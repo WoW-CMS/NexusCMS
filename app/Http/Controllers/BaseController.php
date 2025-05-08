@@ -52,13 +52,19 @@ class BaseController extends Controller
      * @param int $code
      * @return JsonResponse
      */
-    protected function successResponse($data = null, string $message = 'Operation successful', int $code = 200): JsonResponse
-    {
-        return response()->json([
+    protected function successResponse(
+        $data = null, 
+        string $message = 'Operation successful', 
+        int $code = 200
+    ): JsonResponse {
+        return response()->json(
+            [
             'success' => true,
             'message' => $message,
             'data' => $data
-        ], $code);
+            ],
+            $code
+        );
     }
 
     /**
@@ -120,8 +126,11 @@ class BaseController extends Controller
      * @param array|null $messages
      * @return array|JsonResponse
      */
-    protected function validateRequest(Request $request, array $rules = null, array $messages = null)
-    {
+    protected function validateRequest(
+        Request $request, 
+        ?array $rules = null, 
+        ?array $messages = null
+    ) {
         $rules = $rules ?? $this->validationRules;
         $messages = $messages ?? $this->validationMessages;
 
@@ -136,9 +145,9 @@ class BaseController extends Controller
     /**
      * Get list of resources
      *
-     * @param Request $request
-     * @param string|null $view
-     * @return JsonResponse|View
+     * @param Request $request The request instance containing pagination parameters
+     * @param  string|null  $view  The view to render
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function index(Request $request, ?string $view = null)
     {
@@ -149,13 +158,11 @@ class BaseController extends Controller
             if ($request->expectsJson()) {
                 return $this->successResponse($data);
             }
-            
             return $this->renderView($view, ['data' => $data]);
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return $this->errorResponse('Error retrieving records: ' . $e->getMessage(), 500);
             }
-            
             return $this->renderView('errors.500', [
                 'message' => 'Error retrieving records: ' . $e->getMessage()
             ]);
@@ -184,9 +191,12 @@ class BaseController extends Controller
                 return $this->errorResponse('Record not found', 404);
             }
             
-            return $this->renderView('errors.404', [
-                'message' => 'Record not found'
-            ]);
+            return $this->renderView(
+                'errors.404', 
+                [
+                    'message' => 'Record not found'
+                ]
+            );
         }
     }
 
@@ -212,14 +222,20 @@ class BaseController extends Controller
                 return $this->successResponse($item, 'Record created successfully', 201);
             }
             
-            return redirect()->route($redirectRoute ?? $this->guessRedirectRoute('index'))
-                ->with('success', 'Record created successfully');
+            return redirect()->route(
+                $redirectRoute ?? 
+                $this->guessRedirectRoute('index')
+            )->with('success', 'Record created successfully');
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
-                return $this->errorResponse('Error creating record: ' . $e->getMessage(), 500);
+                return $this->errorResponse(
+                    'Error creating record: ' . $e->getMessage(), 500
+                );
             }
             
-            return back()->withInput()->withErrors(['error' => 'Error creating record: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(
+                ['error' => 'Error creating record: ' . $e->getMessage()]
+            );
         }
     }
 
@@ -247,14 +263,20 @@ class BaseController extends Controller
                 return $this->successResponse($item, 'Record updated successfully');
             }
             
-            return redirect()->route($redirectRoute ?? $this->guessRedirectRoute('index'))
-                ->with('success', 'Record updated successfully');
+            return redirect()->route(
+                $redirectRoute ?? 
+                $this->guessRedirectRoute('index')
+            )->with('success', 'Record updated successfully');
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
-                return $this->errorResponse('Error updating record: ' . $e->getMessage(), 500);
+                return $this->errorResponse(
+                    'Error updating record: ' . $e->getMessage(), 500
+                );
             }
             
-            return back()->withInput()->withErrors(['error' => 'Error updating record: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(
+                ['error' => 'Error updating record: ' . $e->getMessage()]
+            );
         }
     }
 
@@ -275,14 +297,20 @@ class BaseController extends Controller
                 return $this->successResponse(null, 'Record deleted successfully');
             }
             
-            return redirect()->route($redirectRoute ?? $this->guessRedirectRoute('index'))
-                ->with('success', 'Record deleted successfully');
+            return redirect()->route(
+                $redirectRoute ?? 
+                $this->guessRedirectRoute('index')
+            )->with('success', 'Record deleted successfully');
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
-                return $this->errorResponse('Error deleting record: ' . $e->getMessage(), 500);
+                return $this->errorResponse(
+                    'Error deleting record: ' . $e->getMessage(), 500
+                );
             }
             
-            return back()->withErrors(['error' => 'Error deleting record: ' . $e->getMessage()]);
+            return back()->withErrors(
+                ['error' => 'Error deleting record: ' . $e->getMessage()]
+            );
         }
     }
 

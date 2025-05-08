@@ -71,7 +71,7 @@ jobs:
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     
     - name: Run PHP CodeSniffer
-      run: phpcs --standard=PSR12 app
+      run: vendor/bin/phpcs --standard=PSR12 app
     
     - name: Run PHP Mess Detector
       run: phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
