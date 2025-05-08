@@ -12,7 +12,9 @@ use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     /**
      * Model associated with the controller
@@ -67,8 +69,11 @@ class BaseController extends Controller
      * @param mixed $errors
      * @return JsonResponse
      */
-    protected function errorResponse(string $message = 'An error has occurred', int $code = 400, $errors = null): JsonResponse
-    {
+    protected function errorResponse(
+        string $message = 'An error has occurred',
+        int $code = 400,
+        $errors = null
+    ): JsonResponse {
         $response = [
             'success' => false,
             'message' => $message
@@ -104,7 +109,6 @@ class BaseController extends Controller
         $controllerName = class_basename($this);
         $controllerName = str_replace('Controller', '', $controllerName);
         $action = debug_backtrace()[2]['function'] ?? 'index';
-        
         return strtolower($controllerName) . '.' . $action;
     }
 
