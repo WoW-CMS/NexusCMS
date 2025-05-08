@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="Custom RuleSet"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+         http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+         >
+
+    <description>Custom ruleset excluding ShortVariable</description>
+
+    <rule ref="cleancode" />
+    <rule ref="codesize" />
+    <rule ref="controversial" />
+    <rule ref="design" />
+    <rule ref="naming">
+        <exclude name="ShortVariable" />
+    </rule>
+    <rule ref="unusedcode" />
+
+</ruleset>
