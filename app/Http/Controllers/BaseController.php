@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -10,6 +9,21 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 
+
+/**
+ * Base Controller class that provides common functionality for all controllers
+ *
+ * This controller implements common CRUD operations and utility methods that can be
+ * inherited by other controllers. It includes methods for handling both API and web
+ * responses, validation, view rendering, and standard CRUD operations.
+ *
+ * @category Controllers
+ * @package  App\Http\Controllers
+ * @author   NexusCMS <noreply@wow-cms.com>
+ * @license  GNU General Public License (GPL)
+ * @version  1.0.0
+ * @link     wow-cms.com
+ */
 class BaseController extends Controller
 {
     use AuthorizesRequests;
@@ -128,7 +142,7 @@ class BaseController extends Controller
      */
     protected function validateRequest(
         Request $request,
-        ?array $rules = null, 
+        ?array $rules = null,
         ?array $messages = null
     ) {
         $rules = $rules ?? $this->validationRules;
@@ -154,7 +168,7 @@ class BaseController extends Controller
         try {
             $perPage = $request->get('per_page', 15);
             $data = $this->model->paginate($perPage);
-            
+
             if ($request->expectsJson()) {
                 return $this->successResponse($data);
             }
@@ -180,19 +194,19 @@ class BaseController extends Controller
     {
         try {
             $item = $this->model->findOrFail($id);
-            
+
             if (request()->expectsJson()) {
                 return $this->successResponse($item);
             }
-            
+
             return $this->renderView($view, ['item' => $item]);
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return $this->errorResponse('Record not found', 404);
             }
-            
+
             return $this->renderView(
-                'errors.404', 
+                'errors.404',
                 [
                     'message' => 'Record not found'
                 ]
@@ -210,29 +224,31 @@ class BaseController extends Controller
     public function store(Request $request, ?string $redirectRoute = null)
     {
         $validated = $this->validateRequest($request);
-        
+
         if ($validated instanceof JsonResponse) {
             return $validated;
         }
 
         try {
             $item = $this->model->create($validated);
-            
+
             if ($request->expectsJson()) {
                 return $this->successResponse($item, 'Record created successfully', 201);
             }
-            
+
             return redirect()->route(
-                $redirectRoute ?? 
+                $redirectRoute ??
                 $this->guessRedirectRoute('index')
             )->with('success', 'Record created successfully');
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return $this->errorResponse(
-                    'Error creating record: ' . $e->getMessage(), 500
+                    'Error creating record: '
+                    . $e->getMessage(),
+                    500
                 );
             }
-            
+
             return back()->withInput()->withErrors(
                 ['error' => 'Error creating record: ' . $e->getMessage()]
             );
@@ -250,7 +266,7 @@ class BaseController extends Controller
     public function update(Request $request, int $id, ?string $redirectRoute = null)
     {
         $validated = $this->validateRequest($request);
-        
+
         if ($validated instanceof JsonResponse) {
             return $validated;
         }
@@ -258,22 +274,24 @@ class BaseController extends Controller
         try {
             $item = $this->model->findOrFail($id);
             $item->update($validated);
-            
+
             if ($request->expectsJson()) {
                 return $this->successResponse($item, 'Record updated successfully');
             }
-            
+
             return redirect()->route(
-                $redirectRoute ?? 
+                $redirectRoute ??
                 $this->guessRedirectRoute('index')
             )->with('success', 'Record updated successfully');
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return $this->errorResponse(
-                    'Error updating record: ' . $e->getMessage(), 500
+                    'Error updating record: '
+                    . $e->getMessage(),
+                    500
                 );
             }
-            
+
             return back()->withInput()->withErrors(
                 ['error' => 'Error updating record: ' . $e->getMessage()]
             );
@@ -292,19 +310,21 @@ class BaseController extends Controller
         try {
             $item = $this->model->findOrFail($id);
             $item->delete();
-            
+
             if (request()->expectsJson()) {
                 return $this->successResponse(null, 'Record deleted successfully');
             }
 
             return redirect()->route(
-                $redirectRoute ?? 
+                $redirectRoute ??
                 $this->guessRedirectRoute('index')
             )->with('success', 'Record deleted successfully');
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return $this->errorResponse(
-                    'Error deleting record: ' . $e->getMessage(), 500
+                    'Error deleting record: '
+                    . $e->getMessage(),
+                    500
                 );
             }
 

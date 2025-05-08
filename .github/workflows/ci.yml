@@ -71,7 +71,7 @@ jobs:
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     
     - name: Run PHP CodeSniffer
-      run: vendor/bin/phpcs --standard=PSR12 --ignore=*/whitespace_at_end_of_line,*/line_exceeds_120_characters app
+      run: phpcs --standard=PSR12 app
     
     - name: Run PHP Mess Detector
       run: phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
