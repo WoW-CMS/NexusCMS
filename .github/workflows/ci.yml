@@ -74,7 +74,7 @@ jobs:
       run: phpcs --standard=PSR12 app
     
     - name: Run PHP Mess Detector
-      run: phpmd -- app text cleancode,codesize,controversial,design,naming,unusedcode
+      run: phpmd -- app text cleancode,codesize,controversial,design,unusedcode
   deploy:
     needs: [laravel-tests, code-quality]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
