@@ -53,8 +53,8 @@ class BaseController extends Controller
      * @return JsonResponse
      */
     protected function successResponse(
-        $data = null, 
-        string $message = 'Operation successful', 
+        $data = null,
+        string $message = 'Operation successful',
         int $code = 200
     ): JsonResponse {
         return response()->json(
@@ -127,7 +127,7 @@ class BaseController extends Controller
      * @return array|JsonResponse
      */
     protected function validateRequest(
-        Request $request, 
+        Request $request,
         ?array $rules = null, 
         ?array $messages = null
     ) {
@@ -296,7 +296,7 @@ class BaseController extends Controller
             if (request()->expectsJson()) {
                 return $this->successResponse(null, 'Record deleted successfully');
             }
-            
+
             return redirect()->route(
                 $redirectRoute ?? 
                 $this->guessRedirectRoute('index')
@@ -307,7 +307,7 @@ class BaseController extends Controller
                     'Error deleting record: ' . $e->getMessage(), 500
                 );
             }
-            
+
             return back()->withErrors(
                 ['error' => 'Error deleting record: ' . $e->getMessage()]
             );
@@ -324,7 +324,7 @@ class BaseController extends Controller
     {
         $controllerName = class_basename($this);
         $controllerName = str_replace('Controller', '', $controllerName);
-        
+
         return strtolower($controllerName) . '.' . $action;
     }
 }
