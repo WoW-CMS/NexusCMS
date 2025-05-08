@@ -75,32 +75,9 @@ jobs:
     
     - name: Run PHP Mess Detector
       run: phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
-    
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Build assets
-      run: npm run build
-    
-    - name: Run linter
-      run: npm run lint
-    
-    - name: Run frontend tests
-      run: npm test
 
   deploy:
-    needs: [laravel-tests, code-quality, frontend]
+    needs: [laravel-tests, code-quality]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
@@ -113,18 +90,6 @@ jobs:
     
     - name: Install dependencies
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --no-dev
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'npm'
-    
-    - name: Install Node.js dependencies
-      run: npm ci
-    
-    - name: Build assets
-      run: npm run build
     
     # Aquí puedes añadir los pasos para desplegar a tu servidor
     # Por ejemplo, usando FTP, SSH, o servicios como Laravel Forge, Envoyer, etc.
