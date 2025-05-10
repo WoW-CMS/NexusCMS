@@ -24,15 +24,4 @@ class HomeController extends BaseController
      * Default view for the homepage.
      */
     protected $view = 'home/home';
-
-    /**
-     * Display the homepage
-     *
-     * @param Request $request The request instance
-     * @return \Illuminate\View\View
-     */
-    public function index(Request $request, ?string $view = null)
-    {
-        return $this->renderView();
-    }
 }
