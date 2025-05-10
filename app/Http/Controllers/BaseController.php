@@ -35,7 +35,7 @@ class BaseController extends Controller
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $model;
+    protected $model = null;
 
     /**
      * Default view for the controller
@@ -57,6 +57,20 @@ class BaseController extends Controller
      * @var array
      */
     protected $validationMessages = [];
+
+    /**
+     * Determines if the controller has a model associated with it
+     *
+     * @var bool
+     */
+    protected $hasModel = false;
+
+    /**
+     * Determines if it's paginated or not
+     *
+     * @var bool
+     */
+    protected $isPaginated = false;
 
     /**
      * Success response
@@ -166,17 +180,25 @@ class BaseController extends Controller
     public function index(Request $request, ?string $view = null)
     {
         try {
+            if (!$this->hasModel) {
+                return $this->renderView($view);
+            }
+
             $perPage = $request->get('per_page', 15);
-            $data = $this->model->paginate($perPage);
+            $data = $this->isPaginated
+                ? $this->model->paginate($perPage)
+                : $this->model->all();
 
             if ($request->expectsJson()) {
                 return $this->successResponse($data);
             }
+
             return $this->renderView($view, ['data' => $data]);
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return $this->errorResponse('Error retrieving records: ' . $e->getMessage(), 500);
             }
+
             return $this->renderView('errors.500', [
                 'message' => 'Error retrieving records: ' . $e->getMessage()
             ]);
