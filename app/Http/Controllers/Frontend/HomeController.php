@@ -23,7 +23,9 @@ class HomeController extends BaseController
     /**
      * Default view for the homepage.
      */
-    protected $view = 'home/home';
+    protected $views = [
+        'index' => 'home.index',
+    ];
 
     /**
      * Has model flag.
