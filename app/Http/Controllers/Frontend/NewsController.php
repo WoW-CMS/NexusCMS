@@ -32,7 +32,7 @@ class NewsController extends BaseController
      * @var boolean
      */
     protected $isPaginated = true;
-    
+
     /**
      * Default view for the controller
      *

@@ -36,7 +36,7 @@ trait ModelHandler
     protected function getModelData($perPage = 15)
     {
         $model = $this->resolveModel();
-        
+
         if (!$model) {
             throw new \RuntimeException('Model not found or invalid');
         }
@@ -62,7 +62,7 @@ trait ModelHandler
     protected function findModel($id)
     {
         $model = $this->resolveModel();
-        
+
         if (!$model) {
             throw new \RuntimeException('Model not found or invalid');
         }
