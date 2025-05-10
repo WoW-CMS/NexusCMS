@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
 
 /**
  * Frontend Home Controller for handling main website pages
@@ -18,40 +17,29 @@ use Illuminate\Http\Request;
  * @version  1.0.0
  * @link     wow-cms.com
  */
-class HomeController extends BaseController
+class NewsController extends BaseController
 {
     /**
-     * Default view for the homepage.
-     */
-    protected $views = [
-        'index' => 'home.index',
-    ];
-
-    /**
-     * Has model flag.
-     *
-     * @var bool
-     */
-    protected $hasModel = true;
-
-    /**
-     * Model name.
+     * Model name
      *
      * @var string
      */
     protected $model = 'news';
 
     /**
-     * Is paginated flag.
+     * Is paginated
      *
-     * @var bool
+     * @var boolean
      */
     protected $isPaginated = true;
 
     /**
-     * perPage
+     * Default view for the controller
      *
-     * @var int
+     * @var string
      */
-    protected $perPage = 2;
+    protected $views = [
+        'index' => 'news.index',
+        'show' => 'news.list',
+    ];
 }

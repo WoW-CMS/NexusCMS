@@ -10,6 +10,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            padding-top: 5rem; /* Agregamos padding superior para compensar la navbar fija */
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Cinzel', serif;
@@ -67,7 +68,7 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="bg-gray-800 bg-opacity-95 fixed w-full z-10 shadow-lg">
+    <nav class="bg-gray-800 bg-opacity-95 fixed w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center">
@@ -77,7 +78,7 @@
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-6">
                             <a href="{{ route('home') }}" class="nav-link @if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
+                            <a href="{{ route('news') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How to Play</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
@@ -102,7 +103,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow">
+    <main class="flex-grow relative">
         @yield('content')
     </main>
 
