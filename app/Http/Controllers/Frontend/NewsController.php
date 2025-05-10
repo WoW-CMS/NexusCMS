@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
 
 /**
  * Frontend Home Controller for handling main website pages
@@ -18,17 +17,21 @@ use Illuminate\Http\Request;
  * @version  1.0.0
  * @link     wow-cms.com
  */
-class HomeController extends BaseController
+class NewsController extends BaseController
 {
     /**
-     * Default view for the homepage.
+     * Model name
+     *
+     * @var string
      */
-    protected $view = 'home/home';
+    protected $model = 'news';
 
     /**
-     * Has model flag.
+     * Default view for the controller
      *
-     * @var bool
+     * @var string
      */
-    protected $hasModel = false;
+    protected $view = 'news.index';
+
+    
 }

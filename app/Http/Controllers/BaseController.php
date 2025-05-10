@@ -63,7 +63,7 @@ class BaseController extends Controller
      *
      * @var bool
      */
-    protected $hasModel = false;
+    protected $hasModel = true;
 
     /**
      * Determines if it's paginated or not
