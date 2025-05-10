@@ -60,7 +60,7 @@ class BaseController extends Controller
 
     /**
      * Determines if the controller has a model associated with it
-     * 
+     *
      * @var bool
      */
     protected $hasModel = false;
@@ -185,8 +185,8 @@ class BaseController extends Controller
             }
 
             $perPage = $request->get('per_page', 15);
-            $data = $this->isPaginated 
-                ? $this->model->paginate($perPage) 
+            $data = $this->isPaginated
+                ? $this->model->paginate($perPage)
                 : $this->model->all();
 
             if ($request->expectsJson()) {
