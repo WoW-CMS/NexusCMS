@@ -104,7 +104,52 @@
         @if($data instanceof \Illuminate\Pagination\LengthAwarePaginator)
             <div class="mt-12">
                 <div class="flex justify-center">
-                    {{ $data->links() }}
+                    @if ($data->hasPages())
+                        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center gap-1">
+                            {{-- Previous Page Link --}}
+                            @if ($data->onFirstPage())
+                                <span class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                            @else
+                                <a href="{{ $data->previousPageUrl() }}" rel="prev" class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
+                                @if ($page == $data->currentPage())
+                                    <span class="px-4 py-2 text-sm font-medium text-indigo-400 bg-indigo-600/20 rounded-lg">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+
+                            {{-- Next Page Link --}}
+                            @if ($data->hasMorePages())
+                                <a href="{{ $data->nextPageUrl() }}" rel="next" class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            @else
+                                <span class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                            @endif
+                        </nav>
+                    @endif
                 </div>
             </div>
         @endif
