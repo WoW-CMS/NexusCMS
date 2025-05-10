@@ -3,6 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 trait ModelHandler
 {
