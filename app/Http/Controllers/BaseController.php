@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ModelHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -29,6 +30,7 @@ class BaseController extends Controller
     use AuthorizesRequests;
     use DispatchesJobs;
     use ValidatesRequests;
+    use ModelHandler;
 
     /**
      * Model associated with the controller
@@ -185,9 +187,7 @@ class BaseController extends Controller
             }
 
             $perPage = $request->get('per_page', 15);
-            $data = $this->isPaginated
-                ? $this->model->paginate($perPage)
-                : $this->model->all();
+            $data = $this->getModelData($perPage);
 
             if ($request->expectsJson()) {
                 return $this->successResponse($data);

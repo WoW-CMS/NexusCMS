@@ -27,11 +27,16 @@ class NewsController extends BaseController
     protected $model = 'news';
 
     /**
+     * Is paginated
+     *
+     * @var boolean
+     */
+    protected $isPaginated = true;
+    
+    /**
      * Default view for the controller
      *
      * @var string
      */
     protected $view = 'news.index';
-
-    
 }

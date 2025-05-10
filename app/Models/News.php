@@ -20,4 +20,12 @@ class News extends Model
     protected $casts = [
         'published_at' => 'datetime'
     ];
+
+    /**
+     * Get the user that owns the news.
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 }
