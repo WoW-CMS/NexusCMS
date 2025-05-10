@@ -33,7 +33,7 @@ trait RouteViewHandler
     protected function setView(string $view): self
     {
         if (!array_key_exists($view, $this->views)) {
-            throw new \InvalidArgumentException("Vista '{$view}' no soportada");
+            throw new InvalidArgumentException("The view '$view' is not defined.");
         }
 
         $this->currentView = $view;

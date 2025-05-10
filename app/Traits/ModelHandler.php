@@ -40,7 +40,7 @@ trait ModelHandler
         $model = $this->resolveModel();
 
         if (!$model) {
-            throw new \RuntimeException('Model not found or invalid');
+            throw new InvalidArgumentException('Model not found or invalid');
         }
 
         $query = $model->query();
@@ -66,7 +66,7 @@ trait ModelHandler
         $model = $this->resolveModel();
 
         if (!$model) {
-            throw new \RuntimeException('Model not found or invalid');
+            throw new InvalidArgumentException('Model not found or invalid');
         }
 
         return $model->findOrFail($id);
