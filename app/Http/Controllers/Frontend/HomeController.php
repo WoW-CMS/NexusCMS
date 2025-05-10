@@ -32,5 +32,26 @@ class HomeController extends BaseController
      *
      * @var bool
      */
-    protected $hasModel = false;
+    protected $hasModel = true;
+
+    /**
+     * Model name.
+     * 
+     * @var string
+     */
+    protected $model = 'news';
+
+    /**
+     * Is paginated flag.
+     * 
+     * @var bool
+     */
+    protected $isPaginated = true;
+
+    /**
+     * perPage
+     *
+     * @var int
+     */
+    protected $perPage = 2;
 }

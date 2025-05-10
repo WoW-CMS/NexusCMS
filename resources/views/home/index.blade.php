@@ -39,48 +39,29 @@
                     </div>
                     
                     <div class="space-y-8">
-                        <!-- News Card 1 -->
+                        @forelse ($data as $news)
                         <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg news-card flex flex-col md:flex-row">
                             <div class="md:w-1/3">
-                                <img class="w-full h-48 md:h-full object-cover" src="https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt8a0bea0752e7b744/6602eae7df6c9d7a3b7a2b9e/WoW-Cataclysm-Classic-Key-Art-16-9.jpg" alt="News Image">
+                                <img class="w-full h-48 md:h-full object-cover" 
+                                     src="{{ asset('storage/' . $news->image) }}" 
+                                     alt="{{ $news->title }}">
                             </div>
                             <div class="md:w-2/3 p-6">
-                                <div class="text-xs text-gray-400 mb-2">April 15, 2023</div>
-                                <h3 class="text-xl font-bold text-white mb-2">New Raid Instance Released!</h3>
-                                <p class="text-gray-300 mb-4">Experience our new custom raid instance with unique bosses and epic loot. Gather your guild and prepare for battle! Our development team has worked tirelessly to create challenging encounters with mechanics never before seen on private servers.</p>
-                                <a href="#" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
+                                <div class="text-xs text-gray-400 mb-2">{{ $news->published_at ? $news->published_at->format('F d, Y') : 'Draft' }}</div>
+                                <h3 class="text-xl font-bold text-white mb-2">{{ $news->title }}</h3>
+                                <p class="text-gray-300 mb-4">{{ Str::limit($news->content, 200) }}</p>
+                                <a href="{{ route('news.show', $news->id) }}" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
                             </div>
                         </div>
-                        
-                        <!-- News Card 2 -->
-                        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg news-card flex flex-col md:flex-row">
-                            <div class="md:w-1/3">
-                                <img class="w-full h-48 md:h-full object-cover" src="https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt7658f7d23e99d0b5/6602eae7c1e5057a3b5c0c8e/WoW-Cataclysm-Classic-Deathwing-16-9.jpg" alt="News Image">
-                            </div>
-                            <div class="md:w-2/3 p-6">
-                                <div class="text-xs text-gray-400 mb-2">April 10, 2023</div>
-                                <h3 class="text-xl font-bold text-white mb-2">Balance Changes Coming Soon</h3>
-                                <p class="text-gray-300 mb-4">We're implementing new class balance changes based on community feedback. Check out the full patch notes! These changes aim to improve the overall gameplay experience and ensure all classes have viable options in both PvE and PvP content.</p>
-                                <a href="#" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
-                            </div>
+                        @empty
+                        <div class="bg-gray-800 rounded-lg p-6 text-center">
+                            <p class="text-gray-400">No news available at the moment.</p>
                         </div>
-                        
-                        <!-- News Card 3 -->
-                        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg news-card flex flex-col md:flex-row">
-                            <div class="md:w-1/3">
-                                <img class="w-full h-48 md:h-full object-cover" src="https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt7c7f5475a4e4c0c7/6602eae7c1e5057a3b5c0c92/WoW-Cataclysm-Classic-Thrall-16-9.jpg" alt="News Image">
-                            </div>
-                            <div class="md:w-2/3 p-6">
-                                <div class="text-xs text-gray-400 mb-2">April 5, 2023</div>
-                                <h3 class="text-xl font-bold text-white mb-2">Weekend XP Boost Event</h3>
-                                <p class="text-gray-300 mb-4">Join us this weekend for a special 2x XP boost event! Perfect time to level up your alts or try a new class. The event starts Friday at 6 PM server time and runs until Monday at 6 AM. Don't miss this opportunity to quickly level your characters!</p>
-                                <a href="#" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                     
                     <div class="text-center mt-8">
-                        <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        <a href="{{ route('news') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                             View All News
                         </a>
                     </div>

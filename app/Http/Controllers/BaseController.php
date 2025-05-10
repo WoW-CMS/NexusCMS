@@ -60,6 +60,13 @@ class BaseController extends Controller
     protected $isPaginated = false;
 
     /**
+     * Number of items per page
+     *
+     * @var int
+     */
+    protected $perPage = 5;
+
+    /**
      * Get list of resources
      *
      * @param Request $request The request instance containing pagination parameters
@@ -73,7 +80,7 @@ class BaseController extends Controller
                 return $this->renderView($view ?? $this->getCurrentView());
             }
 
-            $perPage = $request->get('per_page', 15);
+            $perPage = $request->get('per_page', $this->perPage);
             $data = $this->getModelData($perPage);
 
             if ($request->expectsJson()) {
