@@ -74,7 +74,8 @@ trait Cacheable
      */
     protected static function getListCacheKey($perPage, $query): string
     {
-        return sprintf('%s.list.%s.%s.%s',
+        return sprintf(
+            '%s.list.%s.%s.%s',
             static::getCacheTag(),
             $perPage,
             md5($query),
