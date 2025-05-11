@@ -33,7 +33,11 @@
                         <!-- Article Content -->
                         <div class="mt-6">
                             <div class="flex flex-wrap items-center space-x-4 text-gray-400 text-sm mb-4">
-                                <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full">News</span>
+                                @if($item->category)
+                                    <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full">{{ $item->category->name }}</span>
+                                @else
+                                    <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full">News</span>
+                                @endif
                                 <span class="flex items-center space-x-1">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,12 +73,14 @@
 
                         <!-- Tags -->
                         <div class="mt-8 flex flex-wrap gap-2">
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#WorldOfWarcraft</span>
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#Gaming</span>
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#MMORPG</span>
+                            @if($item->category)
+                                <span class="inline-flex items-center px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                    {{ $item->category->name }}
+                                </span>
+                            @endif
                         </div>
 
                         <!-- Share -->
@@ -158,29 +164,23 @@
                     <div class="bg-gray-900/50 rounded-2xl backdrop-blur-md shadow-lg border border-gray-800 p-6">
                         <h3 class="text-xl font-semibold text-white mb-6">Related News</h3>
                         <div class="space-y-6">
-                            <!-- Related News 1 -->
-                            <div class="group">
-                                <div class="relative h-40 rounded-lg overflow-hidden mb-3">
-                                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        src="{{ asset('images/placeholder.jpg') }}" alt="Related news">
+                            @foreach($item->relatedContents() as $related)
+                                <div class="group">
+                                    <a href="{{ route('news.show', $related->id) }}" class="block">
+                                        <h4 class="text-white font-medium group-hover:text-indigo-400 transition">
+                                            {{ $related->title }}
+                                        </h4>
+                                        @if($related->category)
+                                            <span class="text-xs text-indigo-400 mt-1 block">
+                                                {{ $related->category->name }}
+                                            </span>
+                                        @endif
+                                        <p class="text-sm text-gray-400 mt-2">
+                                            {{ Str::limit(strip_tags($related->content), 100) }}
+                                        </p>
+                                    </a>
                                 </div>
-                                <h4 class="text-white font-medium group-hover:text-indigo-400 transition">New PvP
-                                    Season</h4>
-                                <p class="text-sm text-gray-400 mt-2">Get ready for the new PvP season with amazing
-                                    rewards...</p>
-                            </div>
-
-                            <!-- Related News 2 -->
-                            <div class="group">
-                                <div class="relative h-40 rounded-lg overflow-hidden mb-3">
-                                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        src="{{ asset('images/placeholder.jpg') }}" alt="Related news">
-                                </div>
-                                <h4 class="text-white font-medium group-hover:text-indigo-400 transition">New Raid
-                                    Guide</h4>
-                                <p class="text-sm text-gray-400 mt-2">Everything you need to know about the new
-                                    mechanics...</p>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
