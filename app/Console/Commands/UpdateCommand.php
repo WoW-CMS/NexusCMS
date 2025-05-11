@@ -55,7 +55,7 @@ class UpdateCommand extends Command
     protected function checkCacheConfiguration()
     {
         $cacheStore = config('cache.default');
-        
+
         if ($cacheStore === 'redis') {
             try {
                 Redis::ping();
