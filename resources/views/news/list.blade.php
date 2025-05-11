@@ -81,12 +81,6 @@
                                     {{ $item->category->name }}
                                 </span>
                             @endif
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#WorldOfWarcraft</span>
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#Gaming</span>
-                            <span
-                                class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-sm hover:bg-indigo-500/20 transition">#MMORPG</span>
                         </div>
 
                         <!-- Share -->
