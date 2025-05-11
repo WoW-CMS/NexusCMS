@@ -18,7 +18,7 @@ trait Cacheable
     public function getCached($id)
     {
         $cacheKey = $this->getCacheKey($id);
-        
+
         return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($id) {
             return static::query()->find($id);
         });
@@ -32,7 +32,7 @@ trait Cacheable
         $query = $query ?: static::query();
         $perPage = request()->get('per_page', 15);
         $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
-        
+
         return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($query, $perPage) {
             return $query->paginate($perPage);
         });
