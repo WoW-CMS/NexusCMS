@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Redis\RedisManager;
 
 class UpdateCommand extends Command
 {
@@ -14,6 +14,16 @@ class UpdateCommand extends Command
         {--storage-link : Recreate symbolic links}';
 
     protected $description = 'Update and optimize NexusCMS';
+
+    protected $files;
+    protected $redis;
+
+    public function __construct(Filesystem $files, RedisManager $redis)
+    {
+        parent::__construct();
+        $this->files = $files;
+        $this->redis = $redis;
+    }
 
     public function handle()
     {
@@ -55,10 +65,10 @@ class UpdateCommand extends Command
     protected function checkCacheConfiguration()
     {
         $cacheStore = config('cache.default');
-
+        
         if ($cacheStore === 'redis') {
             try {
-                Redis::ping();
+                $this->redis->connection()->ping();
                 $this->info('Redis connection verified successfully.');
             } catch (\Exception $e) {
                 $this->warn('Could not connect to Redis. Switching to file cache...');
@@ -73,7 +83,7 @@ class UpdateCommand extends Command
             return;
         }
 
-        $envContent = File::get(base_path('.env'));
+        $envContent = $this->files->get(base_path('.env'));
 
         foreach ($data as $key => $value) {
             if ($value) {
@@ -85,6 +95,6 @@ class UpdateCommand extends Command
             }
         }
 
-        File::put(base_path('.env'), $envContent);
+        $this->files->put(base_path('.env'), $envContent);
     }
 }

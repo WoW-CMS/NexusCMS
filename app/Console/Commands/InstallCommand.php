@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\Filesystem;
 
 class InstallCommand extends Command
 {
@@ -16,6 +16,14 @@ class InstallCommand extends Command
         {--locale= : Application locale}';
 
     protected $description = 'Install and configure NexusCMS';
+
+    protected $files;
+
+    public function __construct(Filesystem $files)
+    {
+        parent::__construct();
+        $this->files = $files;
+    }
 
     public function handle()
     {
@@ -47,8 +55,8 @@ class InstallCommand extends Command
         $envFile = base_path('.env');
         $envExample = base_path('.env.example');
 
-        if (!File::exists($envFile) && File::exists($envExample)) {
-            File::copy($envExample, $envFile);
+        if (!$this->files->exists($envFile) && $this->files->exists($envExample)) {
+            $this->files->copy($envExample, $envFile);
         }
 
         $this->updateEnv([
@@ -67,7 +75,7 @@ class InstallCommand extends Command
             return;
         }
 
-        $envContent = File::get(base_path('.env'));
+        $envContent = $this->files->get(base_path('.env'));
 
         foreach ($data as $key => $value) {
             if ($value) {
@@ -79,6 +87,6 @@ class InstallCommand extends Command
             }
         }
 
-        File::put(base_path('.env'), $envContent);
+        $this->files->put(base_path('.env'), $envContent);
     }
 }
