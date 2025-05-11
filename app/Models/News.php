@@ -13,9 +13,12 @@ class News extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'content',
         'image',
-        'status',
+        'author_id',
+        'category_id',
+        'is_published',
         'published_at'
     ];
 
@@ -26,5 +29,23 @@ class News extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(NewsCategory::class, 'category_id');
+    }
+
+    public function relatedContents($limit = 2)
+    {
+        return static::query()
+            ->where('id', '!=', $this->id)
+            ->where('is_published', 1)
+            ->when($this->category_id, function($query) {
+                $query->where('category_id', $this->category_id);
+            })
+            ->orderBy('published_at', 'desc')
+            ->take($limit)
+            ->get();
     }
 }
