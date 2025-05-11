@@ -41,7 +41,7 @@ class News extends Model
         return static::query()
             ->where('id', '!=', $this->id)
             ->where('is_published', 1)
-            ->when($this->category_id, function($query) {
+            ->when($this->category_id, function ($query) {
                 $query->where('category_id', $this->category_id);
             })
             ->orderBy('published_at', 'desc')
