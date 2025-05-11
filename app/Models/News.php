@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use HasFactory, Cacheable;
+    use HasFactory;
+    use Cacheable;
 
     protected $fillable = [
         'title',
