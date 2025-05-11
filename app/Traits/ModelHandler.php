@@ -45,7 +45,7 @@ trait ModelHandler
 
         // Verificar si el modelo usa el trait Cacheable
         if (in_array('App\Traits\Cacheable', class_uses_recursive($model))) {
-            return $model::getCachedList();
+            return $model->getCachedList();
         }
 
         $query = $model->query();
@@ -69,7 +69,7 @@ trait ModelHandler
 
         // Verificar si el modelo usa el trait Cacheable
         if (in_array('App\Traits\Cacheable', class_uses_recursive($model))) {
-            return $model::getCached($id);
+            return $model->getCached($id);  // Changed from static to instance call
         }
 
         return $model->findOrFail($id);

@@ -10,16 +10,16 @@ trait Cacheable
     /**
      * Cache TTL in minutes
      */
-    protected static $cacheTTL = 60;
+    protected $cacheTTL = 60;
 
     /**
      * Get cached model by ID
      */
-    public static function getCached($id)
+    public function getCached($id)
     {
-        $cacheKey = static::getCacheKey($id);
-
-        return Cache::remember($cacheKey, static::$cacheTTL, function () use ($id) {
+        $cacheKey = $this->getCacheKey($id);
+        
+        return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($id) {
             return static::query()->find($id);
         });
     }
@@ -27,13 +27,13 @@ trait Cacheable
     /**
      * Get cached list with query builder
      */
-    public static function getCachedList($query = null)
+    public function getCachedList($query = null)
     {
         $query = $query ?: static::query();
         $perPage = request()->get('per_page', 15);
-        $cacheKey = static::getListCacheKey($perPage, $query->toSql());
-
-        return Cache::remember($cacheKey, static::$cacheTTL, function () use ($query, $perPage) {
+        $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
+        
+        return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($query, $perPage) {
             return $query->paginate($perPage);
         });
     }
@@ -43,8 +43,8 @@ trait Cacheable
      */
     public function clearCache()
     {
-        Cache::forget(static::getCacheKey($this->id));
-        Cache::tags([static::getCacheTag()])->flush();
+        app('cache')->forget($this->getCacheKey($this->id));
+        app('cache')->tags([$this->getCacheTag()])->flush();
     }
 
     /**
@@ -64,19 +64,19 @@ trait Cacheable
     /**
      * Get cache key for a specific ID
      */
-    protected static function getCacheKey($id): string
+    protected function getCacheKey($id): string
     {
-        return sprintf('%s.%s', static::getCacheTag(), $id);
+        return sprintf('%s.%s', $this->getCacheTag(), $id);
     }
 
     /**
      * Get cache key for list
      */
-    protected static function getListCacheKey($perPage, $query): string
+    protected function getListCacheKey($perPage, $query): string
     {
         return sprintf(
             '%s.list.%s.%s.%s',
-            static::getCacheTag(),
+            $this->getCacheTag(),
             $perPage,
             md5($query),
             request()->page ?? 1
@@ -86,7 +86,7 @@ trait Cacheable
     /**
      * Get cache tag based on model class
      */
-    protected static function getCacheTag(): string
+    protected function getCacheTag(): string
     {
         return strtolower(class_basename(static::class));
     }
