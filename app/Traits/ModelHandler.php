@@ -43,9 +43,13 @@ trait ModelHandler
             throw new InvalidArgumentException('Model not found or invalid');
         }
 
+        // Verificar si el modelo usa el trait Cacheable
+        if (in_array('App\Traits\Cacheable', class_uses_recursive($model))) {
+            return $model::getCachedList();
+        }
+
         $query = $model->query();
 
-        // Si el modelo es News, cargamos la relación con el autor
         if ($this->model === 'news') {
             $query->with('author');
         }
@@ -55,18 +59,17 @@ trait ModelHandler
             : $query->get();
     }
 
-    /**
-     * Find model by ID
-     *
-     * @param int $id
-     * @return Model
-     */
     protected function findModel($id)
     {
         $model = $this->resolveModel();
 
         if (!$model) {
             throw new InvalidArgumentException('Model not found or invalid');
+        }
+
+        // Verificar si el modelo usa el trait Cacheable
+        if (in_array('App\Traits\Cacheable', class_uses_recursive($model))) {
+            return $model::getCached($id);
         }
 
         return $model->findOrFail($id);
