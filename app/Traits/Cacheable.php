@@ -15,7 +15,7 @@ trait Cacheable
     /**
      * Get cached model by ID
      */
-    public function getCached($id)
+    public static function getCached($id)
     {
         $cacheKey = static::getCacheKey($id);
 
@@ -27,7 +27,7 @@ trait Cacheable
     /**
      * Get cached list with query builder
      */
-    public function getCachedList($query = null)
+    public static function getCachedList($query = null)
     {
         $query = $query ?: static::query();
         $perPage = request()->get('per_page', 15);
