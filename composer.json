@@ -5,11 +5,18 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
+    "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/WoW-CMS/WowCrypto"
+    }
+    ],
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "predis/predis": "^3.0"
+        "predis/predis": "^3.0",
+        "wowcrypto/wowcrypto": "1.0.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
