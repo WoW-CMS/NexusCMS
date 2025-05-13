@@ -1,54 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'NexusCMS') }} - @yield('title', 'World of Warcraft Private Server')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            padding-top: 5rem; /* Agregamos padding superior para compensar la navbar fija */
+            padding-top: 5rem;
+            /* Agregamos padding superior para compensar la navbar fija */
         }
-        h1, h2, h3, h4, h5, h6 {
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Cinzel', serif;
         }
+
         .bg-wow {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
-                             url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
+
         .text-shadow {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
+
         .bg-blur {
             backdrop-filter: blur(8px);
             background-color: rgba(0, 0, 0, 0.7);
         }
-        .realm-status-online { color: #22c55e; }
-        .realm-status-offline { color: #ef4444; }
-        .realm-status-maintenance { color: #eab308; }
+
+        .realm-status-online {
+            color: #22c55e;
+        }
+
+        .realm-status-offline {
+            color: #ef4444;
+        }
+
+        .realm-status-maintenance {
+            color: #eab308;
+        }
+
         .news-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
         .news-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
         }
+
         .feature-icon {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .feature-card:hover .feature-icon {
             transform: scale(1.2) rotate(5deg);
         }
+
         .nav-link {
             position: relative;
         }
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -59,6 +86,7 @@
             background-color: #3b82f6;
             transition: all 0.3s ease;
         }
+
         .nav-link:hover::after {
             width: 100%;
             left: 0;
@@ -66,6 +94,7 @@
     </style>
     @yield('styles')
 </head>
+
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav class="bg-gray-800 bg-opacity-95 fixed w-full z-50 top-0">
@@ -73,27 +102,39 @@
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <img class="h-12 w-auto transition-transform duration-300 hover:scale-110" src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg" alt="Logo">
+                        <img class="h-12 w-auto transition-transform duration-300 hover:scale-110"
+                            src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg"
+                            alt="Logo">
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-6">
-                            <a href="{{ route('home') }}" class="nav-link @if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
-                            <a href="{{ route('news') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How to Play</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
+                            <a href="{{ route('home') }}"
+                                class="nav-link @if (request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
+                            <a href="{{ route('news') }}"
+                                class="nav-link @if (request()->routeIs('news')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
+                            <a href="#"
+                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How
+                                to Play</a>
+                            <a href="#"
+                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
+                            <a href="{{ route('armory') }}"
+                                class="nav-link @if (request()->routeIs('armory')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
+                            <a href="#"
+                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
                         </div>
                     </div>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-4 flex items-center md:ml-6 space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
-                        <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        <a href="#"
+                            class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
+                        <a href="#"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
-                    <button type="button" class="bg-gray-800 inline-flex items-center justify-center p-3 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-300">
+                    <button type="button"
+                        class="bg-gray-800 inline-flex items-center justify-center p-3 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-300">
                         <span class="sr-only">Open main menu</span>
                         <i class="fas fa-bars"></i>
                     </button>
@@ -113,7 +154,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div class="space-y-4">
                     <h3 class="text-white text-xl font-bold mb-6">NexusCMS</h3>
-                    <p class="text-gray-400 leading-relaxed">The ultimate World of Warcraft private server experience with custom content and an amazing community.</p>
+                    <p class="text-gray-400 leading-relaxed">The ultimate World of Warcraft private server experience
+                        with custom content and an amazing community.</p>
                     <div class="flex space-x-6 mt-6">
                         <a href="#" class="text-gray-400 hover:text-blue-500 transition-colors duration-300">
                             <i class="fab fa-facebook-f text-lg"></i>
@@ -132,29 +174,51 @@
                 <div>
                     <h3 class="text-white text-xl font-bold mb-6">Quick Links</h3>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i>Home</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i>News</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i>How to Play</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i>Forums</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i>Armory</a></li>
+                        <li><a href="{{ route('home') }}"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-chevron-right text-xs mr-2"></i>Home</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-chevron-right text-xs mr-2"></i>News</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-chevron-right text-xs mr-2"></i>How to Play</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-chevron-right text-xs mr-2"></i>Forums</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-chevron-right text-xs mr-2"></i>Armory</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-white text-xl font-bold mb-6">Support</h3>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-question-circle text-xs mr-2"></i>FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-book text-xs mr-2"></i>Connection Guide</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-bug text-xs mr-2"></i>Bug Reports</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-envelope text-xs mr-2"></i>Contact Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i class="fas fa-gavel text-xs mr-2"></i>Terms of Service</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-question-circle text-xs mr-2"></i>FAQ</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-book text-xs mr-2"></i>Connection Guide</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-bug text-xs mr-2"></i>Bug Reports</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-envelope text-xs mr-2"></i>Contact Us</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center"><i
+                                    class="fas fa-gavel text-xs mr-2"></i>Terms of Service</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-white text-xl font-bold mb-6">Newsletter</h3>
                     <p class="text-gray-400 mb-6">Subscribe to our newsletter for the latest news and updates.</p>
                     <form class="flex">
-                        <input type="email" placeholder="Your email" class="px-4 py-3 rounded-l-md w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-md transition-colors duration-300">
+                        <input type="email" placeholder="Your email"
+                            class="px-4 py-3 rounded-l-md w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-md transition-colors duration-300">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
@@ -162,7 +226,9 @@
             </div>
             <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400 text-sm">© {{ date('Y') }} NexusCMS. All rights reserved.</p>
-                <p class="text-gray-400 text-sm mt-4 md:mt-0">World of Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.</p>
+                <p class="text-gray-400 text-sm mt-4 md:mt-0">World of Warcraft and Blizzard Entertainment are
+                    trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other
+                    countries.</p>
             </div>
         </div>
     </footer>
@@ -176,7 +242,7 @@
             mobileMenu.className = 'md:hidden';
             mobileMenu.innerHTML = `
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <a href="{{ route('home') }}" class="@if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:bg-gray-700 hover:text-white @endif block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                    <a href="{{ route('home') }}" class="@if (request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:bg-gray-700 hover:text-white @endif block px-3 py-2 rounded-md text-base font-medium">Home</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">News</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">How to Play</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Forums</a>
@@ -194,7 +260,7 @@
 
             // Smooth scroll behavior
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
                     document.querySelector(this.getAttribute('href')).scrollIntoView({
                         behavior: 'smooth'
@@ -205,4 +271,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>
