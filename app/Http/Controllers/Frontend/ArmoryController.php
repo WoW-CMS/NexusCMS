@@ -25,7 +25,7 @@ class ArmoryController extends BaseController
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $model = Armory::class;
+    protected $model = 'armory';
 
     /**
      * Determines if the controller has a model associated with it
