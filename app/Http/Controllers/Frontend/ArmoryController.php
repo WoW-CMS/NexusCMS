@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
 use App\Models\Armory;
-use Illuminate\Http\Request;
 
 /**
  * Frontend Armory Controller for handling main website pages
