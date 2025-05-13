@@ -21,7 +21,6 @@ use Illuminate\Http\Request;
  */
 class ArmoryController extends BaseController
 {
-
     /**
      * Model associated with the controller
      *
@@ -67,5 +66,4 @@ class ArmoryController extends BaseController
             ->paginate($perPage)
             ->appends(['q' => request('q')]);
     }
-
 }
