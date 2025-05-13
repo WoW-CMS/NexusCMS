@@ -32,7 +32,7 @@ class ArmoryController extends BaseController
      *
      * @var bool
      */
-    protected $hasModel = 'armory';
+    protected $hasModel = true;
 
     /**
      * Determines if it's paginated or not
