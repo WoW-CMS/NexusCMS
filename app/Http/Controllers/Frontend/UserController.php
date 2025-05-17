@@ -11,6 +11,14 @@ use App\Models\User;
 class UserController extends BaseController
 {
     protected $model = 'user';
+    protected $auth;
+    protected $hash;
+
+    public function __construct(Auth $auth, Hash $hash)
+    {
+        $this->auth = $auth;
+        $this->hash = $hash;
+    }
 
     public function showLoginForm()
     {
@@ -24,7 +32,7 @@ class UserController extends BaseController
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if ($this->auth->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
@@ -47,20 +55,21 @@ class UserController extends BaseController
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::create([
+        $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $this->hash->make($validated['password']),
         ]);
+        $user->save();
 
-        Auth::login($user);
+        $this->auth->login($user);
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        $this->auth->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
