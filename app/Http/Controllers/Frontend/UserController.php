@@ -11,6 +11,11 @@ use App\Models\User;
 class UserController extends BaseController
 {
     protected $model = 'user';
+
+    protected $views = [
+        'index' => 'ucp.index',
+    ];
+
     protected $auth;
     protected $hash;
 
@@ -20,6 +25,19 @@ class UserController extends BaseController
         $this->hash = $hash;
     }
 
+    public function show(int $id = null, ?string $view = null)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return throw new \Exception('User not found', 404);
+        }
+
+        $user->coins = 0;
+        
+        return view($this->views[$view] ?? $this->views['index'], compact('user'));   
+    }
+    
     public function showLoginForm()
     {
         return view('auth.login');

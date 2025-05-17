@@ -19,3 +19,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [UserController::class,'register']);
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });
+
+Route::prefix('ucp')->group(function () {
+    Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
+});
