@@ -1,5 +1,4 @@
 <?php
-// app/Enums/CharacterClass.php
 
 namespace App\Enums;
 

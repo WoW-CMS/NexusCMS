@@ -168,4 +168,3 @@ class Armory extends Model
             : null;
     }
 }
-
