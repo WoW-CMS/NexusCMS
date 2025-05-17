@@ -25,7 +25,7 @@ class UserController extends BaseController
         $this->hash = $hash;
     }
 
-    public function show(int $id = null, ?string $view = null)
+    public function show(?int $id, ?string $view = null)
     {
         $user = Auth::user();
 
