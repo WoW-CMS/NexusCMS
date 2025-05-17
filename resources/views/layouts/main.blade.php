@@ -88,8 +88,8 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-4 flex items-center md:ml-6 space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
-                        <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        <a href="{{ route('login') }}" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
+                        <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
