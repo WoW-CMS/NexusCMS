@@ -34,6 +34,11 @@ class NewsController extends BaseController
     protected $isPaginated = true;
 
     /**
+     * Per page
+     */
+    protected $perPage = 5;
+
+    /**
      * Default view for the controller
      *
      * @var string
