@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
-    protected $model = 'user';
-
     protected $views = [
         'index' => 'ucp.index',
     ];
@@ -25,7 +23,7 @@ class UserController extends BaseController
         $this->hash = $hash;
     }
 
-    public function show(?int $id, ?string $view = null)
+    public function show()
     {
         $user = Auth::user();
 
@@ -35,7 +33,7 @@ class UserController extends BaseController
 
         $user->coins = 0;
         
-        return view($this->views[$view] ?? $this->views['index'], compact('user'));   
+        return view($this->views['index'], compact('user'));   
     }
     
     public function showLoginForm()
