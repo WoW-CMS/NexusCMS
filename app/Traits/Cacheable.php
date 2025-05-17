@@ -30,7 +30,7 @@ trait Cacheable
     public function getCachedList($query = null, $perPage = null)
     {
         $query = $query ?: static::query();
-        
+
         $perPage = $perPage ?: request()->get('per_page', 15);
         $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
 
