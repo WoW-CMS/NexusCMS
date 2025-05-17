@@ -7,14 +7,32 @@
             @include('ucp.components.sidebar')
 
             <div class="flex-1 space-y-6">
-                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-900 p-6 shadow-xl transition-all duration-300 hover:bg-gray-800/70 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/5">
+                <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-gray-700 rounded-3xl p-8 shadow-2xl backdrop-blur-lg">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
                             Account Overview
                         </h2>
-                        <span class="px-3 py-1 text-sm font-medium text-emerald-400 bg-emerald-400/10 rounded-full border border-emerald-400/20">
-                            Active Account
-                        </span>
+                        @switch($user->status ?? 'active')
+                            @case('active')
+                                <span class="px-3 py-1 text-sm font-medium text-green-400 bg-emerald-500/20 rounded-full border border-emerald-400/20">
+                                    Active Account
+                                </span>
+                                @break
+                            @case('inactive')
+                                <span class="px-3 py-1 text-sm font-medium text-amber-400 bg-amber-500/20 rounded-full border border-amber-400/20">
+                                    Inactive Account
+                                </span>
+                                @break
+                            @case('banned')
+                                <span class="px-3 py-1 text-sm font-medium text-red-400 bg-red-500/20 rounded-full border border-red-400/20">
+                                    Banned Account
+                                </span>
+                                @break
+                            @default
+                                <span class="px-3 py-1 text-sm font-medium text-gray-400 bg-gray-500/20 rounded-full border border-gray-400/20">
+                                    Unknown Status
+                                </span>
+                        @endswitch
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -58,7 +76,7 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-900 p-6 shadow-xl transition-all duration-300 hover:bg-gray-800/70 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/5">
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-800 p-6 shadow-xl transition-all duration-300 hover:bg-gray-800/70 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/5">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
                             My Characters
@@ -85,7 +103,7 @@
                                         </td>
                                         <td class="py-4">
                                             <span class="px-2 py-1 text-xs font-medium text-yellow-400 bg-yellow-400/10 rounded-full">
-                                                Level {{ $character->level }}
+                                                {{ $character->level }}
                                             </span>
                                         </td>
                                         <td class="py-4">{{ $character->class }}</td>

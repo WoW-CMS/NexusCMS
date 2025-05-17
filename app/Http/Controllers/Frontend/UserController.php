@@ -50,7 +50,7 @@ class UserController extends BaseController
             'password' => ['required'],
         ]);
 
-        if ($this->auth->attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
@@ -76,18 +76,18 @@ class UserController extends BaseController
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $this->hash->make($validated['password']),
+            'password' => Hash::make($validated['password']),
         ]);
         $user->save();
 
-        $this->auth->login($user);
+        Auth::login($user);
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
-        $this->auth->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
