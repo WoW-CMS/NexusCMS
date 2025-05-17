@@ -59,8 +59,11 @@
                                     </div>
                                     <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-6 text-gray-200">
                                         <div>Level <span class="font-semibold text-white">{{ $player->level }}</span></div>
-                                        <div>Class <span class="font-semibold text-white">{{ $player->class }}</span></div>
-                                        <div>Race <span class="font-semibold text-white">{{ $player->race }}</span></div>
+                                        <div>Class <span class="font-semibold"
+                                                style="color: {{ $player->class->color() }}">{{ $player->class->label() }}</span>
+                                        </div>
+                                        <div>Race <span class="font-semibold text-white">{{ $player->race->label() }}</span>
+                                        </div>
                                     </div>
                                     <a href="{{ route('armory.show', $player->getKey()) }}"
                                         class="mt-auto inline-block text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition">
@@ -83,7 +86,7 @@
                                                     class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
-                                                            d="M12.707 5.293a1 1 0 00-1.414 1.414L9.586 10l1.707 1.707a1 1 0 001.414-1.414l-3-3z"
+                                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                 </span>
@@ -92,24 +95,51 @@
                                                     class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
-                                                            d="M12.707 5.293a1 1 0 00-1.414 1.414L9.586 10l1.707 1.707a1 1 0 001.414-1.414l-3-3z"
+                                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                 </a>
                                             @endif
 
-                                            {{-- Pagination Elements --}}
-                                            @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
-                                                @if ($page == $data->currentPage())
+                                            {{-- Custom Pagination Elements --}}
+                                            @php
+                                                $currentPage = $data->currentPage();
+                                                $lastPage = $data->lastPage();
+                                                $start = max(1, $currentPage - 2);
+                                                $end = min($lastPage, $currentPage + 2);
+                                            @endphp
+
+                                            @if ($start > 1)
+                                                <a href="{{ $data->url(1) }}"
+                                                    class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
+                                                    1
+                                                </a>
+                                                @if ($start > 2)
+                                                    <span class="px-2 text-gray-400">...</span>
+                                                @endif
+                                            @endif
+
+                                            @for ($page = $start; $page <= $end; $page++)
+                                                @if ($page == $currentPage)
                                                     <span
                                                         class="px-4 py-2 text-sm font-medium text-indigo-400 bg-indigo-600/20 rounded-lg">{{ $page }}</span>
                                                 @else
-                                                    <a href="{{ $url }}"
+                                                    <a href="{{ $data->url($page) }}"
                                                         class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
                                                         {{ $page }}
                                                     </a>
                                                 @endif
-                                            @endforeach
+                                            @endfor
+
+                                            @if ($end < $lastPage)
+                                                @if ($end < $lastPage - 1)
+                                                    <span class="px-2 text-gray-400">...</span>
+                                                @endif
+                                                <a href="{{ $data->url($lastPage) }}"
+                                                    class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
+                                                    {{ $lastPage }}
+                                                </a>
+                                            @endif
 
                                             {{-- Next Page Link --}}
                                             @if ($data->hasMorePages())
@@ -117,7 +147,7 @@
                                                     class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
-                                                            d="M7.293 14.707a1 1 0 001.414-1.414L8.414 10l.293-.293a1 1 0 10-1.414-1.414l-3 3z"
+                                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                 </a>
@@ -126,7 +156,7 @@
                                                     class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
                                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd"
-                                                            d="M7.293 14.707a1 1 0 001.414-1.414L8.414 10l.293-.293a1 1 0 10-1.414-1.414l-3 3z"
+                                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                 </span>

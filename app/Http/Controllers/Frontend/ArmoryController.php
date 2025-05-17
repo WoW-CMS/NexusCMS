@@ -65,4 +65,18 @@ class ArmoryController extends BaseController
             ->paginate($perPage)
             ->appends(['q' => request('q')]);
     }
+
+    public function show(int $id, ?string $view = null)
+    {
+        $item = Armory::withStats()
+            ->where('characters.guid', $id)
+            ->firstOrFail();
+
+        if (request()->expectsJson()) {
+            return $this->successResponse($item);
+        }
+
+        $this->setView('show');
+        return $this->renderView($view ?? $this->getCurrentView(), ['item' => $item]);
+    }
 }

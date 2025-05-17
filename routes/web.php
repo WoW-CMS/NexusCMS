@@ -13,10 +13,15 @@ Route::prefix('news')->group(function () {
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
 });
 
+Route::prefix('armory')->group(function () {
+    Route::get('/', [ArmoryController::class, 'index'])->name('armory');
+    Route::get('armory/{id}', [ArmoryController::class, 'show'])->name('armory.show');
+});
+
 Route::prefix('auth')->group(function () {
-    Route::get('/login', [UserController::class,'showLoginForm'])->name('login');
+    Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [UserController::class, 'login']);
-    Route::get('/register', [UserController::class,'showRegisterForm'])->name('register');
-    Route::post('/register', [UserController::class,'register']);
+    Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [UserController::class, 'register']);
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });

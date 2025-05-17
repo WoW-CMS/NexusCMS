@@ -64,7 +64,7 @@ return [
 
         'mysql_characters' => [
             'driver' => 'mysql',
-            'url' => env('DCHARACTERS_B_URL'),
+            'url' => env('CHARACTERS_DB_URL'),
             'host' => env('CHARACTERS_DB_HOST', '127.0.0.1'),
             'port' => env('CHARACTERS_DB_PORT', '3306'),
             'database' => env('CHARACTERS_DB_DATABASE', 'laravel'),
@@ -73,6 +73,26 @@ return [
             'unix_socket' => env('CHARACTERS_DB_SOCKET', ''),
             'charset' => env('CHARACTERS_DB_CHARSET', 'utf8mb4'),
             'collation' => env('CHARACTERS_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'mysql_world' => [
+            'driver' => 'mysql',
+            'url' => env('WORLD_DB_URL'),
+            'host' => env('WORLD_DB_HOST', '127.0.0.1'),
+            'port' => env('WORLD_DB_PORT', '3306'),
+            'database' => env('WORLD_DB_DATABASE', 'laravel'),
+            'username' => env('WORLD_DB_USERNAME', 'root'),
+            'password' => env('WORLD_DB_PASSWORD', ''),
+            'unix_socket' => env('WORLD_DB_SOCKET', ''),
+            'charset' => env('WORLD_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('WORLD_DB_COLLATION', 'utf8mb4_unicode_ci'),
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
