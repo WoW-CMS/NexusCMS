@@ -12,7 +12,7 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
                     <input type="email" name="email" id="email" required
-                        class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pl-10">
+                        class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pl-10">
                     @error('email')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -21,7 +21,7 @@
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-400 mb-2">Password</label>
                     <input type="password" name="password" id="password" required
-                        class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 text-white placeholder-gray-500
+                        class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 text-black placeholder-gray-500
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pl-10">
                     @error('password')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

@@ -88,8 +88,24 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-4 flex items-center md:ml-6 space-x-4">
-                        <a href="{{ route('login') }}" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
-                        <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        @auth
+                            <div class="relative">
+                                <button class="flex items-center text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">
+                                    <span>{{ Auth::user()->name }}</span>
+                                    <i class="fas fa-chevron-down ml-2"></i>
+                                </button>
+                                <!-- Add dropdown menu here if needed -->
+                            </div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                                    Logout
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
+                            <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        @endauth
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
