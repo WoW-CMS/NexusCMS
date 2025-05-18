@@ -31,9 +31,11 @@ class UserController extends Controller
             return throw new \Exception('User not found', 404);
         }
 
+        // TODO: Remove this line when you have a real implementation
+        // at the moment we are just returning a dummy user
         $user->coins = 0;
-        
-        return view($this->views['index'], compact('user'));   
+
+        return view($this->views['index'], compact('user'));
     }
 
     public function gameAccount()
@@ -46,7 +48,7 @@ class UserController extends Controller
 
         return view('ucp.gameaccount', compact('user'));
     }
-    
+
     public function showLoginForm()
     {
         return view('auth.login');
