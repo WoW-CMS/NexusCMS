@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use App\Models\User;
+use App\Exceptions\UserNotFoundException;
 
 class UserController extends Controller
 {
@@ -28,7 +29,7 @@ class UserController extends Controller
         $user = $this->auth->guard()->user();
 
         if (!$user) {
-            return throw new \Exception('User not found', 404);
+            throw new UserNotFoundException('User not found', 404);
         }
 
         // TODO: Remove this line when you have a real implementation
@@ -43,7 +44,7 @@ class UserController extends Controller
         $user = $this->auth->guard()->user();
 
         if (!$user) {
-            return throw new \Exception('User not found', 404);
+            throw new UserNotFoundException('User not found', 404);
         }
 
         return view('ucp.gameaccount', compact('user'));
