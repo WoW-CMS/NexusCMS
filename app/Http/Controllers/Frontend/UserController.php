@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use App\Models\User;
 
 class UserController extends Controller
@@ -17,7 +17,7 @@ class UserController extends Controller
     protected $auth;
     protected $hash;
 
-    public function __construct(Auth $auth, Hash $hash)
+    public function __construct(AuthFactory $auth, HasherContract $hash)
     {
         $this->auth = $auth;
         $this->hash = $hash;
@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function show()
     {
-        $user = Auth::user();
+        $user = $this->auth->guard()->user();
 
         if (!$user) {
             return throw new \Exception('User not found', 404);
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function gameAccount()
     {
-        $user = Auth::user();
+        $user = $this->auth->guard()->user();
 
         if (!$user) {
             return throw new \Exception('User not found', 404);
@@ -61,7 +61,7 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if ($this->auth->guard()->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
@@ -87,18 +87,18 @@ class UserController extends Controller
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $this->hash->make($validated['password']),
         ]);
         $user->save();
 
-        Auth::login($user);
+        $this->auth->guard()->login($user);
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        $this->auth->guard()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
