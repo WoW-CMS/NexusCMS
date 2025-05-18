@@ -22,4 +22,5 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('ucp')->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
+    Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
 });

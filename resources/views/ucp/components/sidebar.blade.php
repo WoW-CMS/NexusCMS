@@ -20,6 +20,11 @@
                 <i class="fas fa-home w-5 h-5"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
+            <a href="{{ route('ucp.gameaccount') }}" 
+            class="flex items-center space-x-3 px-5 py-3.5 rounded-xl transition-all duration-300 {{ request()->routeIs('ucp.gameaccount') ? 'bg-gradient-to-r from-blue-600/30 to-indigo-600/30 text-blue-400 border border-gray-900 shadow-lg' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white hover:shadow-md' }}">
+                <i class="fas fa-home w-5 h-5"></i>
+                <span class="font-medium">Game Account</span>
+            </a>
         </nav>
     </div>
 </aside>

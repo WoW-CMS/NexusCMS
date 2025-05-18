@@ -35,6 +35,17 @@ class UserController extends Controller
         
         return view($this->views['index'], compact('user'));   
     }
+
+    public function gameAccount()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return throw new \Exception('User not found', 404);
+        }
+
+        return view('ucp.gameaccount', compact('user'));
+    }
     
     public function showLoginForm()
     {
