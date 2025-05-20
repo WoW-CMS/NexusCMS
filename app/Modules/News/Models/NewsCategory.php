@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\News\Models;
 
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
