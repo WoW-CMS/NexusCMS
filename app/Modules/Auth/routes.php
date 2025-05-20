@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\NewsController;
-use App\Http\Controllers\Frontend\UserController;
 use Illuminate\Support\Facades\Route;
-
+use App\Modules\User\Controllers\UserController;
 
 Route::prefix('auth')->group(function () {
     Route::get('/login', [UserController::class,'showLoginForm'])->name('login');
