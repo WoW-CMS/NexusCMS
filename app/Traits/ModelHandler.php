@@ -13,14 +13,20 @@ trait ModelHandler
      *
      * @return Model|null
      */
-    protected function resolveModel()
+    protected function resolveModel($module = null)
     {
         if ($this->model instanceof Model) {
             return $this->model;
         }
 
         if (is_string($this->model)) {
-            $modelClass = 'App\\Models\\' . ucfirst($this->model);
+            if ($module) {
+                $modelClass = "App\\Modules\\$module\\Models\\" . ucfirst($this->model);
+            } else {
+                $modelClass = "App\\Modules\\". $this->model ."\\Models\\" . ucfirst($this->model);
+            }
+
+
             if (class_exists($modelClass)) {
                 return new $modelClass();
             }
