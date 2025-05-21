@@ -26,7 +26,7 @@ class UserController extends BaseController
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
@@ -56,7 +56,7 @@ class UserController extends BaseController
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 
     public function logout(Request $request)
@@ -64,6 +64,6 @@ class UserController extends BaseController
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('home');
     }
 }
