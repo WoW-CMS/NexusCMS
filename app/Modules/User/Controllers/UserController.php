@@ -2,21 +2,19 @@
 
 namespace App\Modules\User\Controllers;
 
+use App\Http\Controllers\BaseController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 class UserController extends BaseController
 {
-    protected $model = 'user';
-    protected $auth;
-    protected $hash;
-
-    public function __construct(Auth $auth, Hash $hash)
-    {
-        $this->auth = $auth;
-        $this->hash = $hash;
-    }
+    protected $model = 'User';
 
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth::login');
     }
 
     public function login(Request $request)
@@ -26,7 +24,7 @@ class UserController extends BaseController
             'password' => ['required'],
         ]);
 
-        if ($this->auth->attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
@@ -38,7 +36,7 @@ class UserController extends BaseController
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        return view('auth::register');
     }
 
     public function register(Request $request)
@@ -52,18 +50,18 @@ class UserController extends BaseController
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $this->hash->make($validated['password']),
+            'password' => Hash::make($validated['password']),
         ]);
         $user->save();
 
-        $this->auth->login($user);
+        Auth::login($user);
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
-        $this->auth->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');

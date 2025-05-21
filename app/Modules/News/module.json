@@ -1,0 +1,6 @@
+{
+  "name": "news",
+  "description": "Manages news articles, categories, and publishing workflows for the site.",
+  "version": "1.0.0",
+  "author": "Lothiex"
+}

@@ -31,7 +31,7 @@ class NewsController extends BaseController
      * @var string
      */
     protected $views = [
-        'index' => 'news.index',
-        'show' => 'news.list',
+        'index' => 'news::index',
+        'show' => 'news::list',
     ];
 }

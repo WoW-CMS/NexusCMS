@@ -27,24 +27,15 @@ class AppServiceProvider extends ServiceProvider
                 continue;
             }
 
-            $routeFile = $modulesPath . '/' . $module . '/routes.php';
+            $routeFile = $modulesPath . '/' . $module . '/config/routes.php';
 
-            if (is_file($routeFile)) {
-                require $routeFile;
-            }
-        }
-        
-        // Diğer route loader vs varsa silme
-        $modulesPath = app_path('Modules');
-    
-        // View namespace tanımı
-        foreach (scandir($modulesPath) as $module) {
             $viewPath = $modulesPath . '/' . $module . '/Views';
+            
             if (is_dir($viewPath)) {
+                
                 View::addNamespace(strtolower($module), $viewPath);
             }
-    
-            $routeFile = $modulesPath . '/' . $module . '/routes.php';
+
             if (is_file($routeFile)) {
                 require $routeFile;
             }

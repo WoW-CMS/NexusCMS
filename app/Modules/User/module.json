@@ -1,0 +1,6 @@
+{
+  "name": "user",
+  "description": "Manages user profiles, preferences, roles, and account-related operations.",
+  "version": "1.0.0",
+  "author": "Lothiex"
+}

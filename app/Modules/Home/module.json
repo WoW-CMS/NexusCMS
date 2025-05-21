@@ -1,0 +1,6 @@
+{
+  "name": "home",
+  "description": "Handles homepage display, featured content, and main entry point routing.",
+  "version": "1.0.0",
+  "author": "Lothiex"
+}
