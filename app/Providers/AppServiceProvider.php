@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        // Register services here if needed
     }
 
     /**
@@ -29,24 +29,20 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $routeFile = $modulesPath . '/' . $module . '/Config/routes.php';
-
             $viewPath = $modulesPath . '/' . $module . '/Views';
-            
-            if (is_dir($viewPath)) {
 
+            if (is_dir($viewPath)) {
                 View::addNamespace(strtolower($module), $viewPath);
             }
 
             if (file_exists($routeFile)) {
                 require $routeFile;
-
             } else {
-                
-                throw new InvalidArgumentException("Failed to resolve model class for the route file: {$routeFile}. Please check the file structure and namespace definitions.");
+                throw new InvalidArgumentException(
+                    "Failed to resolve model class for the route file: {$routeFile}. " .
+                    "Please check the file structure and namespace definitions."
+                );
             }
-            
         }
     }
-    
-    
 }
