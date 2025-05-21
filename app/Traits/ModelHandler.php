@@ -20,16 +20,25 @@ trait ModelHandler
         }
 
         if (is_string($this->model)) {
+            $classCandidates = [];
+
             if ($module) {
-                $modelClass = "App\\Modules\\$module\\Models\\" . ucfirst($this->model);
-            } else {
-                $modelClass = "App\\Modules\\". $this->model ."\\Models\\" . ucfirst($this->model);
+                $classCandidates[] = "App\\Modules\\$module\\Model\\" . ucfirst($this->model);
             }
 
+            $classCandidates[] = "App\\Modules\\" . ucfirst($this->model) . "\\Model\\" . ucfirst($this->model);
 
-            if (class_exists($modelClass)) {
-                return new $modelClass();
+            // Klasik App\Models fallback
+            $classCandidates[] = "App\\Models\\" . ucfirst($this->model);
+
+            foreach ($classCandidates as $modelClass) {
+                if (class_exists($modelClass)) {
+                    return new $modelClass();
+                }
             }
+
+            // Hata durumunda logla
+            throw new InvalidArgumentException("Model class could not be resolved for: {$this->model}");
         }
 
         return null;
