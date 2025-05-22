@@ -1,0 +1,6 @@
+{
+  "name": "auth",
+  "description": "Provides user authentication, access control, session handling, and credential validation.",
+  "version": "1.0.0",
+  "author": "Lothiex"
+}

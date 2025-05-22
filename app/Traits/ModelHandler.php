@@ -13,17 +13,32 @@ trait ModelHandler
      *
      * @return Model|null
      */
-    protected function resolveModel()
+    protected function resolveModel($module = null)
     {
         if ($this->model instanceof Model) {
             return $this->model;
         }
 
         if (is_string($this->model)) {
-            $modelClass = 'App\\Models\\' . ucfirst($this->model);
-            if (class_exists($modelClass)) {
-                return new $modelClass();
+            $classCandidates = [];
+
+            if ($module) {
+                $classCandidates[] = "App\\Modules\\$module\\Model\\" . ucfirst($this->model);
             }
+
+            $classCandidates[] = "App\\Modules\\" . ucfirst($this->model) . "\\Model\\" . ucfirst($this->model);
+
+            // Klasik App\Models fallback
+            $classCandidates[] = "App\\Models\\" . ucfirst($this->model);
+
+            foreach ($classCandidates as $modelClass) {
+                if (class_exists($modelClass)) {
+                    return new $modelClass();
+                }
+            }
+
+            // Hata durumunda logla
+            throw new InvalidArgumentException("Model class could not be resolved for: {$this->model}");
         }
 
         return null;

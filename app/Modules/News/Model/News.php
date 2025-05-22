@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\News\Model;
 
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Modules\User\Model\User;
 
 class News extends Model
 {
