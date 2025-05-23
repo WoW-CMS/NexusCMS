@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use GameCrypto\WoWCrypto;
 use App\Models\User;
 use App\Exceptions\UserNotFoundException;
+use App\Traits\ConnectsToExternalDatabase;
 
 class UserController extends Controller
 {
+    use ConnectsToExternalDatabase;
+
     protected $views = [
         'index' => 'ucp.index',
     ];
@@ -43,11 +47,31 @@ class UserController extends Controller
     {
         $user = $this->auth->guard()->user();
 
+        $gameAccounts = [
+            [
+                'username' => 'exampleuser',
+                'created_at' => '2023-09-15',
+                'last_login' => '2023-09-15',
+                'status' => 'active',
+                'coins' => 0,
+                'characters' => [
+                    [
+                        'name' => 'Character 1',
+                        'level' => 10,
+                        'class' => 'Warrior',
+                        'last_login' => '2023-09-15',
+                        'status' => 'active',
+                        'coins' => 0,
+                    ],
+                ],
+            ],
+        ];
+
         if (!$user) {
             throw new UserNotFoundException('User not found', 404);
         }
 
-        return view('ucp.gameaccount', compact('user'));
+        return view('ucp.gameaccount', compact('user', 'gameAccounts'));
     }
 
     public function showLoginForm()
@@ -103,5 +127,40 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
+    }
+
+    public function createGameAccount(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|max:32',
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6|max:32',
+            'realm_id' => 'required|integer|exists:realms,id',
+        ]);
+
+        // Obtener el realm y su configuración de base de datos Auth
+        $realm = \App\Models\Realm::findOrFail($request->realm_id);
+        $authConfig = json_decode($realm->auth_database, true);
+
+        // Conectar a la base de datos Auth
+        $authDb = $this->connectToExternalDatabase($authConfig, 'auth');
+
+        // Generar la contraseña usando WoWCrypto
+        $username = strtoupper($request->username);
+        $password = strtoupper($request->password);
+        $sha_pass_hash = WoWCrypto::encryppt($password, $username); // TODO: Implement this method (see WoWCrypto class)
+
+        // Insertar el usuario en la tabla account
+        $authDb->table('account')->insert([
+            'username' => $request->username,
+            'email' => $request->email,
+            'sha_pass_hash' => $sha_pass_hash,
+            'expansion' => $realm->expansion ?? 2,
+            'joindate' => now(),
+        ]);
+
+        // Aquí puedes enlazar la cuenta con el usuario web si lo necesitas
+
+        return redirect()->back()->with('success', 'Cuenta de juego creada correctamente.');
     }
 }

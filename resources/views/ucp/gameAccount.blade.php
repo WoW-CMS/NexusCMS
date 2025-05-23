@@ -8,16 +8,54 @@
 
             <div class="flex-1 space-y-6">
                 <!-- Header Section -->
-                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-900 p-6 shadow-xl">
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-900 p-6 shadow-xl" x-data="{ open: false }">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
                             Game Accounts
                         </h2>
-                        <button class="px-4 py-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/20 hover:bg-indigo-600/30 transition-all duration-300">
+                        <button 
+                            @click="open = true"
+                            class="px-4 py-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/20 hover:bg-indigo-600/30 transition-all duration-300">
                             <i class="fas fa-plus mr-2"></i> Add Account
                         </button>
                     </div>
 
+                    <!-- Modal de creación de cuenta -->
+                    <div 
+                        x-show="open"
+                        style="display: none;"
+                        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+                        x-cloak
+                    >
+                        <div @click.away="open = false" class="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-800">
+                            <h3 class="text-xl font-bold mb-6 text-indigo-400">Create Game Account</h3>
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block text-gray-300 mb-1" for="username">Username</label>
+                                    <input type="text" id="username" name="username" class="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-300 mb-1" for="email">E-mail</label>
+                                    <input type="email" id="email" name="email" class="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-300 mb-1" for="password">Password</label>
+                                    <input type="password" id="password" name="password" class="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-gray-300 mb-1" for="expansion">Realm</label>
+                                    <select id="expansion" name="expansion" class="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                        <option value="">Select your Realm</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" @click="open = false" class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-all">Cancel</button>
+                                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all">Create</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Fin Modal -->
                     <!-- Game Accounts Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @forelse ($gameAccounts ?? [] as $account)
@@ -26,8 +64,8 @@
                                     <div class="flex items-center space-x-3">
                                         <i class="fas fa-gamepad text-2xl text-indigo-400"></i>
                                         <div>
-                                            <h3 class="text-lg font-semibold text-white">{{ $account->username }}</h3>
-                                            <p class="text-sm text-gray-400">Created: {{ $account->created_at->format('M d, Y') }}</p>
+                                            <h3 class="text-lg font-semibold text-white">{{ $account['username'] }}</h3>
+                                            <p class="text-sm text-gray-400">Created: {{ \Carbon\Carbon::parse($account['created_at'])->format('M d, Y') }}</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
@@ -44,16 +82,16 @@
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-gray-400">Status</span>
                                         <span class="px-2 py-1 text-xs font-medium text-emerald-400 bg-emerald-400/10 rounded-full">
-                                            Active
+                                            {{ ucfirst($account['status']) }}
                                         </span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-gray-400">Characters</span>
-                                        <span class="text-white">{{ count($account->characters ?? []) }}</span>
+                                        <span class="text-white">{{ count($account['characters'] ?? []) }}</span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-gray-400">Last Login</span>
-                                        <span class="text-white">{{ $account->last_login ?? 'Never' }}</span>
+                                        <span class="text-white">{{ $account['last_login'] ?? 'Never' }}</span>
                                     </div>
                                 </div>
                             </div>
