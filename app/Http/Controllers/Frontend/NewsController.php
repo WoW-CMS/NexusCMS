@@ -36,7 +36,7 @@ class NewsController extends BaseController
     /**
      * Per page
      */
-    protected $perPage = 5;
+    protected $perPage = 1;
 
     /**
      * Default view for the controller

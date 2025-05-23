@@ -39,7 +39,7 @@
                     </div>
                     
                     <div class="space-y-8">
-                        @forelse ($data as $news)
+                        @forelse ($data['news'] as $news)
                         <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg news-card flex flex-col md:flex-row">
                             <div class="md:w-1/3">
                                 <img class="w-full h-48 md:h-full object-cover" 
@@ -81,100 +81,45 @@
                         
                         <div class="space-y-4">
                             <!-- Realm 1 -->
+                            @forelse ($data['realms'] as $realm)
                             <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 border-green-500">
                                 <div class="p-4">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <h3 class="text-lg font-medium text-white">Realm 1 (PvP)</h3>
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-900 text-green-300">Online</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-3">
-                                        <span>Wrath of the Lich King</span>
-                                        <span>3.3.5a</span>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="mr-3">
-                                                <div class="text-xs text-gray-500">PLAYERS</div>
-                                                <div class="text-xl font-bold text-white">756</div>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs text-gray-500">UPTIME</div>
-                                                <div class="text-xl font-bold text-white">14d 6h</div>
-                                            </div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <h3 class="text-lg font-medium text-white">{{ $realm->name }}</h3>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-900 text-green-300">Online</span>
                                         </div>
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-600 rounded-full h-2.5">
-                                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 75%"></div>
+                                        <div class="flex justify-between text-sm text-gray-400 mb-3">
+                                            <span>{{ App\Helpers\RealmHelper::getWoWConstant('expansion', $realm->expansion) }}</span>
+                                            <span>{{ App\Helpers\RealmHelper::getWoWConstant('version', $realm->expansion) }}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <div class="mr-3">
+                                                    <div class="text-xs text-gray-500">PLAYERS</div>
+                                                    <div class="text-xl font-bold text-white">756</div>
+                                                </div>
+                                                <div>
+                                                    <div class="text-xs text-gray-500">UPTIME</div>
+                                                    <div class="text-xl font-bold text-white">14d 6h</div>
+                                                </div>
                                             </div>
-                                            <span class="ml-2 text-xs text-gray-400">75%</span>
+                                            <div class="flex items-center">
+                                                <div class="w-16 bg-gray-600 rounded-full h-2.5">
+                                                    <div class="bg-green-500 h-2.5 rounded-full" style="width: 75%"></div>
+                                                </div>
+                                                <span class="ml-2 text-xs text-gray-400">75%</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Realm 2 -->
-                            <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 border-red-500">
+                            @empty
+                            <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 border-gray-500">
                                 <div class="p-4">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <h3 class="text-lg font-medium text-white">Realm 2 (PvE)</h3>
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-900 text-red-300">Offline</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-3">
-                                        <span>Cataclysm</span>
-                                        <span>4.3.4</span>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="mr-3">
-                                                <div class="text-xs text-gray-500">PLAYERS</div>
-                                                <div class="text-xl font-bold text-white">0</div>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs text-gray-500">UPTIME</div>
-                                                <div class="text-xl font-bold text-white">0h</div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-600 rounded-full h-2.5">
-                                                <div class="bg-red-500 h-2.5 rounded-full" style="width: 0%"></div>
-                                            </div>
-                                            <span class="ml-2 text-xs text-gray-400">0%</span>
-                                        </div>
-                                    </div>
+                                    No realms available at the moment. Check back later for more details.
                                 </div>
                             </div>
-                            
-                            <!-- Realm 3 -->
-                            <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 border-yellow-500">
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <h3 class="text-lg font-medium text-white">Realm 3 (RP)</h3>
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">Maintenance</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-3">
-                                        <span>Legion</span>
-                                        <span>7.3.5</span>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="mr-3">
-                                                <div class="text-xs text-gray-500">PLAYERS</div>
-                                                <div class="text-xl font-bold text-white">0</div>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs text-gray-500">ETA</div>
-                                                <div class="text-xl font-bold text-white">2h</div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-600 rounded-full h-2.5">
-                                                <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 65%"></div>
-                                            </div>
-                                            <span class="ml-2 text-xs text-gray-400">65%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforelse
                             
                             <!-- Server Statistics -->
                             <div class="bg-gray-800 rounded-lg p-4 mt-4">
