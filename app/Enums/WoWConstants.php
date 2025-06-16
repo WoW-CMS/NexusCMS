@@ -43,4 +43,32 @@ class WoWConstants
         self::EXPANSION_DRAGONFLIGHT => '10.x',
         self::EXPANSION_WAR_WITHIN   => '11.x',
     ];
+
+    public const EXPANSION_COLORS = [
+        self::EXPANSION_VANILLA => 'border-purple-500',
+        self::EXPANSION_TBC => 'border-blue-500',
+        self::EXPANSION_WOTLK => 'border-green-500',
+        self::EXPANSION_CATA => 'border-yellow-500',
+        self::EXPANSION_MOP => 'border-orange-500',
+        self::EXPANSION_WOD => 'border-red-500',
+        self::EXPANSION_LEGION => 'border-pink-500',
+        self::EXPANSION_BFA => 'border-purple-500',
+        self::EXPANSION_SHADOWLANDS => 'border-blue-500',
+        self::EXPANSION_DRAGONFLIGHT => 'border-green-500',
+        self::EXPANSION_WAR_WITHIN   => 'border-yellow-500',
+    ];
+
+    public const EXPANSION_MAX_LEVEL = [
+        self::EXPANSION_VANILLA => 60,
+        self::EXPANSION_TBC => 70,
+        self::EXPANSION_WOTLK => 80,
+        self::EXPANSION_CATA => 85,
+        self::EXPANSION_MOP => 90, 
+        self::EXPANSION_WOD => 100,
+        self::EXPANSION_LEGION => 110,
+        self::EXPANSION_BFA => 120,
+        self::EXPANSION_SHADOWLANDS => 60,
+        self::EXPANSION_DRAGONFLIGHT => 70,
+        self::EXPANSION_WAR_WITHIN   => 80,
+    ];
 }

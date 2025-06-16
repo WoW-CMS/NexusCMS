@@ -48,6 +48,8 @@ class RealmHelper
                 return WoWConstants::EXPANSION_NAMES[$id] ?? null;
             case 'version':
                 return WoWConstants::EXPANSION_VERSIONS[$id] ?? null;
+            case 'color':
+                return WoWConstants::EXPANSION_COLORS[$id]?? null;
             default:
                 return null;
         }

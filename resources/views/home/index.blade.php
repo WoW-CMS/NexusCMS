@@ -82,11 +82,13 @@
                         <div class="space-y-4">
                             <!-- Realm 1 -->
                             @forelse ($data['realms'] as $realm)
-                            <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 border-green-500">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden border-l-4 {{ App\Helpers\RealmHelper::getWoWConstant('color', $realm->expansion) }}">
                                 <div class="p-4">
                                         <div class="flex justify-between items-center mb-2">
                                             <h3 class="text-lg font-medium text-white">{{ $realm->name }}</h3>
                                             <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-900 text-green-300">Online</span>
+                                           <!-- <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-900 text-green-300">Offline</span>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-900 text-green-300">Mantenimiento</span> -->
                                         </div>
                                         <div class="flex justify-between text-sm text-gray-400 mb-3">
                                             <span>{{ App\Helpers\RealmHelper::getWoWConstant('expansion', $realm->expansion) }}</span>
