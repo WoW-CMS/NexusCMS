@@ -113,18 +113,18 @@
                                      class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5"
                                      style="display: none;">
                                     <div class="py-1">
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
-                                            Mi Perfil
+                                        <a href="{{ route('ucp.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Your Profile
                                         </a>
                                         <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
-                                            Ajustes de Cuenta
+                                            Account Settings
                                         </a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
-                                            Personajes
+                                        <a href="{{ route('ucp.gameaccount') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Your Game Accounts
                                         </a>
                                         <div class="border-t border-gray-700"></div>
                                         <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
-                                            Soporte
+                                            Admin Control Panel
                                         </a>
                                     </div>
                                 </div>
@@ -156,6 +156,7 @@
         @yield('content')
     </main>
 
+    @yield('modals')
     <!-- Footer -->
     <footer class="bg-gray-800 pt-16 pb-12 border-t border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
