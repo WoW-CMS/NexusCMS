@@ -109,21 +109,13 @@ class UserController extends Controller
     private function getUserGameAccounts($user)
     {
         $gameLinked = AccountLinked::where('user_id', $user->id)->get();
-        $config  = [
-            'driver'    => 'mysql',
-            'host'      => '127.0.0.1',
-            'port'      => 3307,
-            'database'  => 'auth',
-            'username'  => 'root',
-            'password'  => 'admin',
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-        ];
-
-        $external = $this->connectToExternalDatabase($config);
 
         foreach ($gameLinked as $game) {
+            $realm = Realm::findOrFail($game->realm_id);
+            $external = $this->connectToExternalDatabase(
+                json_decode($realm->auth_database, true)
+            );
+            
             $acc = $external->table('account')->where('id', $game->target_id)->first();
 
             $account[] = [
