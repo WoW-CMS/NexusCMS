@@ -44,7 +44,7 @@ class AuthController extends Controller
         if ($this->auth->guard()->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            return redirect()->route('ucp.dashboard');
         }
 
         return back()->withErrors([

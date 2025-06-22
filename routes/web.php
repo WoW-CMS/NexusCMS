@@ -26,5 +26,7 @@ Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/battlepass', [UserController::class, 'battlePass'])->name('ucp.battlepass');
+    Route::get('/gameaccount/create', [UserController::class, 'createAction'])->name('ucp.gameaccount.create');
     Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.create');
+    Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
 });

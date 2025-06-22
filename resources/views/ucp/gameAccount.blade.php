@@ -17,12 +17,11 @@
                             <p class="text-gray-400 text-sm">Manage all your game accounts from one place</p>
                         </div>
                         <div class="mt-4 md:mt-0">
-                            <!-- Botón en el encabezado -->
-                            <button 
-                                @click="$dispatch('open-modal', 'create-account-modal')"
-                                class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 font-medium shadow-lg shadow-indigo-600/20">
+                            <a 
+                                href="{{ route('ucp.gameaccount.create') }}"                               
+                                class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-lg hover:from-indigo-500 hover:to-purple-600 transition-all duration-300 font-medium shadow-lg"
                                 <i class="fas fa-plus mr-2"></i> Register new account
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -64,10 +63,6 @@
                         <h3 class="text-xl font-semibold text-white flex items-center">
                             <i class="fas fa-id-card text-indigo-400 mr-3"></i> Your Game Accounts
                         </h3>
-                        <div class="relative">
-                            <input type="text" placeholder="Buscar cuenta..." class="px-4 py-2 pl-10 bg-gray-900/70 border border-gray-700 rounded-lg text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
-                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        </div>
                     </div>
 
                     <!-- Game Accounts Grid -->
@@ -142,7 +137,7 @@
                                     <h3 class="text-2xl font-bold text-gray-300 mb-4">No tienes cuentas vinculadas</h3>
                                     <p class="text-gray-500 max-w-md mx-auto mb-8">Vincula tu primera cuenta de juego para comenzar a jugar y gestionar todos tus personajes desde un solo lugar.</p>
                                     <button 
-                                        @click="$dispatch('open-modal', 'create-account-modal')"
+                                        href="{{ route('ucp.gameaccount.create') }}"
                                         class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 font-medium shadow-lg shadow-indigo-600/20">
                                         <i class="fas fa-plus mr-2"></i> Crear mi primera cuenta
                                     </button>

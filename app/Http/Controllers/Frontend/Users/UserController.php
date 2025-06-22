@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use App\Exceptions\UserNotFoundException;
+use App\Helpers\RealmHelper;
 use App\Libraries\Auth\AccountLibrary;
 use App\Models\AccountLinked;
 use App\Models\Realm;
@@ -18,6 +19,9 @@ class UserController extends Controller
 
     protected $views = [
         'index' => 'ucp.index',
+        'create' => 'ucp.createAccount',
+        'gameAccount' => 'ucp.gameaccount',
+        'manage' => 'ucp.manageAccount',
     ];
 
     protected $auth;
@@ -44,6 +48,36 @@ class UserController extends Controller
         return view($this->views['index'], compact('user'));
     }
 
+    public function createAction()
+    {
+        $realms = RealmHelper::all();
+        $user = $this->auth->guard()->user();
+
+        if (!$user) {
+            throw new UserNotFoundException('User not found', 404);
+        }
+
+        return view($this->views['create'], [
+            'user' => $user,
+            'realms' => $realms,
+        ]);
+    }
+
+    public function manage()
+    {
+        $user          = $this->auth->guard()->user();
+        $linkedAccount = AccountLinked::where('user_id', $user->id)->first();
+
+        if (!$user) {
+            throw new UserNotFoundException('User not found', 404);
+        }
+
+        return view($this->views['manage'], [
+            'user' => $user,
+            'account' => $account ?? [],
+        ]);
+    }
+
     public function gameAccount()
     {
         $user = $this->auth->guard()->user();
@@ -52,7 +86,7 @@ class UserController extends Controller
             throw new UserNotFoundException('User not found', 404);
         }
 
-        $gameAccounts = $this->getUserGameAccounts($user);
+        $gameAccounts = $this->getUserGameAccounts($user) ?? [];
 
         return view('ucp.gameaccount', [
             'user' => $user,
@@ -74,26 +108,9 @@ class UserController extends Controller
 
     private function getUserGameAccounts($user)
     {
-        // Replace this with actual logic to retrieve game accounts for the user
-        return [
-            [
-                'username' => 'Darthar',
-                'created_at' => '2025-06-02',
-                'last_login' => '2025-06-01',
-                'status' => 'active',
-                'coins' => 0,
-                'characters' => [
-                    [
-                        'name' => 'Character 1',
-                        'level' => 10,
-                        'class' => 'Warrior',
-                        'last_login' => '2023-09-15',
-                        'status' => 'active',
-                        'coins' => 0,
-                    ],
-                ],
-            ],
-        ];
+        $gameAccounts = [];
+        
+        return $gameAccounts;
     }
 
     public function createGameAccount(Request $request)
