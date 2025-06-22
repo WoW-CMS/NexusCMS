@@ -136,11 +136,11 @@
                                     </div>
                                     <h3 class="text-2xl font-bold text-gray-300 mb-4">No tienes cuentas vinculadas</h3>
                                     <p class="text-gray-500 max-w-md mx-auto mb-8">Vincula tu primera cuenta de juego para comenzar a jugar y gestionar todos tus personajes desde un solo lugar.</p>
-                                    <button 
+                                    <a 
                                         href="{{ route('ucp.gameaccount.create') }}"
                                         class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 font-medium shadow-lg shadow-indigo-600/20">
                                         <i class="fas fa-plus mr-2"></i> Crear mi primera cuenta
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         @endforelse
