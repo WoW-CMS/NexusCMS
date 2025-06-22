@@ -13,10 +13,18 @@ use App\Models\AccountLinked;
 use App\Models\Realm;
 use App\Traits\ConnectsToExternalDatabase;
 
+/**
+ * User Controller for handling user-related actions in the frontend
+ */
 class UserController extends Controller
 {
     use ConnectsToExternalDatabase;
 
+    /**
+     * View paths mapping
+     *
+     * @var array<string, string>
+     */
     protected $views = [
         'index' => 'ucp.index',
         'create' => 'ucp.createAccount',
@@ -24,15 +32,34 @@ class UserController extends Controller
         'manage' => 'ucp.manageAccount',
     ];
 
+    /**
+     * @var AuthFactory
+     */
     protected $auth;
+
+    /**
+     * @var HasherContract
+     */
     protected $hash;
 
+    /**
+     * Constructor
+     *
+     * @param AuthFactory $auth
+     * @param HasherContract $hash
+     */
     public function __construct(AuthFactory $auth, HasherContract $hash)
     {
         $this->auth = $auth;
         $this->hash = $hash;
     }
 
+    /**
+     * Display user profile
+     *
+     * @throws UserNotFoundException
+     * @return \Illuminate\View\View
+     */
     public function show()
     {
         $user = $this->auth->guard()->user();
@@ -48,6 +75,12 @@ class UserController extends Controller
         return view($this->views['index'], compact('user'));
     }
 
+    /**
+     * Show create account form
+     *
+     * @throws UserNotFoundException
+     * @return \Illuminate\View\View
+     */
     public function createAction()
     {
         $realms = RealmHelper::all();
@@ -63,9 +96,15 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Show account management page
+     *
+     * @throws UserNotFoundException
+     * @return \Illuminate\View\View
+     */
     public function manage()
     {
-        $user          = $this->auth->guard()->user();
+        $user = $this->auth->guard()->user();
         $linkedAccount = AccountLinked::where('user_id', $user->id)->first();
 
         if (!$user) {
@@ -74,10 +113,16 @@ class UserController extends Controller
 
         return view($this->views['manage'], [
             'user' => $user,
-            'account' => $account ?? [],
+            'account' => $linkedAccount ?? [],
         ]);
     }
 
+    /**
+     * Show game account page
+     *
+     * @throws UserNotFoundException
+     * @return \Illuminate\View\View
+     */
     public function gameAccount()
     {
         $user = $this->auth->guard()->user();
@@ -88,27 +133,23 @@ class UserController extends Controller
 
         $gameAccounts = $this->getUserGameAccounts($user) ?? [];
 
-        return view('ucp.gameaccount', [
-            'user' => $user,
-            'gameAccounts' => $gameAccounts,
-            'realm' => Realm::all(),
+        return view($this->views['gameAccount'], [
+            'user'          => $user,
+            'gameAccounts'  => $gameAccounts,
+            'realm'         => Realm::all(),
         ]);
     }
 
-    public function battlePass()
-    {
-        $user = $this->auth->guard()->user();
-
-        if (!$user) {
-            throw new UserNotFoundException('User not found', 404);
-        }
-
-        return view('ucp.battlepass', compact('user'));
-    }
-
+    /**
+     * Get user's game accounts
+     *
+     * @param mixed $user
+     * @return array|null
+     */
     private function getUserGameAccounts($user)
     {
         $gameLinked = AccountLinked::where('user_id', $user->id)->get();
+        $account = [];
 
         foreach ($gameLinked as $game) {
             $realm = Realm::findOrFail($game->realm_id);
@@ -119,36 +160,41 @@ class UserController extends Controller
             $acc = $external->table('account')->where('id', $game->target_id)->first();
 
             $account[] = [
-                'username' => $game->username,
-                'email' => $acc->email,
+                'username'   => $game->username,
+                'email'      => $acc->email,
                 'created_at' => $acc->joindate,
-                'lastip' => $acc->last_ip,
-                'status' => $acc->locked,
-                'active' => $acc->online,
-                'expansion' => $acc->expansion,
+                'lastip'     => $acc->last_ip,
+                'status'     => $acc->locked,
+                'active'     => $acc->online,
+                'expansion'  => $acc->expansion,
             ];
         }
 
         return $account;
     }
 
+    /**
+     * Create a new game account
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createGameAccount(Request $request)
     {
-        // Generar la contraseña usando WoWCrypto
-        $username  = strtoupper($request->username);
-        $email     = strtoupper($request->email);
-        $password  = strtoupper($request->password);
-        $realm     = $request->realm;
+        // Generate password using WoWCrypto
+        $username = strtoupper($request->username);
+        $email    = strtoupper($request->email);
+        $password = strtoupper($request->password);
 
-        // Obtain realm configuratio
-        $realm = \App\Models\Realm::findOrFail($request->realm_id);
-        $al    = new AccountLibrary($realm);
+        // Obtain realm configuration
+        $realm = Realm::findOrFail($request->realm_id);
+        $al = new AccountLibrary($realm);
 
         try {
             $account = $al->createNewAccount($username, $password, $email, true);
 
             $gameAccountMatch = preg_match('/game account ([^ ]+)/i', $account, $gameAccountMatch);
-            $gameAccount      = $gameAccountMatch[1] ?? null;
+            $gameAccount = $gameAccountMatch[1] ?? null;
 
             if ($gameAccount) {
                 $gameAccount = explode('#', $gameAccount)[0];
@@ -157,19 +203,19 @@ class UserController extends Controller
             $existingAccount = AccountLinked::where('target_id', $gameAccount)->first();
 
             if ($existingAccount) {
-                return redirect()->back()->with('error', 'La cuenta de juego ya esta vinculada con este usuario.');
+                return redirect()->back()->with('error', 'Game account is already linked to this user.');
             }
 
             $accountLinked = new AccountLinked();
-            $accountLinked->user_id = $request->user()->id;
-            $accountLinked->realm_id = $request->realm_id;
+            $accountLinked->username  = $username;
+            $accountLinked->user_id   = $request->user()->id;
+            $accountLinked->realm_id  = $request->realm_id;
             $accountLinked->target_id = $gameAccount;
             $accountLinked->save();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al crear la cuenta de juego: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error creating game account: ' . $e->getMessage());
         }
 
-        
-        return redirect()->back()->with('success', 'Cuenta de juego creada correctamente.');
+        return redirect()->back()->with('success', 'Game account created successfully.');
     }
 }
