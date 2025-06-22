@@ -14,7 +14,7 @@ trait ConnectsToExternalDatabase
      * @param string $prefix Prefijo para el nombre de la conexión (ej: 'auth', 'characters')
      * @return Connection
      */
-    public function connectToExternalDatabase(array $config, string $prefix = 'external'): Connection
+    public function connectToExternalDatabase(array $config, string $prefix = 'external'): ?Connection
     {
         $connectionName = $prefix . '_temp_' . uniqid();
 
@@ -34,6 +34,14 @@ trait ConnectsToExternalDatabase
             ]
         ]);
 
-        return DB::connection($connectionName);
+        try {
+            $connection = DB::connection($connectionName);
+            $connection->getPdo();
+            return $connection;
+        } catch (\Exception $e) {
+            // Clean up the temporary connection silently
+            config(["database.connections.$connectionName" => null]);
+            return null;
+        }
     }
 }

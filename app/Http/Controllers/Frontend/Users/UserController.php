@@ -152,11 +152,16 @@ class UserController extends Controller
         $account = [];
 
         foreach ($gameLinked as $game) {
-            $realm = Realm::findOrFail($game->realm_id);
+            $realm    = Realm::findOrFail($game->realm_id);
             $external = $this->connectToExternalDatabase(
                 json_decode($realm->auth_database, true)
             );
             
+            if (empty($external)) {
+                return [];
+            }
+
+
             $acc = $external->table('account')->where('id', $game->target_id)->first();
 
             $account[] = [
@@ -187,8 +192,8 @@ class UserController extends Controller
         $password = strtoupper($request->password);
 
         // Obtain realm configuration
-        $realm = Realm::findOrFail($request->realm_id);
-        $al = new AccountLibrary($realm);
+        $realm = Realm::findOrFail($request->realm);
+        $al    = new AccountLibrary($realm);
 
         try {
             $account = $al->createNewAccount($username, $password, $email, true);
@@ -203,6 +208,8 @@ class UserController extends Controller
             $existingAccount = AccountLinked::where('target_id', $gameAccount)->first();
 
             if ($existingAccount) {
+                dump($existingAccount);
+                die();
                 return redirect()->back()->with('error', 'Game account is already linked to this user.');
             }
 
@@ -216,6 +223,6 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Error creating game account: ' . $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Game account created successfully.');
+        return redirect()->route('ucp.gameaccount')->with('success', 'Game account created successfully.');
     }
 }
