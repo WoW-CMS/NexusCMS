@@ -108,9 +108,36 @@ class UserController extends Controller
 
     private function getUserGameAccounts($user)
     {
-        $gameAccounts = [];
-        
-        return $gameAccounts;
+        $gameLinked = AccountLinked::where('user_id', $user->id)->get();
+        $config  = [
+            'driver'    => 'mysql',
+            'host'      => '127.0.0.1',
+            'port'      => 3307,
+            'database'  => 'auth',
+            'username'  => 'root',
+            'password'  => 'admin',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ];
+
+        $external = $this->connectToExternalDatabase($config);
+
+        foreach ($gameLinked as $game) {
+            $acc = $external->table('account')->where('id', $game->target_id)->first();
+
+            $account[] = [
+                'username' => $game->username,
+                'email' => $acc->email,
+                'created_at' => $acc->joindate,
+                'lastip' => $acc->last_ip,
+                'status' => $acc->locked,
+                'active' => $acc->online,
+                'expansion' => $acc->expansion,
+            ];
+        }
+
+        return $account;
     }
 
     public function createGameAccount(Request $request)

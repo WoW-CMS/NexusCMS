@@ -96,9 +96,9 @@
                                     <div class="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
                                         <p class="text-xs text-gray-500 mb-1">Status</p>
                                         <div class="flex items-center">
-                                            <span class="w-2 h-2 rounded-full {{ $account['status'] === 'active' ? 'bg-emerald-500' : 'bg-gray-500' }} mr-2"></span>
-                                            <span class="text-sm font-medium {{ $account['status'] === 'active' ? 'text-emerald-400' : 'text-gray-400' }}">
-                                                {{ ucfirst($account['status']) }}
+                                            <span class="w-2 h-2 rounded-full {{ $account['status'] === 0 ? 'bg-green-500' : 'bg-gray-500' }} mr-2"></span>
+                                            <span class="text-sm font-medium {{ $account['status'] === 0 ? 'text-green-400' : 'text-gray-400' }}">
+                                                {{ $account['status'] === 0 ? 'Active' : 'Inactive' }}
                                             </span>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                                         <p class="text-xs text-gray-500 mb-1">Expansion</p>
                                         <p class="text-sm text-gray-300">
                                             <i class="fas fa-globe text-indigo-400 mr-2"></i>
-                                            {{ $account['expansion'] ?? 'Classic' }}
+                                            {{ App\Helpers\RealmHelper::getWoWConstant('expansion', $account['expansion']) }}
                                         </p>
                                     </div>
                                     <button class="px-4 py-2 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 text-indigo-400 rounded-lg border border-indigo-500/20 hover:from-indigo-600/30 hover:to-purple-600/30 transition-all duration-300 text-sm">
