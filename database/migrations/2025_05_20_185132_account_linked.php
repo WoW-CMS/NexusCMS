@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('realm_id')->references('id')->on('realms')->onDelete('cascade');
-            $table->unique(['user_id', 'realm_id']);
+            $table->unique(['user_id']);
         });
     }
 

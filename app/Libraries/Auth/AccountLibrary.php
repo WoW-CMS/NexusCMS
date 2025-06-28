@@ -29,7 +29,7 @@ class AccountLibrary
     {
         try {
             if ($isBnet) {
-                return $this->soapCreator->createAccountBnet($username, $password);
+                return $this->soapCreator->createAccountBnet($email, $password);
             }
             
             return $this->soapCreator->createAccount($username, $password, $email);

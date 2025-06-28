@@ -28,6 +28,52 @@
                 <!-- Create Account Form -->
                 <div class="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-800 p-8 shadow-xl">
                     <div class="max-w-2xl mx-auto">
+                        <!-- Error Messages -->
+                        @if ($errors->any())
+                            <div class="mb-6 bg-red-900/20 border border-red-800 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-triangle text-red-400 text-xl mr-3 mt-0.5"></i>
+                                    <div class="flex-1">
+                                        <h3 class="text-red-400 font-medium mb-2">Se encontraron los siguientes errores:</h3>
+                                        <ul class="text-sm text-red-300 space-y-1">
+                                            @foreach ($errors->all() as $error)
+                                                <li class="flex items-start">
+                                                    <span class="text-red-400 mr-2">•</span>
+                                                    <span>{{ $error }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Success Message -->
+                        @if (session('success'))
+                            <div class="mb-6 bg-green-900/20 border border-green-800 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-400 text-xl mr-3"></i>
+                                    <div>
+                                        <span class="text-green-400 font-medium">¡Éxito!</span>
+                                        <p class="text-sm text-green-300">{{ session('success') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Error Message -->
+                        @if (session('error'))
+                            <div class="mb-6 bg-red-900/20 border border-red-800 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-exclamation-circle text-red-400 text-xl mr-3"></i>
+                                    <div>
+                                        <span class="text-red-400 font-medium">Error</span>
+                                        <p class="text-sm text-red-300">{{ session('error') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         <form class="space-y-6" method="POST" action="{{ route('ucp.gameaccount.create') }}">
                             @csrf
 
@@ -39,7 +85,7 @@
                                 <div class="space-y-4">
                                     @foreach($realms ?? [] as $realm)
                                         <label class="relative flex items-start p-6 bg-gradient-to-br from-gray-800/80 via-gray-800/60 to-gray-800/80 border-2 border-gray-700 rounded-xl cursor-pointer hover:border-indigo-500 transition-all duration-300 group shadow-lg realm-option">
-                                            <input type="radio" name="realm" value="{{ $realm->id }}" class="sr-only realm-radio" required>
+                                            <input type="radio" name="realm" value="{{ $realm->id }}" {{ old('realm') == $realm->id ? 'checked' : '' }} class="sr-only realm-radio" required>
                                             <div class="flex-shrink-0 w-6 h-6 border-2 border-gray-500 rounded-full mt-1 flex items-center justify-center group-hover:border-indigo-400 transition-colors radio-indicator">
                                                 <div class="w-3 h-3 bg-indigo-500 rounded-full opacity-0 transition-opacity radio-dot"></div>
                                             </div>
@@ -76,17 +122,25 @@
                                     </div>
                                 </div>
                                 @endif
+                                @error('realm')
+                                    <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                                @enderror
                             </div>
                             
+                            @if(!empty($realms))
                             <!-- Username -->
                             <div class="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
                                 <label class="block text-sm font-medium text-gray-300 mb-3">
                                     <i class="fas fa-user text-indigo-400 mr-2"></i>Nombre de Usuario
                                 </label>
-                                <input type="text" name="username" required 
+                                <input type="text" name="username" value="{{ old('username') }}" required 
                                        placeholder="Ingresa el nombre de usuario"
-                                       class="w-full px-4 py-3 bg-gray-800/70 border border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                <p class="text-xs text-gray-500 mt-2">Mínimo 3 caracteres, máximo 12. Solo letras y números</p>
+                                       class="w-full px-4 py-3 bg-gray-800/70 border {{ $errors->has('username') ? 'border-red-500' : 'border-gray-600' }} rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                @error('username')
+                                    <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                                @else
+                                    <p class="text-xs text-gray-500 mt-2">Mínimo 3 caracteres, máximo 12. Solo letras y números</p>
+                                @enderror
                             </div>
                             
                             <!-- Password -->
@@ -96,8 +150,12 @@
                                 </label>
                                 <input type="password" name="password" required 
                                        placeholder="Ingresa la contraseña"
-                                       class="w-full px-4 py-3 bg-gray-800/70 border border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                <p class="text-xs text-gray-500 mt-2">Mínimo 6 caracteres, se recomienda usar mayúsculas, minúsculas y números</p>
+                                       class="w-full px-4 py-3 bg-gray-800/70 border {{ $errors->has('password') ? 'border-red-500' : 'border-gray-600' }} rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                @error('password')
+                                    <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                                @else
+                                    <p class="text-xs text-gray-500 mt-2">Mínimo 6 caracteres, se recomienda usar mayúsculas, minúsculas y números</p>
+                                @enderror
                             </div>
                             
                             <!-- Confirm Password -->
@@ -107,7 +165,10 @@
                                 </label>
                                 <input type="password" name="password_confirmation" required 
                                        placeholder="Confirma la contraseña"
-                                       class="w-full px-4 py-3 bg-gray-800/70 border border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                       class="w-full px-4 py-3 bg-gray-800/70 border {{ $errors->has('password_confirmation') ? 'border-red-500' : 'border-gray-600' }} rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                @error('password_confirmation')
+                                    <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <!-- Email -->
@@ -115,10 +176,14 @@
                                 <label class="block text-sm font-medium text-gray-300 mb-3">
                                     <i class="fas fa-envelope text-indigo-400 mr-2"></i>Email
                                 </label>
-                                <input type="email" name="email" required
+                                <input type="email" name="email" value="{{ old('email') }}" required
                                        placeholder="youremail@tld.com"
-                                       class="w-full px-4 py-3 bg-gray-800/70 border border-gray-600 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                <p class="text-xs text-gray-500 mt-2">Para recuperación de cuenta y notificaciones importantes</p>
+                                       class="w-full px-4 py-3 bg-gray-800/70 border {{ $errors->has('email') ? 'border-red-500' : 'border-gray-600' }} rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                @error('email')
+                                    <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                                @else
+                                    <p class="text-xs text-gray-500 mt-2">Para recuperación de cuenta y notificaciones importantes</p>
+                                @enderror
                             </div>
 
 
@@ -148,6 +213,7 @@
                                     <i class="fas fa-plus mr-2"></i>Crear Cuenta
                                 </button>
                             </div>
+                            @endif
                         </form>
                     </div>
                 </div>

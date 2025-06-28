@@ -161,7 +161,6 @@ class UserController extends Controller
                 return [];
             }
 
-
             $acc = $external->table('account')->where('id', $game->target_id)->first();
 
             $account[] = [
@@ -186,43 +185,123 @@ class UserController extends Controller
      */
     public function createGameAccount(Request $request)
     {
+        // Validate the request
+        $request->validate([
+            'username' => 'required|string|min:3|max:12|alpha_num',
+            'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|email|max:255',
+            'realm' => 'required|exists:realms,id',
+            'terms' => 'required|accepted'
+        ], [
+            'username.required' => 'Username is required.',
+            'username.min' => 'Username must be at least 3 characters.',
+            'username.max' => 'Username cannot be more than 12 characters.',
+            'username.alpha_num' => 'Username can only contain letters and numbers.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Invalid email format.',
+            'realm.required' => 'You must select a realm.',
+            'realm.exists' => 'Selected realm is invalid.',
+            'terms.required' => 'You must accept the terms and conditions.',
+            'terms.accepted' => 'You must accept the terms and conditions.'
+        ]);
+
         // Generate password using WoWCrypto
         $username = strtoupper($request->username);
         $email    = strtoupper($request->email);
         $password = strtoupper($request->password);
 
-        // Obtain realm configuration
-        $realm = Realm::findOrFail($request->realm);
-        $al    = new AccountLibrary($realm);
-
         try {
-            $account = $al->createNewAccount($username, $password, $email, true);
-
-            $gameAccountMatch = preg_match('/game account ([^ ]+)/i', $account, $gameAccountMatch);
-            $gameAccount = $gameAccountMatch[1] ?? null;
-
-            if ($gameAccount) {
-                $gameAccount = explode('#', $gameAccount)[0];
-            }
+            // Obtain realm configuration
+            $realm = Realm::findOrFail($request->realm);
             
-            $existingAccount = AccountLinked::where('target_id', $gameAccount)->first();
-
-            if ($existingAccount) {
-                dump($existingAccount);
-                die();
-                return redirect()->back()->with('error', 'Game account is already linked to this user.');
+            // Check if realm database configuration exists
+            if (empty($realm->auth_database)) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'External database configuration not found.');
             }
 
-            $accountLinked = new AccountLinked();
-            $accountLinked->username  = $username;
-            $accountLinked->user_id   = $request->user()->id;
-            $accountLinked->realm_id  = $request->realm_id;
-            $accountLinked->target_id = $gameAccount;
-            $accountLinked->save();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error creating game account: ' . $e->getMessage());
-        }
+            $al = new AccountLibrary($realm);
+            $external = $this->connectToExternalDatabase(
+                json_decode($realm->auth_database, true)
+            );
 
-        return redirect()->route('ucp.gameaccount')->with('success', 'Game account created successfully.');
+            // Check database connection
+            if (empty($external)) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Error connecting to external database. Please try again.');
+            }
+
+            // Check if username already exists in the external database
+            $existingUsername = $external->table('account')->where('username', $username)->first();
+            if ($existingUsername) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['username' => 'This username is already in use.']);
+            }
+
+            // Check if email already exists in the external database
+            $existingEmail = $external->table('account')->where('email', $email)->first();
+            if ($existingEmail) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['email' => 'This email is already registered.']);
+            }
+
+            // Create the account
+            $account = $al->createNewAccount($username, $password, $email, true);
+            $acc = $external->table('account')->where('email', $email)->first();
+
+            if (!$acc) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Error creating game account. Please try again.');
+            }
+
+            // Check if account is already linked to another user
+            $existingAccount = AccountLinked::where('target_id', $acc->id)->first();
+            if ($existingAccount) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'This game account is already linked to another user.');
+            }
+
+            // Check if user already has an account linked to this realm
+            $userRealmAccount = AccountLinked::where('user_id', $request->user()->id)
+                ->where('realm_id', $realm->id)
+                ->first();
+            if ($userRealmAccount) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'You already have an account linked to this realm.');
+            }
+
+            // Link the account
+            $accountLinked = new AccountLinked();
+            $accountLinked->username = $username;
+            $accountLinked->user_id = $request->user()->id;
+            $accountLinked->realm_id = $realm->id;
+            $accountLinked->target_id = $acc->id;
+            $accountLinked->save();
+
+            return redirect()->route('ucp.gameaccount')
+                ->with('success', 'Cuenta de juego creada y vinculada exitosamente.');
+
+        } catch (\Exception $e) {
+            \Log::error('Error creating game account: ' . $e->getMessage(), [
+                'user_id' => $request->user()->id,
+                'username' => $request->username,
+                'realm_id' => $request->realm,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al crear la cuenta de juego: ' . $e->getMessage());
+        }
     }
 }
