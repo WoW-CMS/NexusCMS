@@ -150,28 +150,79 @@ class UserController extends Controller
     {
         $gameLinked = AccountLinked::where('user_id', $user->id)->get();
         $account = [];
+        $connectionErrors = false;
 
         foreach ($gameLinked as $game) {
-            $realm    = Realm::findOrFail($game->realm_id);
-            $external = $this->connectToExternalDatabase(
-                json_decode($realm->auth_database, true)
-            );
-            
-            if (empty($external)) {
-                return [];
+            try {
+                $realm = Realm::findOrFail($game->realm_id);
+                $external = $this->connectToExternalDatabase(
+                    json_decode($realm->auth_database, true)
+                );
+                
+                if (empty($external)) {
+                    // Registramos que hubo un error de conexión pero continuamos con otros reinos
+                    $connectionErrors = true;
+                    continue;
+                }
+
+                $acc = $external->table('account')->where('id', $game->target_id)->first();
+                
+                if (!$acc) {
+                    $connectionErrors = true;
+                    continue;
+                }
+
+                // Intentamos obtener los personajes si es posible
+                $characters = [];
+                try {
+                    // Intentamos conectar a la base de datos de personajes si está configurada
+                    if (!empty($realm->characters_database)) {
+                        $charactersDb = $this->connectToExternalDatabase(
+                            json_decode($realm->characters_database, true),
+                            'characters'
+                        );
+                        
+                        if ($charactersDb) {
+                            $chars = $charactersDb->table('characters')
+                                ->where('account', $game->target_id)
+                                ->select(['guid', 'name', 'race', 'class', 'level', 'gender'])
+                                ->get();
+                                
+                            if ($chars) {
+                                $characters = $chars->toArray();
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    \Log::warning('Error al obtener personajes: ' . $e->getMessage());
+                }
+
+                $account[] = [
+                    'username'   => $game->username,
+                    'email'      => $acc->email ?? 'No disponible',
+                    'created_at' => $acc->joindate ?? now(),
+                    'lastip'     => $acc->last_ip ?? '0.0.0.0',
+                    'status'     => $acc->locked ?? 1,
+                    'active'     => $acc->online ?? 0,
+                    'expansion'  => $acc->expansion ?? 0,
+                    'characters' => $characters,
+                    'realm_name' => $realm->name,
+                    'last_login' => $acc->last_login ?? 'Nunca',
+                ];
+            } catch (\Exception $e) {
+                \Log::error('Error al obtener cuenta de juego: ' . $e->getMessage());
+                $connectionErrors = true;
+                continue;
             }
+        }
 
-            $acc = $external->table('account')->where('id', $game->target_id)->first();
-
-            $account[] = [
-                'username'   => $game->username,
-                'email'      => $acc->email,
-                'created_at' => $acc->joindate,
-                'lastip'     => $acc->last_ip,
-                'status'     => $acc->locked,
-                'active'     => $acc->online,
-                'expansion'  => $acc->expansion,
-            ];
+        // Si hubo errores de conexión pero pudimos obtener algunas cuentas
+        if ($connectionErrors && !empty($account)) {
+            session()->flash('warning', 'Se han encontrado problemas al conectar con algunos servidores. La información mostrada puede estar incompleta.');
+        }
+        // Si hubo errores de conexión y no pudimos obtener ninguna cuenta
+        else if ($connectionErrors && empty($account)) {
+            session()->flash('error', 'No se ha podido conectar con los servidores de juego. Por favor, inténtalo de nuevo más tarde.');
         }
 
         return $account;

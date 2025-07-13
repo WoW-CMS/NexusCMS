@@ -4,6 +4,7 @@ namespace App\Enums;
 
 class WoWConstants
 {
+    // Expansions
     public const EXPANSION_VANILLA = 0;
     public const EXPANSION_TBC = 1;
     public const EXPANSION_WOTLK = 2;
@@ -15,6 +16,21 @@ class WoWConstants
     public const EXPANSION_SHADOWLANDS = 8;
     public const EXPANSION_DRAGONFLIGHT = 9;
     public const EXPANSION_WAR_WITHIN = 10;
+    
+    // Classes
+    public const CLASS_WARRIOR = 1;
+    public const CLASS_PALADIN = 2;
+    public const CLASS_HUNTER = 3;
+    public const CLASS_ROGUE = 4;
+    public const CLASS_PRIEST = 5;
+    public const CLASS_DEATH_KNIGHT = 6;
+    public const CLASS_SHAMAN = 7;
+    public const CLASS_MAGE = 8;
+    public const CLASS_WARLOCK = 9;
+    public const CLASS_MONK = 10;
+    public const CLASS_DRUID = 11;
+    public const CLASS_DEMON_HUNTER = 12;
+    public const CLASS_EVOKER = 13;
 
     public const EXPANSION_NAMES = [
         self::EXPANSION_VANILLA => 'Vanilla',
@@ -70,5 +86,21 @@ class WoWConstants
         self::EXPANSION_SHADOWLANDS => 60,
         self::EXPANSION_DRAGONFLIGHT => 70,
         self::EXPANSION_WAR_WITHIN   => 80,
+    ];
+    
+    public const CLASS_NAMES = [
+        self::CLASS_WARRIOR => 'Guerrero',
+        self::CLASS_PALADIN => 'Paladín',
+        self::CLASS_HUNTER => 'Cazador',
+        self::CLASS_ROGUE => 'Pícaro',
+        self::CLASS_PRIEST => 'Sacerdote',
+        self::CLASS_DEATH_KNIGHT => 'Caballero de la Muerte',
+        self::CLASS_SHAMAN => 'Chamán',
+        self::CLASS_MAGE => 'Mago',
+        self::CLASS_WARLOCK => 'Brujo',
+        self::CLASS_MONK => 'Monje',
+        self::CLASS_DRUID => 'Druida',
+        self::CLASS_DEMON_HUNTER => 'Cazador de Demonios',
+        self::CLASS_EVOKER => 'Evocador',
     ];
 }

@@ -33,9 +33,9 @@ class RealmHelper
     /**
      * Get the enum WoWConstants for a given type and ID
      * 
-     * @param string $type The type of constant to get (expansion or version)
+     * @param string $type The type of constant to get (expansion, version, color, class)
      * @param int|null $id The ID of the constant to get
-     * @return WoWConstants|null Returns the WoWConstants enum for the given type and ID, or null if not found
+     * @return string|null Returns the constant value for the given type and ID, or null if not found
      */
     public static function getWoWConstant(string $type = 'expansion', ?int $id = null)
     {
@@ -49,7 +49,9 @@ class RealmHelper
             case 'version':
                 return WoWConstants::EXPANSION_VERSIONS[$id] ?? null;
             case 'color':
-                return WoWConstants::EXPANSION_COLORS[$id]?? null;
+                return WoWConstants::EXPANSION_COLORS[$id] ?? null;
+            case 'class':
+                return WoWConstants::CLASS_NAMES[$id] ?? null;
             default:
                 return null;
         }

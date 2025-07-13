@@ -17,11 +17,20 @@
                             <p class="text-gray-400 text-sm">Manage all your game accounts from one place</p>
                         </div>
                         <div class="mt-4 md:mt-0">
+                            @if(!session('error'))
                             <a 
                                 href="{{ route('ucp.gameaccount.create') }}"                               
                                 class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-lg hover:from-indigo-500 hover:to-purple-600 transition-all duration-300 font-medium shadow-lg"
                                 <i class="fas fa-plus mr-2"></i> Register new account
                             </a>
+                            @else
+                            <button 
+                                disabled                           
+                                class="px-5 py-2.5 bg-gradient-to-r from-gray-600 to-gray-700 text-gray-400 rounded-lg cursor-not-allowed transition-all duration-300 font-medium shadow-lg opacity-75"
+                            >
+                                <i class="fas fa-plus mr-2"></i> Register new account
+                            </button>
+                            @endif
                         </div>
                     </div>
 
@@ -64,6 +73,30 @@
                             <i class="fas fa-id-card text-indigo-400 mr-3"></i> Your Game Accounts
                         </h3>
                     </div>
+
+                    @if(session('error'))
+                    <div class="bg-red-900/50 border border-red-700 rounded-lg p-4 mb-6 text-white">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle text-red-400 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold">Error de conexión</h4>
+                                <p class="text-red-200">{{ session('error') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if(session('warning'))
+                    <div class="bg-yellow-900/50 border border-yellow-700 rounded-lg p-4 mb-6 text-white">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle text-yellow-400 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold">Advertencia</h4>
+                                <p class="text-yellow-200">{{ session('warning') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <!-- Game Accounts Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -110,6 +143,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                @if(!empty($account['characters']))
+                                <div class="mt-4 mb-5">
+                                    <p class="text-xs text-gray-500 mb-2">Personajes en {{ $account['realm_name'] ?? 'Realm' }}</p>
+                                    <div class="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
+                                        <div class="max-h-32 overflow-y-auto p-1">
+                                            @foreach($account['characters'] as $character)
+                                            <div class="flex items-center justify-between py-1 px-2 hover:bg-gray-700/50 rounded">
+                                                <div class="flex items-center">
+                                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mr-2 text-xs font-bold text-white">{{ $character->level }}</div>
+                                                    <span class="text-sm font-medium text-white">{{ $character->name }}</span>
+                                                </div>
+                                                <div class="text-xs text-gray-400">
+                                                    {{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
 
                                 <div class="flex items-center justify-between">
                                     <div>
@@ -125,6 +179,7 @@
                                 </div>
                             </div>
                         @empty
+                            @if(!session('error'))
                             <div class="col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-12 text-center border border-gray-800 relative overflow-hidden">
                                 <!-- Background decoration -->
                                 <div class="absolute -right-20 -top-20 w-40 h-40 bg-indigo-600/5 rounded-full blur-xl"></div>
@@ -143,6 +198,7 @@
                                     </a>
                                 </div>
                             </div>
+                            @endif
                         @endforelse
                     </div>
                 </div>
