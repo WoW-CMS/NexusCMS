@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('account_linked', function (Blueprint $table) {
-            $table->string('username')->nullable()->after('user_id');
+        Schema::table('realms', function (Blueprint $table) {
+            $table->boolean('bnet')->nullable()->after('auth_database');
         });
     }
 
     public function down(): void
     {
-        Schema::table('account_linked', function (Blueprint $table) {
-            $table->dropColumn('username');
+        Schema::table('realms', function (Blueprint $table) {
+            $table->dropColumn('bnet');
         });
     }
 };
