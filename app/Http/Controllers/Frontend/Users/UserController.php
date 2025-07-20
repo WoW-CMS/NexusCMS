@@ -172,10 +172,9 @@ class UserController extends Controller
                     continue;
                 }
 
-                // Intentamos obtener los personajes si es posible
                 $characters = [];
+
                 try {
-                    // Intentamos conectar a la base de datos de personajes si está configurada
                     if (!empty($realm->characters_database)) {
                         $charactersDb = $this->connectToExternalDatabase(
                             json_decode($realm->characters_database, true),
@@ -194,7 +193,7 @@ class UserController extends Controller
                         }
                     }
                 } catch (\Exception $e) {
-                    \Log::warning('Error al obtener personajes: ' . $e->getMessage());
+                    session()->flash('warning', 'Error al obtener personajes');
                 }
 
                 $account[] = [
@@ -210,7 +209,6 @@ class UserController extends Controller
                     'last_login' => $acc->last_login ?? 'Nunca',
                 ];
             } catch (\Exception $e) {
-                \Log::error('Error al obtener cuenta de juego: ' . $e->getMessage());
                 $connectionErrors = true;
                 continue;
             }
@@ -304,7 +302,7 @@ class UserController extends Controller
             }
 
             // Create the account
-            $account = $al->createNewAccount($username, $password, $email, true);
+            $al->createNewAccount($username, $password, $email, true);
             $acc = $external->table('account')->where('email', $email)->first();
 
             if (!$acc) {
@@ -343,13 +341,6 @@ class UserController extends Controller
                 ->with('success', 'Cuenta de juego creada y vinculada exitosamente.');
 
         } catch (\Exception $e) {
-            \Log::error('Error creating game account: ' . $e->getMessage(), [
-                'user_id' => $request->user()->id,
-                'username' => $request->username,
-                'realm_id' => $request->realm,
-                'trace' => $e->getTraceAsString()
-            ]);
-
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Error al crear la cuenta de juego: ' . $e->getMessage());
