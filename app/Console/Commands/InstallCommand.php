@@ -8,7 +8,9 @@ use Illuminate\Filesystem\Filesystem;
 class InstallCommand extends Command
 {
     protected $signature = 'nexus:install 
-        {--database= : Database name}
+        {--db-connection= : Database connection}
+        {--db-host= : Database host}
+        {--db-name= : Database name}
         {--db-username= : Database username}
         {--db-password= : Database password}
         {--app-name= : Application name}
@@ -33,7 +35,7 @@ class InstallCommand extends Command
         $this->configureEnvironment();
 
         // Run migrations
-        $this->call('migrate:fresh', ['--seed' => false]);
+        $this->call('migrate:fresh', ['--seed' => true]);
 
         // Create storage link
         $this->call('storage:link');
@@ -62,12 +64,15 @@ class InstallCommand extends Command
         $useRedis = $this->confirm('Would you like to use Redis as cache driver?', false);
 
         $envConfig = [
-            'APP_NAME' => $this->option('app-name') ?: $this->ask('Application name?', 'NexusCMS'),
-            'APP_URL' => $this->option('app-url') ?: $this->ask('Application URL?', 'http://localhost'),
-            'APP_LOCALE' => $this->option('locale') ?: $this->ask('Application locale?', 'en'),
-            'DB_DATABASE' => $this->option('database') ?: $this->ask('Database name?', 'nexuscms'),
-            'DB_USERNAME' => $this->option('db-username') ?: $this->ask('Database username?', 'root'),
-            'DB_PASSWORD' => $this->option('db-password') ?: $this->ask('Database password?', 'root'),
+            'APP_NAME' => $this->option('app-name') ?? 'NexusCMS',
+            'APP_NAME' => $this->option('app-name') ?? 'NexusCMS',
+            'APP_URL' => $this->option('app-url') ?? 'http://localhost',
+            'APP_LOCALE' => $this->option('locale') ?? 'en',
+            'DB_CONNECTION' => $this->option('db-connection') ?? 'mysql',
+            'DB_HOST' => $this->option('db-host') ?? '127.0.0.1',
+            'DB_DATABASE' => $this->option('db-name') ?? 'nexuscms',
+            'DB_USERNAME' => $this->option('db-username') ?? 'root',
+            'DB_PASSWORD' => $this->option('db-password') ?? 'root',
         ];
 
         if ($useRedis) {
