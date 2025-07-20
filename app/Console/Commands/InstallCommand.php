@@ -64,15 +64,14 @@ class InstallCommand extends Command
         $useRedis = $this->confirm('Would you like to use Redis as cache driver?', false);
 
         $envConfig = [
-            'APP_NAME' => $this->option('app-name') ?? 'NexusCMS',
-            'APP_NAME' => $this->option('app-name') ?? 'NexusCMS',
-            'APP_URL' => $this->option('app-url') ?? 'http://localhost',
-            'APP_LOCALE' => $this->option('locale') ?? 'en',
-            'DB_CONNECTION' => $this->option('db-connection') ?? 'mysql',
-            'DB_HOST' => $this->option('db-host') ?? '127.0.0.1',
-            'DB_DATABASE' => $this->option('db-name') ?? 'nexuscms',
-            'DB_USERNAME' => $this->option('db-username') ?? 'root',
-            'DB_PASSWORD' => $this->option('db-password') ?? 'root',
+            'APP_NAME' => $this->option('app-name') ?: $this->ask('Application name?', 'NexusCMS'),
+            'APP_URL' => $this->option('app-url') ?: $this->ask('Application URL?', 'http://localhost'),
+            'APP_LOCALE' => $this->option('locale') ?: $this->ask('Application locale?', 'en'),
+            'DB_HOST' => $this->option('db-host') ?: $this->ask('Database host?', '127.0.0.1'),
+            'DB_PORT' => $this->option('db-port') ?: $this->ask('Database port?', '3306'),
+            'DB_DATABASE' => $this->option('db-name') ?: $this->ask('Database name?', 'nexuscms'),
+            'DB_USERNAME' => $this->option('db-username') ?: $this->ask('Database username?', 'root'),
+            'DB_PASSWORD' => $this->option('db-password') ?: $this->ask('Database password?', 'root'),
         ];
 
         if ($useRedis) {
