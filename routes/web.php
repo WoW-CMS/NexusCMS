@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
-use App\Http\Controllers\Frontend\UserController;
+use App\Http\Controllers\Frontend\Users\UserController;
+use App\Http\Controllers\Frontend\Users\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -13,9 +14,19 @@ Route::prefix('news')->group(function () {
 });
 
 Route::prefix('auth')->group(function () {
-    Route::get('/login', [UserController::class,'showLoginForm'])->name('login');
-    Route::post('/login', [UserController::class, 'login']);
-    Route::get('/register', [UserController::class,'showRegisterForm'])->name('register');
-    Route::post('/register', [UserController::class,'register']);
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/login', [AuthController::class,'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class,'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class,'register']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+// Rutas para users
+Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
+    Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
+    Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
+    Route::get('/battlepass', [UserController::class, 'battlePass'])->name('ucp.battlepass');
+    Route::get('/gameaccount/create', [UserController::class, 'createAction'])->name('ucp.gameaccount.create');
+    Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.create');
+    Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
 });

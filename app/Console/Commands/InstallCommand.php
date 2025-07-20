@@ -33,7 +33,7 @@ class InstallCommand extends Command
         $this->configureEnvironment();
 
         // Run migrations
-        $this->call('migrate:fresh', ['--seed' => true]);
+        $this->call('migrate:fresh', ['--seed' => false]);
 
         // Create storage link
         $this->call('storage:link');
@@ -59,14 +59,41 @@ class InstallCommand extends Command
             $this->files->copy($envExample, $envFile);
         }
 
-        $this->updateEnv([
-            'APP_NAME' => $this->option('app-name') ?? 'NexusCMS',
-            'APP_URL' => $this->option('app-url') ?? 'http://localhost',
-            'APP_LOCALE' => $this->option('locale') ?? 'en',
-            'DB_DATABASE' => $this->option('database') ?? 'nexuscms',
-            'DB_USERNAME' => $this->option('db-username') ?? 'root',
-            'DB_PASSWORD' => $this->option('db-password') ?? 'root',
-        ]);
+        $useRedis = $this->confirm('Would you like to use Redis as cache driver?', false);
+
+        $envConfig = [
+            'APP_NAME' => $this->option('app-name') ?: $this->ask('Application name?', 'NexusCMS'),
+            'APP_URL' => $this->option('app-url') ?: $this->ask('Application URL?', 'http://localhost'),
+            'APP_LOCALE' => $this->option('locale') ?: $this->ask('Application locale?', 'en'),
+            'DB_DATABASE' => $this->option('database') ?: $this->ask('Database name?', 'nexuscms'),
+            'DB_USERNAME' => $this->option('db-username') ?: $this->ask('Database username?', 'root'),
+            'DB_PASSWORD' => $this->option('db-password') ?: $this->ask('Database password?', 'root'),
+        ];
+
+        if ($useRedis) {
+            $envConfig['CACHE_DRIVER'] = 'redis';
+            $envConfig['QUEUE_CONNECTION'] = 'redis';
+            $envConfig['SESSION_DRIVER'] = 'redis';
+
+            // Configure Redis settings
+            $redisHost = $this->ask('Redis host?', '127.0.0.1');
+            $redisPassword = $this->ask('Redis password? (leave empty for none)', '');
+            $redisPort = $this->ask('Redis port?', '6379');
+            $redisUsername = $this->ask('Redis username? (leave empty for none)', '');
+
+            $envConfig['REDIS_HOST'] = $redisHost;
+            $envConfig['REDIS_PORT'] = $redisPort;
+            
+            if ($redisPassword) {
+                $envConfig['REDIS_PASSWORD'] = $redisPassword;
+            }
+            
+            if ($redisUsername) {
+                $envConfig['REDIS_USERNAME'] = $redisUsername;
+            }
+        }
+
+        $this->updateEnv($envConfig);
     }
 
     protected function updateEnv($data)
