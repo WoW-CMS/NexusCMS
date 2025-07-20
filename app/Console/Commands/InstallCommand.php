@@ -10,6 +10,7 @@ class InstallCommand extends Command
     protected $signature = 'nexus:install 
         {--db-connection= : Database connection}
         {--db-host= : Database host}
+        {--db-port= : Database port}
         {--db-name= : Database name}
         {--db-username= : Database username}
         {--db-password= : Database password}
