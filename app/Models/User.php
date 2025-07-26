@@ -28,4 +28,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    /**
+     * Get all threads created by this user
+     */
+    public function threads(): HasMany
+    {
+        return $this->hasMany(Thread::class);
+    }
+    
+    /**
+     * Get all posts created by this user
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 }
