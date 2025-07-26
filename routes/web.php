@@ -22,7 +22,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Rutas para users
-Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
+Route::prefix('ucp')->middleware(['auth', 'role:User'])->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/battlepass', [UserController::class, 'battlePass'])->name('ucp.battlepass');
