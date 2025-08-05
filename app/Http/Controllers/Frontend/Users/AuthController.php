@@ -1,16 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\Frontend\Users;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 
-class UserController extends BaseController
+class AuthController extends Controller
 {
-    protected $model = 'user';
+    protected $views = [
+        'login' => 'auth.login',
+        'register' => 'auth.register',
+    ];
+
     protected $auth;
     protected $hash;
 
@@ -20,29 +24,30 @@ class UserController extends BaseController
 
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view($this->views['login']);
+    }
+
+    public function showRegisterForm()
+    {
+        return view($this->views['register']);
     }
 
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+
+            return redirect()->route('ucp.dashboard');
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
-    }
-
-    public function showRegisterForm()
-    {
-        return view('auth.register');
+        ]);
     }
 
     public function register(Request $request)
@@ -58,11 +63,13 @@ class UserController extends BaseController
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
         $user->save();
+        $user->assignRole('user');
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->route('ucp.dashboard');
     }
 
     public function logout(Request $request)
