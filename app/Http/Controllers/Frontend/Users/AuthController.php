@@ -18,10 +18,8 @@ class AuthController extends Controller
     protected $auth;
     protected $hash;
 
-    public function __construct(AuthFactory $auth, HasherContract $hash)
+    public function __construct()
     {
-        $this->auth = $auth;
-        $this->hash = $hash;
     }
 
     public function showLoginForm()
@@ -41,7 +39,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if ($this->auth->guard()->attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->route('ucp.dashboard');
@@ -63,20 +61,20 @@ class AuthController extends Controller
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $this->hash->make($validated['password']),
+            'password' => Hash::make($validated['password']),
         ]);
 
         $user->save();
         $user->assignRole('user');
 
-        $this->auth->guard()->login($user);
+        Auth::login($user);
 
         return redirect()->route('ucp.dashboard');
     }
 
     public function logout(Request $request)
     {
-        $this->auth->guard()->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
