@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -18,8 +20,10 @@ class AuthController extends Controller
     protected $auth;
     protected $hash;
 
-    public function __construct()
+    public function __construct(AuthFactory $auth, HasherContract $hash)
     {
+        $this->auth = $auth;
+        $this->hash = $hash;
     }
 
     public function showLoginForm()
@@ -39,7 +43,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if ($this->auth->guard()->attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->route('ucp.dashboard');
@@ -61,22 +65,27 @@ class AuthController extends Controller
         $user = new User([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $this->hash->make($validated['password']),
         ]);
 
         $user->save();
-        $user->assignRole('user');
 
-        Auth::login($user);
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole('user');
+        }
+
+        $this->auth->guard()->login($user);
 
         return redirect()->route('ucp.dashboard');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        $this->auth->guard()->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

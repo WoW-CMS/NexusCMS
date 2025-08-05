@@ -28,7 +28,7 @@ class UserController extends Controller
     protected $views = [
         'index' => 'ucp.index',
         'create' => 'ucp.createAccount',
-        'gameAccount' => 'ucp.gameaccount',
+        'gameAccount' => 'ucp.gameAccount',
         'manage' => 'ucp.manageAccount',
     ];
 
@@ -337,7 +337,7 @@ class UserController extends Controller
             $accountLinked->target_id = $acc->id;
             $accountLinked->save();
 
-            return redirect()->route('ucp.gameaccount')
+            return redirect()->route($this->views['gameaccount'])
                 ->with('success', 'Cuenta de juego creada y vinculada exitosamente.');
 
         } catch (\Exception $e) {
