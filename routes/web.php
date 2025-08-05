@@ -35,13 +35,15 @@ Route::prefix('ucp')->middleware(['auth', 'role:User'])->group(function () {
 // Forums routes
 Route::prefix('forums')->group(function () {
     Route::get('/', [ForumsController::class, 'index'])->name('forums.index');
-    Route::get('/{slug}', [ForumsController::class, 'showForum'])->name('forums.show');
-    Route::get('/{forumSlug}/{threadSlug}', [ForumsController::class, 'showThread'])->name('forums.thread');
     
     // Routes that require authentication
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'role:User'])->group(function () {
         Route::get('/{slug}/create', [ForumsController::class, 'createThread'])->name('forums.create_thread');
         Route::post('/{slug}/create', [ForumsController::class, 'storeThread'])->name('forums.store_thread');
         Route::post('/{forumSlug}/{threadSlug}/reply', [ForumsController::class, 'storePost'])->name('forums.store_post');
     });
+    
+    // These routes must be defined after the more specific routes above
+    Route::get('/{forumSlug}/{threadSlug}', [ForumsController::class, 'showThread'])->name('forums.thread');
+    Route::get('/{slug}', [ForumsController::class, 'showForum'])->name('forums.show');
 });
