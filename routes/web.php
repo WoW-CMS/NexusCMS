@@ -23,7 +23,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Rutas para users
-Route::prefix('ucp')->middleware(['auth', 'role:User'])->group(function () {
+Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/battlepass', [UserController::class, 'battlePass'])->name('ucp.battlepass');
@@ -34,10 +34,10 @@ Route::prefix('ucp')->middleware(['auth', 'role:User'])->group(function () {
 
 // Forums routes
 Route::prefix('forums')->group(function () {
-    Route::get('/', [ForumsController::class, 'index'])->name('forums.index');
+    Route::get('/', [ForumsController::class, 'index'])->name('forums');
     
     // Routes that require authentication
-    Route::middleware(['auth', 'role:User'])->group(function () {
+    Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
         Route::get('/{slug}/create', [ForumsController::class, 'createThread'])->name('forums.create_thread');
         Route::post('/{slug}/create', [ForumsController::class, 'storeThread'])->name('forums.store_thread');
         Route::post('/{forumSlug}/{threadSlug}/reply', [ForumsController::class, 'storePost'])->name('forums.store_post');

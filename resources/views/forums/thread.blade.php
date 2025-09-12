@@ -36,7 +36,7 @@
         <div class="flex flex-wrap items-center text-gray-400 text-sm mb-4">
             <a href="{{ route('home') }}" class="hover:text-blue-400 transition duration-200">Home</a>
             <span class="mx-2 text-gray-600">&raquo;</span>
-            <a href="{{ route('forums.index') }}" class="hover:text-blue-400 transition duration-200">Forums</a>
+            <a href="{{ route('forums') }}" class="hover:text-blue-400 transition duration-200">Forums</a>
             <span class="mx-2 text-gray-600">&raquo;</span>
             <a href="{{ route('forums.show', $forum->slug) }}" class="hover:text-blue-400 transition duration-200">{{ $forum->name }}</a>
             <span class="mx-2 text-gray-600">&raquo;</span>

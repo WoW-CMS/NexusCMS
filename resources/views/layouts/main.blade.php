@@ -82,7 +82,7 @@
                             <a href="{{ route('home') }}" class="nav-link @if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
                             <a href="{{ route('news') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How to Play</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
+                            <a href="{{ route('forums') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
                         </div>
