@@ -9,10 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * Service for managing forums, threads, and posts.
+ * 
+ * Provides methods to:
+ * - Retrieve categories and subforums.
+ * - Retrieve forums with their threads.
+ * - Retrieve threads with their posts.
+ * - Create threads and posts.
+ */
 class ForumService
 {
     /**
-     * Obtener categorías principales con sus subforos
+     * Get main categories with their subforums.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|Forum[]
      */
     public function getCategories()
     {
@@ -25,7 +36,10 @@ class ForumService
     }
 
     /**
-     * Obtener un foro por slug con sus hilos
+     * Get a forum by slug with its threads.
+     *
+     * @param string $slug
+     * @return array{forum: Forum, threads: \Illuminate\Contracts\Pagination\LengthAwarePaginator}
      */
     public function getForumWithThreads(string $slug)
     {
@@ -45,7 +59,11 @@ class ForumService
     }
 
     /**
-     * Obtener un hilo con sus posts
+     * Get a thread with its posts.
+     *
+     * @param string $forumSlug
+     * @param string $threadSlug
+     * @return array{forum: Forum, thread: Thread, posts: \Illuminate\Contracts\Pagination\LengthAwarePaginator}
      */
     public function getThreadWithPosts(string $forumSlug, string $threadSlug)
     {
@@ -65,13 +83,18 @@ class ForumService
     }
 
     /**
-     * Crear un nuevo hilo con su primer post
+     * Create a new thread with its first post.
+     *
+     * @param Forum $forum
+     * @param array $validated Validated thread data ['title' => string, 'content' => string]
+     * @return string The unique slug of the created thread
+     * @throws \Throwable
      */
     public function createThread(Forum $forum, array $validated)
     {
         $threadSlug = Str::slug($validated['title']);
 
-        // Si el slug ya existe lo hacemos único
+        // Make slug unique if it already exists
         $count = Thread::where('slug', $threadSlug)->count();
         if ($count > 0) {
             $threadSlug .= '-' . time();
@@ -106,7 +129,13 @@ class ForumService
     }
 
     /**
-     * Crear un nuevo post en un hilo
+     * Create a new post in a thread.
+     *
+     * @param Thread $thread
+     * @param array $validated Validated post data ['content' => string]
+     * @return void
+     * @throws \Exception If the thread is locked
+     * @throws \Throwable
      */
     public function createPost(Thread $thread, array $validated)
     {
