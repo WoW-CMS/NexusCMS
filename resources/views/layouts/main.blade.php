@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -81,7 +82,7 @@
                             <a href="{{ route('home') }}" class="nav-link @if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
                             <a href="{{ route('news') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How to Play</a>
-                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
+                            <a href="{{ route('forums') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
                             <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
                         </div>

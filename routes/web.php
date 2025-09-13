@@ -4,6 +4,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
 use App\Http\Controllers\Frontend\Users\AuthController;
+use App\Http\Controllers\Frontend\ForumsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -29,4 +30,20 @@ Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(
     Route::get('/gameaccount/create', [UserController::class, 'createAction'])->name('ucp.gameaccount.create');
     Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.create');
     Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
+});
+
+// Forums routes
+Route::prefix('forums')->group(function () {
+    Route::get('/', [ForumsController::class, 'index'])->name('forums');
+    
+    // Routes that require authentication
+    Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
+        Route::get('/{slug}/create', [ForumsController::class, 'createThread'])->name('forums.create_thread');
+        Route::post('/{slug}/create', [ForumsController::class, 'storeThread'])->name('forums.store_thread');
+        Route::post('/{forumSlug}/{threadSlug}/reply', [ForumsController::class, 'storePost'])->name('forums.store_post');
+    });
+    
+    // These routes must be defined after the more specific routes above
+    Route::get('/{forumSlug}/{threadSlug}', [ForumsController::class, 'showThread'])->name('forums.thread');
+    Route::get('/{slug}', [ForumsController::class, 'showForum'])->name('forums.show');
 });

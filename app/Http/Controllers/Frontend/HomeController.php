@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Helpers\RealmHelper;
-use App\Models\News;
 
 /**
  * Frontend Home Controller for handling main website pages
