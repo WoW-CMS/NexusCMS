@@ -1,9 +1,9 @@
 # NexusCMS
 
 <p align="center">
-<a href="https://github.com/yourusername/NexusCMS/actions"><img src="https://github.com/yourusername/NexusCMS/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/yourusername/nexuscms"><img src="https://img.shields.io/packagist/v/yourusername/nexuscms" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/yourusername/nexuscms"><img src="https://img.shields.io/packagist/l/yourusername/nexuscms" alt="License"></a>
+<a href="https://github.com/WoW-CMS/NexusCMS/actions"><img src="https://github.com/WoW-CMS/NexusCMS/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/WoW-CMS/nexuscms"><img src="https://img.shields.io/packagist/v/WoW-CMS/nexuscms" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/WoW-CMS/nexuscms"><img src="https://img.shields.io/packagist/l/WoW-CMS/nexuscms" alt="License"></a>
 <a href="https://deepwiki.com/WoW-CMS/NexusCMS"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
