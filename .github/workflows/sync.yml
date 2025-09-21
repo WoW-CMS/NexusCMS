@@ -1,0 +1,19 @@
+name: Sync from Gitea
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *" # cada hora (puedes ajustarlo)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub repo
+        uses: actions/checkout@v4
+
+      - name: Sync with Gitea
+        run: |
+          git remote add gitea https://gitea.wow-cms.com/WoWCMS/NexusCMS
+          git fetch gitea main
+          git push origin gitea/main:release --force
