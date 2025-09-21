@@ -3,17 +3,25 @@ name: Sync from Gitea
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # cada hora (puedes ajustarlo)
+    - cron: "0 * * * *" # cada hora
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout GitHub repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Sync with Gitea
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote add gitea https://gitea.wow-cms.com/WoWCMS/NexusCMS
           git fetch gitea main
-          git push origin gitea/main:release --force
+          git checkout main || git checkout -b main
+          git merge gitea/main --allow-unrelated-histories -m "Sync from Gitea"
+          git push origin main:release
