@@ -4,10 +4,19 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
 use App\Http\Controllers\Frontend\Users\AuthController;
+use App\Http\Controllers\Frontend\InstallController;
 use App\Http\Controllers\Frontend\ForumsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::middleware([])->group(function () {
+    if (!file_exists(storage_path('installed.lock'))) {
+        Route::get('/install', [InstallController::class, 'index'])->name('install.index');
+        Route::post('/install', [InstallController::class, 'install'])->name('install.run');
+        Route::post('/install/test-db', [InstallController::class, 'testDb'])->name('install.testDb');
+    }
+});
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
