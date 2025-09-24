@@ -30,19 +30,19 @@ jobs:
 
       - name: Create sync branch
         run: |
-          git checkout -B sync-from-gitea
+          git checkout -B release
           git merge gitea/main --allow-unrelated-histories -m "Sync from Gitea"
 
       - name: Update Changelog
         run: |
-          git checkout main
+          git checkout release
           echo "## Sync from Gitea - $(date +'%Y-%m-%d')" >> CHANGELOG.md
-          git log main..sync-from-gitea --pretty=format:"- %s (%an)" >> CHANGELOG.md
+          git log origin/main..HEAD --pretty=format:"- %s (%an)" >> CHANGELOG.md
           git add CHANGELOG.md
           git commit -m "Update changelog from Gitea sync" || echo "No changes to commit"
 
       - name: Push sync branch
-        run: git push origin sync-from-gitea --force
+        run: git push origin release --force
 
       - name: Create Pull Request
         id: pr
@@ -50,7 +50,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          head: sync-from-gitea
+          head: release
           title: "Sync from Gitea"
           body: "Automated sync from Gitea main branch"
           merge-method: squash
