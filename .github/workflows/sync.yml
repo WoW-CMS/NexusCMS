@@ -35,9 +35,9 @@ jobs:
 
       - name: Update Changelog
         run: |
-          git checkout release
+          git checkout main
           echo "## Sync from Gitea - $(date +'%Y-%m-%d')" >> CHANGELOG.md
-          git log release..sync-from-gitea --pretty=format:"- %s (%an)" >> CHANGELOG.md
+          git log main..sync-from-gitea --pretty=format:"- %s (%an)" >> CHANGELOG.md
           git add CHANGELOG.md
           git commit -m "Update changelog from Gitea sync" || echo "No changes to commit"
 
@@ -49,7 +49,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: release
+          base: main
           head: sync-from-gitea
           title: "Sync from Gitea"
           body: "Automated sync from Gitea main branch"
