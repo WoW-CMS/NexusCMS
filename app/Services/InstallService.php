@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
+use Spatie\Permission\Contracts\Role;
 
 class InstallService
 {
@@ -19,6 +21,7 @@ class InstallService
         $this->configureEnvironment($options);
 
         Artisan::call('migrate:fresh', ['--seed' => true]);
+        $this->createAdminAccount($options);
         Artisan::call('storage:link');
         Artisan::call('key:generate');
         Artisan::call('config:cache');
@@ -27,6 +30,21 @@ class InstallService
         Artisan::call('optimize');
 
         return true;
+    }
+
+    protected function createAdminAccount(array $options)
+    {
+        $adminName = $options['admin_name'];
+        $adminEmail = $options['admin_email'];
+        $adminPassword = $options['admin_password'];
+
+        $user = User::create([
+            'name'  => $adminName,
+            'email' => $adminEmail,
+            'password' => bcrypt($adminPassword),
+        ]);
+
+        $user->assignRole('Admin');
     }
 
     protected function configureEnvironment(array $options)

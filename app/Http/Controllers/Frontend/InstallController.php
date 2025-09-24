@@ -45,6 +45,9 @@ class InstallController extends Controller
             'app_url' => $request->app_url,
             'locale' => $request->locale,
             'use_redis' => $request->use_redis ?? false,
+            'admin_name' => $request->admin_name,
+            'admin_email' => $request->admin_email,
+            'admin_password' => $request->admin_password,
         ]);
 
         // lock de instalación
