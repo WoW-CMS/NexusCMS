@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Installer</title>
+    <title>NexusCMS Installer</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8">
@@ -15,8 +15,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"></path>
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Application Installer</h1>
-            <p class="text-gray-600">Configura tu aplicación en unos simples pasos</p>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">NexusCMS Installer</h1>
+            <p class="text-gray-600">Configure the application settings and database connection.</p>
         </div>
 
         <!-- Progress Steps -->
@@ -27,10 +27,10 @@
                     <div id="step{{ $step }}-indicator" class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-semibold text-sm">{{ $step }}</div>
                     <span id="step{{ $step }}-text" class="ml-2 text-sm font-medium text-gray-400 hidden md:block">
                         @switch($step)
-                            @case(1) App Config @break
-                            @case(2) Database @break
-                            @case(3) Terms @break
-                            @case(4) Install @break
+                            @case(1) Application Config @break
+                            @case(2) Database Config @break
+                            @case(3) Terms and Conditions @break
+                            @case(4) Installation @break
                         @endswitch
                     </span>
                 </div>
@@ -49,26 +49,26 @@
                 <!-- Step 1: Application Configuration -->
                 <div id="step1" class="step-content">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Configuración de la Aplicación</h2>
-                        <p class="text-gray-600 text-sm">Configura los datos básicos de tu aplicación</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Application Configuration</h2>
+                        <p class="text-gray-600 text-sm">Configure the basic settings of your application</p>
                     </div>
 
                     <div class="space-y-6">
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de la Aplicación</label>
-                            <input type="text" name="app_name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="Mi Aplicación Increíble">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Application Name</label>
+                            <input type="text" name="app_name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="My Incredible Application">
                         </div>
 
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">URL de la Aplicación</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Application URL</label>
                             <input type="url" name="app_url" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="https://miapp.com">
                         </div>
 
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Idioma</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Application Language</label>
                             <select name="locale" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200">
                                 <option value="en">English</option>
-                                <option value="es">Español</option>
+                                <option value="es">Spanish</option>
                                 <option value="fr">Français</option>
                                 <option value="de">Deutsch</option>
                             </select>
@@ -79,43 +79,43 @@
                 <!-- Step 2: Database Configuration -->
                 <div id="step2" class="step-content hidden">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Configuración de Base de Datos</h2>
-                        <p class="text-gray-600 text-sm">Configura la conexión a tu base de datos MySQL</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Database Configuration</h2>
+                        <p class="text-gray-600 text-sm">Configure the connection to your MySQL database</p>
                     </div>
 
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Host</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Database Host</label>
                                 <input type="text" name="db_host" value="127.0.0.1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200">
                             </div>
 
                             <div class="group">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Puerto</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Database Port</label>
                                 <input type="number" name="db_port" value="3306" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200">
                             </div>
                         </div>
 
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de la Base de Datos</label>
-                            <input type="text" name="db_name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="mi_aplicacion">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Database Name</label>
+                            <input type="text" name="db_name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="my_application">
                         </div>
 
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Database Username</label>
                             <input type="text" name="db_username" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="root">
                         </div>
 
                         <div class="group">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Database Password</label>
                             <input type="password" name="db_password" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200" placeholder="••••••••">
                         </div>
 
                         <!-- Test Connection Button -->
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-blue-800">Puedes probar la conexión antes de continuar</span>
-                                <button type="button" id="testConnection" class="px-3 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 transition-colors duration-200">Probar Conexión</button>
+                                <span class="text-sm text-blue-800">You can test the connection before continuing</span>
+                                <button type="button" id="testConnection" class="px-3 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 transition-colors duration-200">Test Connection</button>
                             </div>
                         </div>
                     </div>
@@ -124,25 +124,25 @@
                 <!-- Step 3: Terms -->
                 <div id="step3" class="step-content hidden">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Términos y Condiciones</h2>
-                        <p class="text-gray-600 text-sm">Por favor acepta los términos antes de continuar</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Terms and Conditions</h2>
+                        <p class="text-gray-600 text-sm">Please accept the terms before continuing</p>
                     </div>
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <input id="agree_terms" name="agree_terms" type="checkbox" required class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                            <label for="agree_terms" class="ml-2 text-sm font-medium text-gray-900">Acepto los términos y condiciones *</label>
+                            <label for="agree_terms" class="ml-2 text-sm font-medium text-gray-900"> Accept the terms and conditions *</label>
                         </div>
                         <div class="flex items-center">
                             <input id="agree_privacy" name="agree_privacy" type="checkbox" required class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                            <label for="agree_privacy" class="ml-2 text-sm font-medium text-gray-900">Acepto la política de privacidad *</label>
+                            <label for="agree_privacy" class="ml-2 text-sm font-medium text-gray-900"> Accept the privacy policy *</label>
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 4: Confirmation -->
                 <div id="step4" class="step-content hidden text-center">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">¡Listo para Instalar!</h2>
-                    <p class="text-gray-600 mb-6">Revisa la configuración y procede</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Installation Confirmation</h2>
+                    <p class="text-gray-600 mb-6">Review the configuration and proceed</p>
                 </div>
 
                 <!-- Hidden inputs -->
@@ -150,10 +150,10 @@
 
                 <!-- Navigation Buttons -->
                 <div class="flex justify-between pt-6 border-t border-gray-200">
-                    <button type="button" id="prevBtn" class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200 hidden">← Anterior</button>
+                    <button type="button" id="prevBtn" class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200 hidden">Previous ←</button>
                     <div class="flex-1"></div>
-                    <button type="button" id="nextBtn" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200">Siguiente →</button>
-                    <button type="submit" id="installBtn" class="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200 hidden">Instalar ✅</button>
+                    <button type="button" id="nextBtn" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200">Next →</button>
+                    <button type="submit" id="installBtn" class="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200 hidden">Install</button>
                 </div>
             </form>
         </div>
@@ -201,7 +201,7 @@
             })
             .then(res => res.json())
             .then(data => alert(data.message))
-            .catch(err => alert('Error al probar la conexión'));
+            .catch(err => alert('Error testing the connection'));
         });
 
         showStep(currentStep);
