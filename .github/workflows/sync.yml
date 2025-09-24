@@ -10,18 +10,55 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout GitHub repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Sync with Gitea
+      - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add gitea https://gitea.wow-cms.com/WoWCMS/NexusCMS
-          git fetch gitea main
-          git checkout main || git checkout -b main
+
+      - name: Add Gitea remote
+        run: git remote add gitea https://gitea.wow-cms.com/WoWCMS/NexusCMS
+
+      - name: Fetch Gitea main
+        run: git fetch gitea main
+
+      - name: Create sync branch
+        run: |
+          git checkout -B sync-from-gitea
           git merge gitea/main --allow-unrelated-histories -m "Sync from Gitea"
-          git push origin main:release
+
+      - name: Update Changelog
+        run: |
+          git checkout release
+          echo "## Sync from Gitea - $(date +'%Y-%m-%d')" >> CHANGELOG.md
+          git log release..sync-from-gitea --pretty=format:"- %s (%an)" >> CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "Update changelog from Gitea sync" || echo "No changes to commit"
+
+      - name: Push sync branch
+        run: git push origin sync-from-gitea --force
+
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: release
+          head: sync-from-gitea
+          title: "Sync from Gitea"
+          body: "Automated sync from Gitea main branch"
+          merge-method: squash
+
+      - name: Auto-merge PR if no conflicts
+        if: steps.pr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.pr.outputs.pull-request-number }}
+          merge-method: squash
