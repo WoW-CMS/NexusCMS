@@ -4,10 +4,20 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
 use App\Http\Controllers\Frontend\Users\AuthController;
+use App\Http\Controllers\Frontend\InstallController;
 use App\Http\Controllers\Frontend\ForumsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::middleware([])->group(function () {
+    if (!file_exists(storage_path('installed.lock'))) {
+        Route::get('/install', [InstallController::class, 'index'])->name('install.index');
+        Route::get('/install/success', [InstallController::class, 'success'])->name('install.success');
+        Route::post('/install', [InstallController::class, 'install'])->name('install.run');
+        Route::post('/install/test-db', [InstallController::class, 'testDb'])->name('install.testDb');
+    }
+});
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
@@ -28,7 +38,7 @@ Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/battlepass', [UserController::class, 'battlePass'])->name('ucp.battlepass');
     Route::get('/gameaccount/create', [UserController::class, 'createAction'])->name('ucp.gameaccount.create');
-    Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.create');
+    Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.store');
     Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
 });
 

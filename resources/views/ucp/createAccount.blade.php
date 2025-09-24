@@ -74,7 +74,7 @@
                             </div>
                         @endif
 
-                        <form class="space-y-6" method="POST" action="{{ route('ucp.gameaccount.create') }}">
+                        <form class="space-y-6" method="POST" action="{{ route('ucp.gameaccount.store') }}">
                             @csrf
 
                             <!-- Expansion Selection -->
