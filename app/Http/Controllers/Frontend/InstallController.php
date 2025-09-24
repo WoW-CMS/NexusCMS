@@ -16,6 +16,11 @@ class InstallController extends Controller
         return view('install.index');
     }
 
+    public function success()
+    {
+        return view('install.success');
+    }
+
     public function testDb(Request $request)
     {
         try {
