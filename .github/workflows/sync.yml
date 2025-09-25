@@ -3,7 +3,7 @@ name: Sync from Gitea
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # cada hora
+    - cron: "0 0 * * 0"
 
 jobs:
   sync:
