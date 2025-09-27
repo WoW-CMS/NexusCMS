@@ -7,7 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8">
-    <div class="max-w-2xl mx-auto px-4">
+    <div class="max-w-2xl mx-auto px-4" 
+         id="installerApp" 
+         data-step="{{ $currentStep ?? 0 }}">
         <!-- Header -->
         <div class="text-center mb-8">
             <div class="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
@@ -19,10 +21,6 @@
             <p class="text-gray-600">Configure the application settings and database connection.</p>
         </div>
 
-        @php
-            $currentStep = $currentStep ?? 0;
-        @endphp
-
         <!-- Progress Steps -->
         <div class="mb-8">
             <div class="flex items-center justify-center space-x-2 md:space-x-4">
@@ -31,13 +29,13 @@
                     <div 
                         id="step{{ $step }}-indicator" 
                         class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm leading-none flex-shrink-0
-                            {{ $currentStep == $step ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600' }}">
+                            {{ ($currentStep ?? 0) == $step ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600' }}">
                         {{ $step == 0 ? 'EULA' : $step }}
                     </div>
                     <span 
                         id="step{{ $step }}-text" 
                         class="ml-2 text-sm font-medium hidden md:block
-                            {{ $currentStep == $step ? 'text-blue-600' : 'text-gray-400' }}">
+                            {{ ($currentStep ?? 0) == $step ? 'text-blue-600' : 'text-gray-400' }}">
                         @switch($step)
                             @case(0) EULA @break
                             @case(1) Application Config @break
@@ -50,7 +48,7 @@
                 @if($step < 5)
                 <div 
                     class="w-8 md:w-16 h-0.5 
-                        {{ $currentStep > $step ? 'bg-blue-500' : 'bg-gray-300' }}" 
+                        {{ ($currentStep ?? 0) > $step ? 'bg-blue-500' : 'bg-gray-300' }}" 
                     id="progress-bar-{{ $step }}">
                 </div>
                 @endif
@@ -228,7 +226,10 @@
 
     <!-- Stepper Script -->
     <script>
-        let currentStep = Number(@json($currentStep ?? 0));
+        const installerApp = document.getElementById('installerApp');
+        const defaultStep = 0;
+        const stepAttr = installerApp.dataset.step;
+        let currentStep = Number(stepAttr) || defaultStep;
 
         const stepContents = Array.from(document.querySelectorAll('.step-content'));
         const indicators = Array.from(document.querySelectorAll('[id$="-indicator"]'));
@@ -272,7 +273,6 @@
         };
 
         document.getElementById('nextBtn').addEventListener('click', () => {
-            // Validate EULA on step0
             if(currentStep === 0) {
                 const eulaChecked = document.getElementById('agree_eula').checked;
                 if(!eulaChecked) {
