@@ -131,29 +131,49 @@
                             </div>
                         </form>
                         <div class="space-y-8">
-                            <div class="flex items-start gap-4 group">
-                                <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
-                                    src="{{ asset('images/default-avatar.png') }}" alt="Avatar">
-                                <div class="flex-1">
-                                    <div
-                                        class="bg-gray-950/70 border border-gray-800 rounded-xl p-5 shadow group-hover:border-indigo-500 transition">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <div class="flex items-center gap-2">
-                                                <span class="font-semibold text-white">Example User</span>
-                                                <span class="text-xs text-gray-400">• 2 hours ago</span>
+                            @forelse($item->comments as $comment)
+                                <div class="flex items-start gap-4 group">
+                                    {{-- Avatar --}}
+                                    <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
+                                        src="{{ $comment->user->avatar_url ?? asset('images/default-avatar.png') }}"
+                                        alt="Avatar">
+
+                                    <div class="flex-1">
+                                        <div class="bg-gray-950/70 border border-gray-800 rounded-xl p-5 shadow 
+                                                    group-hover:border-indigo-500 transition">
+                                            
+                                            {{-- Nombre + fecha --}}
+                                            <div class="flex items-center justify-between mb-2">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="font-semibold text-white">
+                                                        {{ $comment->user->name ?? 'Anonymous' }}
+                                                    </span>
+                                                    <span class="text-xs text-gray-400">
+                                                        • {{ date('d/m/Y H:i', $comment->created_at) }}
+                                                    </span>
+                                                </div>
+
+                                                {{-- Acciones --}}
+                                                <div class="flex gap-2">
+                                                    <button class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">
+                                                        Like
+                                                    </button>
+                                                    <button class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">
+                                                        Reply
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="flex gap-2">
-                                                <button
-                                                    class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">Like</button>
-                                                <button
-                                                    class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">Reply</button>
-                                            </div>
+
+                                            {{-- Contenido del comentario --}}
+                                            <p class="text-gray-300 leading-relaxed">
+                                                {{ $comment->comment }}
+                                            </p>
                                         </div>
-                                        <p class="text-gray-300 leading-relaxed">Amazing article! Can't wait to try this
-                                            new raid.</p>
                                     </div>
                                 </div>
-                            </div>
+                            @empty
+                                <p class="text-gray-400">No comments yet. Be the first to comment!</p>
+                            @endforelse
                         </div>
                     </div>
                 </div>

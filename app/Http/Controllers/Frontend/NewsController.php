@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
+use App\Models\News;
 
 /**
  * Frontend Home Controller for handling main website pages
@@ -45,6 +46,40 @@ class NewsController extends BaseController
      */
     protected $views = [
         'index' => 'news.index',
-        'show' => 'news.list',
+        'show' => 'news.show',
     ];
+
+    /**
+     * Show specific resource
+     *
+     * @param int $id
+     * @param string|null $view
+     * @return JsonResponse|View
+     */
+    public function show(int|string $id, ?string $view = null)
+    {
+        try {
+            // Buscar la noticia por slug o id
+            $item = News::where('slug', $id)
+                ->with(['comments' => function ($query) {
+                    $query->where('is_active', true)
+                        ->with('user')
+                        ->orderBy('created_at', 'asc');
+                }])
+                ->firstOrFail();
+
+            if (request()->expectsJson()) {
+                return $this->successResponse($item);
+            }
+
+            $this->setView('show');
+            return $this->renderView($view ?? $this->getCurrentView(), ['item' => $item]);
+        } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return $this->errorResponse('Record not found', 404);
+            }
+
+            return $this->renderView('errors.404', ['message' => 'Record not found']);
+        }
+    }
 }
