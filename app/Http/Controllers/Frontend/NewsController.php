@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\News;
+use Illuminate\View\View;
 
 /**
  * Frontend Home Controller for handling main website pages
@@ -18,7 +19,7 @@ use App\Models\News;
  * @version  1.0.0
  * @link     wow-cms.com
  */
-class NewsController extends BaseController
+class NewsController extends Controller
 {
     /**
      * Model name
@@ -50,6 +51,20 @@ class NewsController extends BaseController
     ];
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return View
+     */
+    public function index()
+    {
+        $items = News::where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
+
+        return view($this->views['index'], ['items' => $items]);
+    }
+
+    /**
      * Show specific resource
      *
      * @param int $id
@@ -59,7 +74,6 @@ class NewsController extends BaseController
     public function show(int|string $id, ?string $view = null)
     {
         try {
-            // Buscar la noticia por slug o id
             $item = News::where('slug', $id)
                 ->with(['comments' => function ($query) {
                     $query->where('is_active', true)
@@ -69,17 +83,16 @@ class NewsController extends BaseController
                 ->firstOrFail();
 
             if (request()->expectsJson()) {
-                return $this->successResponse($item);
+                return response()->json(['data' => $item], 200);
             }
 
-            $this->setView('show');
-            return $this->renderView($view ?? $this->getCurrentView(), ['item' => $item]);
+            return view($this->views['show'], ['item' => $item]);
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
-                return $this->errorResponse('Record not found', 404);
+                return response()->json(['error' => 'Record not found'], 404);
             }
 
-            return $this->renderView('errors.404', ['message' => 'Record not found']);
+            return view('errors.404', ['message' => 'Record not found']);
         }
     }
 }
