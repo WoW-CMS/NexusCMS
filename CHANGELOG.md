@@ -14,7 +14,9 @@
 - Sync from Gitea (github-actions[bot])
 - Merge pull request 'fix/decorators-js' (#6) from fix/decorators-js into main (darthar)
 - chore: add installer.lock to gitignore to exclude generated file (sayghteight)
-- refactor(installer): improve step handling and remove installed file (sayghteight)## Sync from Gitea - 2025-10-03
+- refactor(installer): improve step handling and remove installed file (sayghteight)
+
+## Sync from Gitea - 2025-10-03
 - Sync from Gitea (github-actions[bot])
 - Merge pull request 'feature/comments' (#7) from feature/comments into main (darthar)
 - feat(comments): implement polymorphic comments with CKEditor integration (sayghteight)
