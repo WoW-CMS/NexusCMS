@@ -57,11 +57,11 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $items = News::where('is_active', true)
+        $items = News::where('is_published', true)
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
-        return view($this->views['index'], ['items' => $items]);
+        return view($this->views['index'], ['data' => $items]);
     }
 
     /**
