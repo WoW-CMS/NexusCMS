@@ -50,7 +50,7 @@
                                 <div class="text-xs text-gray-400 mb-2">{{ $news->published_at ? $news->published_at->format('F d, Y') : 'Draft' }}</div>
                                 <h3 class="text-xl font-bold text-white mb-2">{{ $news->title }}</h3>
                                 <p class="text-gray-300 mb-4">{{ Str::limit($news->content, 200) }}</p>
-                                <a href="{{ route('news.show', $news->id) }}" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
+                                <a href="{{ route('news.show', $news->slug) }}" class="text-blue-400 hover:text-blue-300 font-medium">Read More →</a>
                             </div>
                         </div>
                         @empty
