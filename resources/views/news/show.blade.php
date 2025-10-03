@@ -114,14 +114,14 @@
                         <h3 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                             Comments
                         </h3>
-                        <form action="#" method="POST" class="mb-10">
+                        <form action="{{ route('news.comment.store', $item->slug) }}" method="POST" class="mb-10">
                             @csrf
                             <div class="flex items-start gap-4">
                                 <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
                                     src="{{ asset('images/default-avatar.png') }}" alt="Your Avatar">
                                 <div class="flex-1">
-                                    <textarea name="body" rows="3" required
-                                        class="w-full bg-gray-950/60 rounded-lg p-4 text-black focus:ring-2 focus:ring-indigo-500 border border-gray-800 resize-none"
+                                    <textarea id="editor" name="body" required
+                                        class="w-full bg-gray-950/60 rounded-lg p-4 text-white focus:ring-2 focus:ring-indigo-500 border border-gray-800"
                                         placeholder="Write a comment..."></textarea>
                                     <div class="flex justify-end mt-2">
                                         <button type="submit"
@@ -131,29 +131,47 @@
                             </div>
                         </form>
                         <div class="space-y-8">
-                            <div class="flex items-start gap-4 group">
-                                <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
-                                    src="{{ asset('images/default-avatar.png') }}" alt="Avatar">
-                                <div class="flex-1">
-                                    <div
-                                        class="bg-gray-950/70 border border-gray-800 rounded-xl p-5 shadow group-hover:border-indigo-500 transition">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <div class="flex items-center gap-2">
-                                                <span class="font-semibold text-white">Example User</span>
-                                                <span class="text-xs text-gray-400">• 2 hours ago</span>
+                            @forelse($item->comments as $comment)
+                                <div class="flex items-start gap-4 group">
+                                    {{-- Avatar --}}
+                                    <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
+                                        src="{{ $comment->user->avatar_url ?? asset('images/default-avatar.png') }}"
+                                        alt="Avatar">
+
+                                    <div class="flex-1">
+                                        <div class="bg-gray-950/70 border border-gray-800 rounded-xl p-5 shadow 
+                                                    group-hover:border-indigo-500 transition">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="font-semibold text-white">
+                                                        {{ $comment->user->name ?? 'Anonymous' }}
+                                                    </span>
+                                                    <span class="text-xs text-gray-400">
+                                                        • {{ date('d/m/Y H:i', $comment->created_at) }}
+                                                    </span>
+                                                </div>
+
+                                                {{-- Acciones --}}
+                                                <div class="flex gap-2">
+                                                    <button class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">
+                                                        Like
+                                                    </button>
+                                                    <button class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">
+                                                        Reply
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="flex gap-2">
-                                                <button
-                                                    class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">Like</button>
-                                                <button
-                                                    class="text-gray-400 hover:text-indigo-400 transition text-xs font-medium">Reply</button>
+
+                                            {{-- Contenido del comentario --}}
+                                            <div class="text-gray-300 leading-relaxed comment-content">
+                                                {!! $comment->comment !!}
                                             </div>
                                         </div>
-                                        <p class="text-gray-300 leading-relaxed">Amazing article! Can't wait to try this
-                                            new raid.</p>
                                     </div>
                                 </div>
-                            </div>
+                            @empty
+                                <p class="text-gray-400">No comments yet. Be the first to comment!</p>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -186,13 +204,23 @@
 
                     <!-- Newsletter -->
                     <div class="bg-gray-900/50 rounded-2xl backdrop-blur-md shadow-lg border border-gray-800 p-6">
-                        <h3 class="text-xl font-semibold text-white mb-4">Stay Informed!</h3>
+                        <h3 class="text-xl font-semibold text-white mb-4">Stay Updated!</h3>        
                         <p class="text-gray-400 text-sm mb-4">Subscribe to receive the latest news and updates.</p>
-                        <form class="space-y-3">
-                            <input type="email"
-                                class="w-full bg-gray-950/50 rounded-lg px-4 py-2 text-black focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Your email">
-                            <button
+                        
+                        @if(session('success'))
+                            <div class="text-sm text-green-400 mb-3">{{ session('success') }}</div>
+                        @endif
+                        
+                        @if(session('error'))
+                            <div class="text-sm text-red-400 mb-3">{{ session('error') }}</div>
+                        @endif
+                        
+                        <form action="{{ route('subscribe') }}" method="POST" class="space-y-3">
+                            @csrf
+                            <input type="email" name="email" required
+                                class="w-full bg-gray-950/50 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500"
+                                placeholder="Your email address">
+                            <button type="submit"
                                 class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Subscribe</button>
                         </form>
                     </div>
