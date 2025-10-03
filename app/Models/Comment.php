@@ -9,21 +9,30 @@ class Comment extends Model
     protected $table = 'comments';
 
     protected $fillable = [
-        'news_id',
         'user_id',
         'comment',
-        'is_active'
+        'is_active',
+        'commentable_id',
+        'commentable_type'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp'
     ];
 
-    public function news()
+    /**
+     * Get the parent commentable model (news, post, etc).
+     */
+    public function commentable()
     {
-        return $this->belongsTo(News::class, 'news_id');
+        return $this->morphTo();
     }
 
+    /**
+     * Get the user that owns the comment.
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

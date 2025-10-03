@@ -114,14 +114,14 @@
                         <h3 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                             Comments
                         </h3>
-                        <form action="#" method="POST" class="mb-10">
+                        <form action="{{ route('news.comment.store', $item->slug) }}" method="POST" class="mb-10">
                             @csrf
                             <div class="flex items-start gap-4">
                                 <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
                                     src="{{ asset('images/default-avatar.png') }}" alt="Your Avatar">
                                 <div class="flex-1">
-                                    <textarea name="body" rows="3" required
-                                        class="w-full bg-gray-950/60 rounded-lg p-4 text-black focus:ring-2 focus:ring-indigo-500 border border-gray-800 resize-none"
+                                    <textarea id="editor" name="body" required
+                                        class="w-full bg-gray-950/60 rounded-lg p-4 text-white focus:ring-2 focus:ring-indigo-500 border border-gray-800"
                                         placeholder="Write a comment..."></textarea>
                                     <div class="flex justify-end mt-2">
                                         <button type="submit"
@@ -141,8 +141,6 @@
                                     <div class="flex-1">
                                         <div class="bg-gray-950/70 border border-gray-800 rounded-xl p-5 shadow 
                                                     group-hover:border-indigo-500 transition">
-                                            
-                                            {{-- Nombre + fecha --}}
                                             <div class="flex items-center justify-between mb-2">
                                                 <div class="flex items-center gap-2">
                                                     <span class="font-semibold text-white">
@@ -165,9 +163,9 @@
                                             </div>
 
                                             {{-- Contenido del comentario --}}
-                                            <p class="text-gray-300 leading-relaxed">
-                                                {{ $comment->comment }}
-                                            </p>
+                                            <div class="text-gray-300 leading-relaxed comment-content">
+                                                {!! $comment->comment !!}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

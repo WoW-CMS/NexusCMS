@@ -78,7 +78,7 @@ class NewsController extends Controller
                 ->with(['comments' => function ($query) {
                     $query->where('is_active', true)
                         ->with('user')
-                        ->orderBy('created_at', 'asc');
+                        ->orderBy('created_at', 'desc');
                 }])
                 ->firstOrFail();
 
@@ -87,6 +87,7 @@ class NewsController extends Controller
             }
 
             return view($this->views['show'], ['item' => $item]);
+
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json(['error' => 'Record not found'], 404);
