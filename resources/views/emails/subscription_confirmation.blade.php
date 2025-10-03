@@ -45,7 +45,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>¡Gracias por Suscribirte!</h1>
+        <h1>Subscription Confirmation</h1>
     </div>
     
     <div class="content">
@@ -54,7 +54,7 @@
         <p>Thank you for subscribing to our newsletter of {{ $siteName }}. From now on, you will receive updates about our latest news and content.</p>
         
         <p style="text-align: center;">
-            <a href="{{ url('/confirm-subscription/'.$token) }}" class="button" style="color: white;">Confirm Subscription</a>
+            <a href="{{ route('confirm.subscription', ['token' => $token]) }}" class="button" style="color: white;">Confirm Subscription</a>
         </p>
         
         <p>If you did not subscribe to our newsletter, you can safely ignore this email.</p>
@@ -66,7 +66,7 @@
     <div class="footer">
         <p>© {{ date('Y') }} {{ $siteName }}. All rights reserved.</p>
         <p>This email was sent to {{ $email }}</p>
-        <p>If you wish to unsubscribe, <a href="{{ url('/unsubscribe/'.$token) }}">click here</a>.</p>
+        <p>If you wish to unsubscribe, <a href="{{ route('unsubscribe', ['token' => $token]) }}">click here</a>.</p>
     </div>
 </body>
 </html>
