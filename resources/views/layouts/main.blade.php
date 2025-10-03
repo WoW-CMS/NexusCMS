@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            padding-top: 5rem; /* Agregamos padding superior para compensar la navbar fija */
+            padding-top: 5rem;
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Cinzel', serif;
