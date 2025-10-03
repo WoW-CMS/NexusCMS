@@ -206,13 +206,23 @@
 
                     <!-- Newsletter -->
                     <div class="bg-gray-900/50 rounded-2xl backdrop-blur-md shadow-lg border border-gray-800 p-6">
-                        <h3 class="text-xl font-semibold text-white mb-4">Stay Informed!</h3>
+                        <h3 class="text-xl font-semibold text-white mb-4">Stay Updated!</h3>        
                         <p class="text-gray-400 text-sm mb-4">Subscribe to receive the latest news and updates.</p>
-                        <form class="space-y-3">
-                            <input type="email"
-                                class="w-full bg-gray-950/50 rounded-lg px-4 py-2 text-black focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Your email">
-                            <button
+                        
+                        @if(session('success'))
+                            <div class="text-sm text-green-400 mb-3">{{ session('success') }}</div>
+                        @endif
+                        
+                        @if(session('error'))
+                            <div class="text-sm text-red-400 mb-3">{{ session('error') }}</div>
+                        @endif
+                        
+                        <form action="{{ route('subscribe') }}" method="POST" class="space-y-3">
+                            @csrf
+                            <input type="email" name="email" required
+                                class="w-full bg-gray-950/50 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-indigo-500"
+                                placeholder="Your email address">
+                            <button type="submit"
                                 class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Subscribe</button>
                         </form>
                     </div>

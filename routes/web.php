@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\Users\UserController;
 use App\Http\Controllers\Frontend\Users\AuthController;
 use App\Http\Controllers\Frontend\InstallController;
 use App\Http\Controllers\Frontend\ForumsController;
+use App\Http\Controllers\Frontend\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,6 +23,9 @@ Route::middleware([])->group(function () {
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
+    Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+    Route::get('/confirm-subscription/{token}', [SubscriptionController::class, 'confirmSubscription'])->name('confirm.subscription');
+    Route::get('/unsubscribe/{token}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 });
 
 Route::prefix('auth')->group(function () {
