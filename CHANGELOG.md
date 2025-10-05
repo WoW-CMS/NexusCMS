@@ -26,3 +26,10 @@
 - feat(news): update news listing UI and query logic (sayghteight)
 - refactor(NewsController): replace BaseController with Controller and simplify views (sayghteight)
 - feat(news): add comments functionality and update news show view (sayghteight)
+## Sync from Gitea - 2025-10-05
+- Sync from Gitea (github-actions[bot])
+- Merge pull request 'feat(howtoplay): add how to play page with installation guide and faq' (#9) from feature/how-to-play into main (darthar)
+- Added route on navigation (sayghteight)
+- feat(howtoplay): add how to play page with installation guide and faq (sayghteight)
+- Merge pull request 'fix(views): add auth check for comment form in news show page.' (#8) from fix/news-users-not-validation-login into main (darthar)
+- fix(views): add auth check for comment form in news show page. (sayghteight)
