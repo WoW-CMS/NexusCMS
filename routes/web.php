@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\CommentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->name('howtoplay');
 
 Route::middleware([])->group(function () {
     if (!file_exists(storage_path('installed.lock'))) {
