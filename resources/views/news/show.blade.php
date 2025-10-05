@@ -114,6 +114,8 @@
                         <h3 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                             Comments
                         </h3>
+                        <!-- validate login -->
+                        @auth
                         <form action="{{ route('news.comment.store', $item->slug) }}" method="POST" class="mb-10">
                             @csrf
                             <div class="flex items-start gap-4">
@@ -130,6 +132,7 @@
                                 </div>
                             </div>
                         </form>
+                        @endauth
                         <div class="space-y-8">
                             @forelse($item->comments as $comment)
                                 <div class="flex items-start gap-4 group">
