@@ -33,6 +33,7 @@ class HomeController extends BaseController
      */
     protected $views = [
         'index' => 'home.index',
+        'howtoplay' => 'howtoplay.index',
     ];
 
     /**
@@ -92,5 +93,18 @@ class HomeController extends BaseController
         ];
 
         return $this->renderView($view ?? $this->views['index'], compact('data'));
+    }
+
+    /**
+     * Display the how to play page.
+     *
+     * @param Request     $request The incoming HTTP request
+     * @param string|null $view    Optional custom view to render
+     * @return \Illuminate\View\View The rendered how to play view
+     * @since 1.0.0
+     */
+    public function howToPlay(Request $request, ?string $view = null)
+    {
+        return $this->renderView($view ?? $this->views['howtoplay']);
     }
 }
