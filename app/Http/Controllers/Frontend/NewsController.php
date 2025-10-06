@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Helpers\GeneralHelper;
 use Illuminate\View\View;
 
 /**
@@ -61,6 +62,11 @@ class NewsController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
+        // Add reading time to each item
+        $items->each(function ($item) {
+            $item->reading_time = GeneralHelper::readingTime($item->content);
+        });
+
         return view($this->views['index'], ['data' => $items]);
     }
 
@@ -82,12 +88,10 @@ class NewsController extends Controller
                 }])
                 ->firstOrFail();
 
-            if (request()->expectsJson()) {
-                return response()->json(['data' => $item], 200);
-            }
+            // Add reading time to the item
+            $item->reading_time = GeneralHelper::readingTime($item->content);
 
             return view($this->views['show'], ['item' => $item]);
-
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json(['error' => 'Record not found'], 404);
