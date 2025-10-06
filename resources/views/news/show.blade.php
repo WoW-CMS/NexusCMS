@@ -23,10 +23,10 @@
                     <div
                         class="bg-gray-900/50 rounded-2xl overflow-hidden backdrop-blur-md shadow-lg border border-gray-800 p-6">
                         <!-- Featured Image with Enhanced Overlay -->
-                        @if ($item->featured_image)
+                        @if ($item->image)
                             <div class="relative h-96 overflow-hidden rounded-lg">
-                                <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                    src="{{ asset('storage/' . $item->featured_image) }}" alt="{{ $item->title }}">
+                                <img class="w-full h-48 md:h-full object-cover" 
+                                    src="{{ asset('storage/images/' . $item->image) }}" alt="{{ $item->title }}">
                             </div>
                         @endif
 

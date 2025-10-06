@@ -43,8 +43,8 @@
                         <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg news-card flex flex-col md:flex-row">
                             <div class="md:w-1/3">
                                 <img class="w-full h-48 md:h-full object-cover" 
-                                     src="{{ asset('storage/' . $news->image) }}" 
-                                     alt="{{ $news->title }}">
+                                     src="{{ asset('storage/images/' . $news->image) }}" 
+                                     alt="{{ $news->title }}">2
                             </div>
                             <div class="md:w-2/3 p-6">
                                 <div class="text-xs text-gray-400 mb-2">{{ $news->published_at ? $news->published_at->format('F d, Y') : 'Draft' }}</div>
