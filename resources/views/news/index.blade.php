@@ -46,10 +46,10 @@
                     <article class="bg-gray-900/50 rounded-2xl overflow-hidden backdrop-blur-md shadow-lg border border-gray-800 hover:border-gray-700 transition-all duration-300 group">
                         <a href="{{ route('news.show', $news->slug) }}" class="block">
                             <!-- Featured Image -->
-                            @if ($news->featured_image)
+                            @if ($news->image)
                                 <div class="relative h-64 overflow-hidden">
-                                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                        src="{{ asset('storage/' . $news->featured_image) }}" 
+                                    <img class="w-full h-48 md:h-full object-cover" 
+                                        src="{{ asset('storage/images/' . $news->image) }}" 
                                         alt="{{ $news->title }}">
                                 </div>
                             @endif
