@@ -7,92 +7,10 @@
     <title>{{ config('app.name', 'NexusCMS') }} - @yield('title', 'World of Warcraft Private Server')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap"
-        rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            padding-top: 5rem;
-            /* Agregamos padding superior para compensar la navbar fija */
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Cinzel', serif;
-        }
-
-        .bg-wow {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
-                url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        .text-shadow {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-        }
-
-        .bg-blur {
-            backdrop-filter: blur(8px);
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .realm-status-online {
-            color: #22c55e;
-        }
-
-        .realm-status-offline {
-            color: #ef4444;
-        }
-
-        .realm-status-maintenance {
-            color: #eab308;
-        }
-
-        .news-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .news-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.2) rotate(5deg);
-        }
-
-        .nav-link {
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #3b82f6;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-            left: 0;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('styles')
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
@@ -108,28 +26,67 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-6">
-                            <a href="{{ route('home') }}"
-                                class="nav-link @if (request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
-                            <a href="{{ route('news') }}"
-                                class="nav-link @if (request()->routeIs('news')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
-                            <a href="#"
-                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How
-                                to Play</a>
-                            <a href="#"
-                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
-                            <a href="{{ route('armory') }}"
-                                class="nav-link @if (request()->routeIs('armory')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
-                            <a href="#"
-                                class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
+                            <a href="{{ route('home') }}" class="nav-link @if(request()->routeIs('home')) bg-gray-900 text-white @else text-gray-300 hover:text-white @endif px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Home</a>
+                            <a href="{{ route('news') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">News</a>
+                            <a href="{{ route('howtoplay') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">How to Play</a>
+                            <a href="{{ route('forums') }}" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Forums</a>
+                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Armory</a>
+                            <a href="#" class="nav-link text-gray-300 hover:text-white px-4 py-3 rounded-md text-sm font-medium uppercase tracking-wider">Donate</a>
                         </div>
                     </div>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-4 flex items-center md:ml-6 space-x-4">
-                        <a href="#"
-                            class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
-                        <a href="#"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        @auth
+                            <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                                <button @click="open = !open" 
+                                    class="flex items-center text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700"
+                                    :aria-expanded="open">
+                                    <span>{{ Auth::user()->name }}</span>
+                                    <svg class="ml-2 h-5 w-5 text-gray-400 transition-transform duration-200" 
+                                         :class="{ 'transform rotate-180': open }"
+                                         xmlns="http://www.w3.org/2000/svg" 
+                                         viewBox="0 0 20 20" 
+                                         fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <div x-show="open"
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="transform opacity-0 scale-95"
+                                     x-transition:enter-end="transform opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="transform opacity-100 scale-100"
+                                     x-transition:leave-end="transform opacity-0 scale-95"
+                                     class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5"
+                                     style="display: none;">
+                                    <div class="py-1">
+                                        <a href="{{ route('ucp.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Your Profile
+                                        </a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Account Settings
+                                        </a>
+                                        <a href="{{ route('ucp.gameaccount') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Your Game Accounts
+                                        </a>
+                                        <div class="border-t border-gray-700"></div>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                            Admin Control Panel
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                                    Logout
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:bg-gray-700">Login</a>
+                            <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Register</a>
+                        @endauth
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
@@ -148,6 +105,7 @@
         @yield('content')
     </main>
 
+    @yield('modals')
     <!-- Footer -->
     <footer class="bg-gray-800 pt-16 pb-12 border-t border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,0 +1,148 @@
+/* Home page */
+body {
+    font-family: 'Inter', sans-serif;
+    padding-top: 5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+}
+.bg-wow {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+.bg-blur {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.realm-status-online { color: #22c55e; }
+.realm-status-offline { color: #ef4444; }
+.realm-status-maintenance { color: #eab308; }
+.news-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+.feature-icon {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.feature-card:hover .feature-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #3b82f6;
+    transition: all 0.3s ease;
+}
+.nav-link:hover::after {
+    width: 100%;
+    left: 0;
+}
+/* How to Play */
+.step-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+}
+.step-card:hover {
+    transform: translateY(-8px);
+    border-color: #3b82f6;
+    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.3);
+}
+.step-number {
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.4);
+}
+.requirement-badge {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+}
+.requirement-badge:hover {
+    background: rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+}
+.download-button {
+    position: relative;
+    overflow: hidden;
+}
+.download-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 1.5s, height 1.5s;
+}
+.download-button:hover::before {
+    width: 100%;
+    height: 300px;
+}
+.tab-button {
+    position: relative;
+    transition: all 0.3s ease;
+}
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    transition: width 0.3s ease;
+}
+.tab-button.active::after {
+    width: 100%;
+}
+.faq-item {
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+.faq-item:hover {
+    border-left-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+.pulse-dot {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.bg-hero-pattern {
+    background-image: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)), 
+                        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}

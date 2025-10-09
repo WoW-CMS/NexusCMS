@@ -36,6 +36,11 @@ class News extends Model
         return $this->belongsTo(NewsCategory::class, 'category_id');
     }
 
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
     public function relatedContents($limit = 2)
     {
         return static::query()

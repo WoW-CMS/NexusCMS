@@ -27,10 +27,11 @@ trait Cacheable
     /**
      * Get cached list with query builder
      */
-    public function getCachedList($query = null)
+    public function getCachedList($query = null, $perPage = null)
     {
         $query = $query ?: static::query();
-        $perPage = request()->get('per_page', 15);
+
+        $perPage = $perPage ?: request()->get('per_page', 15);
         $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
 
         return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($query, $perPage) {

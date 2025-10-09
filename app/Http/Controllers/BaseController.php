@@ -106,7 +106,7 @@ class BaseController extends Controller
      * @param string|null $view
      * @return JsonResponse|View
      */
-    public function show(int $id, ?string $view = null)
+    public function show(int|string $id, ?string $view = null)
     {
         try {
             $item = $this->findModel($id);

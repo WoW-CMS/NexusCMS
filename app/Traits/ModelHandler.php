@@ -45,7 +45,9 @@ trait ModelHandler
 
         // Verificar si el modelo usa el trait Cacheable
         if (in_array('App\Traits\Cacheable', class_uses_recursive($model))) {
-            return $model->getCachedList();
+            return $this->isPaginated
+            ? $model->getCachedList(null, $this->perPage ?? $perPage)
+            : $model->getCachedList();
         }
 
         $query = $model->query();
