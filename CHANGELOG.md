@@ -40,3 +40,4 @@
 - feat(news): add dynamic reading time calculation. (sayghteight)
 - Merge pull request 'refactor(views): update image paths and field names in news views' (#10) from feat/image-placeholder into main (darthar)
 - refactor(views): update image paths and field names in news views (sayghteight)
+## Sync from Gitea - 2025-10-12
