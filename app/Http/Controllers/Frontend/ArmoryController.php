@@ -44,7 +44,7 @@ class ArmoryController extends Controller
 
         return view($this->views['index'], [
             'data' => $characters ?? [],
-            'search' => $q,
+            'search' => $q ?? '',
         ]);
     }
 
