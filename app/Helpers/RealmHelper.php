@@ -52,6 +52,8 @@ class RealmHelper
                 return WoWConstants::EXPANSION_COLORS[$id] ?? null;
             case 'class':
                 return WoWConstants::CLASS_NAMES[$id] ?? null;
+            case 'race':
+                return WoWConstants::RACE_NAMES[$id] ?? null;
             default:
                 return null;
         }

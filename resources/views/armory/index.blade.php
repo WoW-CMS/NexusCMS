@@ -53,16 +53,16 @@
                                 <div
                                     class="group bg-gray-900/50 rounded-2xl backdrop-blur-sm shadow-lg border border-gray-800 p-6 flex flex-col">
                                     <div class="flex items-center space-x-4 mb-4">
-                                        <img src="{{ $player->avatar_url }}" alt="Avatar"
+                                        <img src="" alt="Avatar"
                                             class="h-16 w-16 rounded-full object-cover">
                                         <h3 class="text-2xl font-bold text-white">{{ $player->name }}</h3>
                                     </div>
                                     <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-6 text-gray-200">
                                         <div>Level <span class="font-semibold text-white">{{ $player->level }}</span></div>
-                                        <div>Class <span class="font-semibold text-white">{{ $player->class }}</span></div>
-                                        <div>Race <span class="font-semibold text-white">{{ $player->race }}</span></div>
+                                        <div>Class <span class="font-semibold text-white">{{ App\Helpers\RealmHelper::getWoWConstant('class', $player->class) }}</span></div>
+                                        <div>Race <span class="font-semibold text-white">{{ App\Helpers\RealmHelper::getWoWConstant('race', $player->race) }}</span></div>
                                     </div>
-                                    <a href="{{ route('armory.show', $player->getKey()) }}"
+                                    <a href=""
                                         class="mt-auto inline-block text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition">
                                         View Character
                                     </a>

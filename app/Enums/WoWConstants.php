@@ -32,6 +32,25 @@ class WoWConstants
     public const CLASS_DEMON_HUNTER = 12;
     public const CLASS_EVOKER = 13;
 
+    // Races
+    public const RACE_HUMAN = 1;
+    public const RACE_ORC = 2;
+    public const RACE_DWARF = 3;
+    public const RACE_NIGHT_ELF = 4;
+    public const RACE_UNDEAD = 5;
+    public const RACE_TAUREN = 6;
+    public const RACE_GNOME = 7;
+    public const RACE_TROLL = 8;
+    public const RACE_BLOODELF = 9;
+    public const RACE_DRAENEI = 10;
+    public const RACE_WOLF = 11;
+    public const RACE_GOBLIN = 12;
+    public const RACE_PANDAREN = 13;
+    public const RACE_DARK_IRON_DWARF = 14;
+    public const RACE_HIGHMOUNTAIN_TAUREN = 15;
+    public const RACE_VOID_ELF = 16;
+    public const RACE_MAGHAR_ORC = 17;
+    
     public const EXPANSION_NAMES = [
         self::EXPANSION_VANILLA => 'Vanilla',
         self::EXPANSION_TBC => 'The Burning Crusade',
@@ -118,5 +137,25 @@ class WoWConstants
         self::CLASS_DRUID => 'border-orange-500',
         self::CLASS_DEMON_HUNTER => 'border-purple-500',
         self::CLASS_EVOKER => 'border-yellow-500',
+    ];
+
+    public const RACE_NAMES = [
+        self::RACE_HUMAN => 'Humano',
+        self::RACE_ORC => 'Orc',
+        self::RACE_DWARF => 'Enano',
+        self::RACE_NIGHT_ELF => 'Elfo Nocturno',
+        self::RACE_UNDEAD => 'Muerto',
+        self::RACE_TAUREN => 'Tauren',
+        self::RACE_GNOME => 'Gnomo',
+        self::RACE_TROLL => 'Troll',
+        self::RACE_BLOODELF => 'Elfo Sangre',
+        self::RACE_DRAENEI => 'Draenei',
+        self::RACE_WOLF => 'Lobo',
+        self::RACE_GOBLIN => 'Goblin',
+        self::RACE_PANDAREN => 'Pandaren',
+        self::RACE_DARK_IRON_DWARF => 'Enano Oscuro',
+        self::RACE_HIGHMOUNTAIN_TAUREN => 'Tauren de Montaña',
+        self::RACE_VOID_ELF => 'Elfo del Vacío',
+        self::RACE_MAGHAR_ORC => 'Orc de la Muerte',
     ];
 }
