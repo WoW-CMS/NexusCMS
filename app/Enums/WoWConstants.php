@@ -103,4 +103,20 @@ class WoWConstants
         self::CLASS_DEMON_HUNTER => 'Cazador de Demonios',
         self::CLASS_EVOKER => 'Evocador',
     ];
+
+    public const CLASS_COLORS = [
+        self::CLASS_WARRIOR => 'border-red-500',
+        self::CLASS_PALADIN => 'border-yellow-500',
+        self::CLASS_HUNTER => 'border-green-500',
+        self::CLASS_ROGUE => 'border-orange-500',
+        self::CLASS_PRIEST => 'border-purple-500',
+        self::CLASS_DEATH_KNIGHT => 'border-blue-500',
+        self::CLASS_SHAMAN => 'border-pink-500',
+        self::CLASS_MAGE => 'border-cyan-500',
+        self::CLASS_WARLOCK => 'border-gray-500',
+        self::CLASS_MONK => 'border-lime-500',
+        self::CLASS_DRUID => 'border-orange-500',
+        self::CLASS_DEMON_HUNTER => 'border-purple-500',
+        self::CLASS_EVOKER => 'border-yellow-500',
+    ];
 }
