@@ -2,67 +2,63 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
-use App\Models\Armory;
+use App\Http\Controllers\Controller;
+use App\Interfaces\ArmoryRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * Frontend Armory Controller for handling main website pages
+ * Frontend Armory Controller
  *
- * This controller handles the main frontend pages and views for the website,
- * including the homepage, landing pages, and other public-facing content.
- *
- * @category Controllers
- * @package  App\Http\Controllers\Frontend
- * @author   NexusCMS <noreply@wow-cms.com>
- * @license  GNU General Public License (GPL)
- * @version  1.0.0
- * @link     wow-cms.com
+ * Handles public-facing Armory pages using the Armory repository.
  */
-class ArmoryController extends BaseController
+class ArmoryController extends Controller
 {
-    /**
-     * Model associated with the controller
-     *
-     * @var \Illuminate\Database\Eloquent\Model
-     */
-    protected $model = Armory::class;
+    protected int $perPage = 9;
 
-    /**
-     * Determines if the controller has a model associated with it
-     *
-     * @var bool
-     */
-    protected $hasModel = true;
-
-    /**
-     * Determines if it's paginated or not
-     *
-     * @var bool
-     */
-    protected $isPaginated = true;
-
-    /**
-     * Number of items per page
-     *
-     * @var int
-     */
-    protected $perPage = 9;
-
-    /**
-     * Default view for the controller
-     *
-     * @var string
-     */
-    protected $views = [
+    protected array $views = [
         'index' => 'armory.index',
-        'show' => 'armory.show',
+        'show'  => 'armory.show',
     ];
-    protected function getModelData($perPage = 0)
+
+    protected ArmoryRepositoryInterface $armoryRepo;
+
+    public function __construct(ArmoryRepositoryInterface $armoryRepo)
     {
-        return Armory::query()
-            ->search(request('q'))
-            ->orderBy('name')
-            ->paginate($perPage)
-            ->appends(['q' => request('q')]);
+        $this->armoryRepo = $armoryRepo;
+    }
+
+    /**
+     * Display a paginated list of Armory characters
+     */
+    /**
+     * Show list of characters, optionally filtered by search query
+     */
+    public function index(Request $request)
+    {
+        $q = $request->input('q');
+
+        if ($q) {
+            $characters = $this->armoryRepo->search($q); // <-- Método search en el repo
+        }
+
+        return view($this->views['index'], [
+            'data' => $characters ?? [],
+            'search' => $q,
+        ]);
+    }
+
+    /**
+     * Show a single character by GUID
+     */
+    public function show(int $guid)
+    {
+        $character = $this->armoryRepo->getCharacter($guid);
+
+        abort_if(!$character, 404);
+
+        $items = $this->armoryRepo->getCharacterItems($guid);
+
+        return view($this->views['show'], compact('character', 'items'));
     }
 }

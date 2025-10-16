@@ -21,6 +21,24 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
         $this->world = $this->connectToExternalDatabase($realmConfig['world_database'], 'world');
     }
 
+    /**
+     * Get all characters from the database
+     */
+    public function getAllCharacters()
+    {
+        return $this->characters
+            ->table('characters')
+            ->get();
+    }
+
+    public function search(string $q)
+    {
+        return $this->characters
+            ->table('characters')
+            ->where('name', 'like', "%{$q}%")
+            ->get();
+    }
+
     public function getCharacter(int $guid)
     {
         return $this->characters
