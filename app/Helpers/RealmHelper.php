@@ -54,8 +54,53 @@ class RealmHelper
                 return WoWConstants::CLASS_NAMES[$id] ?? null;
             case 'race':
                 return WoWConstants::RACE_NAMES[$id] ?? null;
+            case 'avatar':
+                return WoWConstants::RACE_ICONS[$id] ?? null;
             default:
                 return null;
         }
     }
+
+    /**
+     * Get the faction of a race
+     * 
+     * @param int $race The race ID
+     * @return string|null Returns the faction of the race, or null if not found
+     */
+    public static function getFactionByRace(int $race): ?string
+    {
+        $allianceRaces = [
+            WoWConstants::RACE_HUMAN,
+            WoWConstants::RACE_DWARF,
+            WoWConstants::RACE_NIGHT_ELF,
+            WoWConstants::RACE_GNOME,
+            WoWConstants::RACE_DRAENEI,
+            WoWConstants::RACE_VOID_ELF,
+        ];
+
+        $hordeRaces = [
+            WoWConstants::RACE_ORC,
+            WoWConstants::RACE_UNDEAD,
+            WoWConstants::RACE_TAUREN,
+            WoWConstants::RACE_TROLL,
+            WoWConstants::RACE_BLOODELF,
+            WoWConstants::RACE_GOBLIN,
+            WoWConstants::RACE_MAGHAR_ORC,
+            WoWConstants::RACE_HIGHMOUNTAIN_TAUREN,
+            WoWConstants::RACE_DARK_IRON_DWARF,
+            WoWConstants::RACE_PANDAREN, // Pandaren pueden elegir, tal vez devuelves null
+            WoWConstants::RACE_WOLF,     // si es un NPC
+        ];
+
+        if (in_array($race, $allianceRaces, true)) {
+            return 'Alliance';
+        }
+
+        if (in_array($race, $hordeRaces, true)) {
+            return 'Horde';
+        }
+
+        return null;
+    }
+
 }

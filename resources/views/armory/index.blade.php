@@ -43,106 +43,48 @@
                 </div>
             </form>
 
-            <!-- Results Grid -->
             @if (filled($search))
-                <section>
-                    @if ($data->count())
-                        <h2 class="text-2xl font-semibold text-white mb-6">Players</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                            @foreach ($data as $player)
-                                <div
-                                    class="group bg-gray-900/50 rounded-2xl backdrop-blur-sm shadow-lg border border-gray-800 p-6 flex flex-col">
-                                    <div class="flex items-center space-x-4 mb-4">
-                                        <img src="" alt="Avatar"
-                                            class="h-16 w-16 rounded-full object-cover">
-                                        <h3 class="text-2xl font-bold text-white">{{ $player->name }}</h3>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <!-- Character Header -->
+                @if ($data->count())
+                    @foreach ($data as $player)
+                    <div class="bg-gray-800 rounded-lg p-6 mb-8 border border-gray-700">
+                        <div class="flex items-center justify-between flex-wrap gap-4">
+                            <div class="flex items-center gap-6">
+                                <img src="{{ App\Helpers\RealmHelper::getWoWConstant('avatar', $player->race) }}" 
+                                    alt="Character" class="w-24 h-24 rounded-lg border-2 border-blue-500">
+                                <div>
+                                    <h2 class="text-3xl font-bold cinzel mb-2">{{ $player->name }}</h2>
+                                    <div class="flex items-center gap-4 text-gray-400">
+                                        <span class="flex items-center gap-2">
+                                            <i class="fas fa-shield-alt text-blue-500"></i> Level {{ $player->level }} {{ App\Helpers\RealmHelper::getWoWConstant('race', $player->race) }}
+                                        </span>
+                                        <span class="flex items-center gap-2">
+                                            <i class="fas fa-user text-green-500"></i> {{ App\Helpers\RealmHelper::getWoWConstant('class', $player->class) }}
+                                        </span>
+                                        <span class="flex items-center gap-2">
+                                            <i class="fas fa-server text-purple-500"></i> Realm Name
+                                        </span>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-6 text-gray-200">
-                                        <div>Level <span class="font-semibold text-white">{{ $player->level }}</span></div>
-                                        <div>Class <span class="font-semibold text-white">{{ App\Helpers\RealmHelper::getWoWConstant('class', $player->class) }}</span></div>
-                                        <div>Race <span class="font-semibold text-white">{{ App\Helpers\RealmHelper::getWoWConstant('race', $player->race) }}</span></div>
+                                    <div class="mt-2">
+                                        <span class="inline-block {{ App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance' ? 'bg-blue-600' : 'bg-red-600' }} text-white px-3 py-1 rounded text-sm font-medium">
+                                            @if (App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance')
+                                                <i class="fas fa-shield-alt mr-1"></i> Alliance
+                                            @else
+                                                <i class="fas fa-fist-raised mr-1"></i> Horde
+                                            @endif
+                                        </span>
                                     </div>
-                                    <a href=""
-                                        class="mt-auto inline-block text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition">
-                                        View Character
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Pagination -->
-                        @if ($data instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                            <div class="mt-12">
-                                <div class="flex justify-center">
-                                    @if ($data->hasPages())
-                                        <nav role="navigation" aria-label="Pagination Navigation"
-                                            class="flex items-center gap-1">
-                                            {{-- Previous Page Link --}}
-                                            @if ($data->onFirstPage())
-                                                <span
-                                                    class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
-                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M12.707 5.293a1 1 0 00-1.414 1.414L9.586 10l1.707 1.707a1 1 0 001.414-1.414l-3-3z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </span>
-                                            @else
-                                                <a href="{{ $data->previousPageUrl() }}" rel="prev"
-                                                    class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
-                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M12.707 5.293a1 1 0 00-1.414 1.414L9.586 10l1.707 1.707a1 1 0 001.414-1.414l-3-3z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </a>
-                                            @endif
-
-                                            {{-- Pagination Elements --}}
-                                            @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
-                                                @if ($page == $data->currentPage())
-                                                    <span
-                                                        class="px-4 py-2 text-sm font-medium text-indigo-400 bg-indigo-600/20 rounded-lg">{{ $page }}</span>
-                                                @else
-                                                    <a href="{{ $url }}"
-                                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
-                                                        {{ $page }}
-                                                    </a>
-                                                @endif
-                                            @endforeach
-
-                                            {{-- Next Page Link --}}
-                                            @if ($data->hasMorePages())
-                                                <a href="{{ $data->nextPageUrl() }}" rel="next"
-                                                    class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-800/40 rounded-lg hover:bg-indigo-600/20 hover:text-indigo-400 transition-colors">
-                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M7.293 14.707a1 1 0 001.414-1.414L8.414 10l.293-.293a1 1 0 10-1.414-1.414l-3 3z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </a>
-                                            @else
-                                                <span
-                                                    class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-800/40 rounded-lg cursor-not-allowed">
-                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M7.293 14.707a1 1 0 001.414-1.414L8.414 10l.293-.293a1 1 0 10-1.414-1.414l-3 3z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </span>
-                                            @endif
-                                        </nav>
-                                    @endif
                                 </div>
                             </div>
-                        @endif
-                    @else
-                        <p class="text-center text-gray-400">
-                            No results found for
-                            “<strong class="text-white">{{ $search }}</strong>”.
-                        </p>
-                    @endif
-                </section>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-yellow-500 mb-1">2,456</div>
+                                <div class="text-gray-400 text-sm">Achievement Points</div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                @endif
             @endif
         </div>
     </div>

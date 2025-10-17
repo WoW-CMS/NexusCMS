@@ -158,4 +158,24 @@ class WoWConstants
         self::RACE_VOID_ELF => 'Elfo del Vacío',
         self::RACE_MAGHAR_ORC => 'Orc de la Muerte',
     ];
+
+    public const RACE_ICONS = [
+        self::RACE_HUMAN => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_human_male.jpg',
+        self::RACE_ORC => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_orc_male.jpg',
+        self::RACE_DWARF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_dwarf_male.jpg',
+        self::RACE_NIGHT_ELF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_night_elf_male.jpg',
+        self::RACE_UNDEAD => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_scourge_male.jpg',
+        self::RACE_TAUREN => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_tauren_male.jpg',
+        self::RACE_GNOME => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_gnome_male.jpg',
+        self::RACE_TROLL => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_troll_male.jpg',
+        self::RACE_BLOODELF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_blood_elf_male.jpg',
+        self::RACE_DRAENEI => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_draenei_male.jpg',
+        self::RACE_WOLF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_worgen_male.jpg',
+        self::RACE_GOBLIN => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_goblin_male.jpg',
+        self::RACE_PANDAREN => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_pandaren_male.jpg',
+        self::RACE_DARK_IRON_DWARF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_dark_iron_dwarf_male.jpg',
+        self::RACE_HIGHMOUNTAIN_TAUREN => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_highmountain_tauren_male.jpg',
+        self::RACE_VOID_ELF => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_void_elf_male.jpg',
+        self::RACE_MAGHAR_ORC => 'https://wow.zamimg.com/images/wow/icons/large/achievement_character_maghar_orc_male.jpg',
+    ];
 }
