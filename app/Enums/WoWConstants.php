@@ -108,19 +108,19 @@ class WoWConstants
     ];
     
     public const CLASS_NAMES = [
-        self::CLASS_WARRIOR => 'Guerrero',
-        self::CLASS_PALADIN => 'Paladín',
-        self::CLASS_HUNTER => 'Cazador',
-        self::CLASS_ROGUE => 'Pícaro',
-        self::CLASS_PRIEST => 'Sacerdote',
-        self::CLASS_DEATH_KNIGHT => 'Caballero de la Muerte',
-        self::CLASS_SHAMAN => 'Chamán',
-        self::CLASS_MAGE => 'Mago',
-        self::CLASS_WARLOCK => 'Brujo',
-        self::CLASS_MONK => 'Monje',
-        self::CLASS_DRUID => 'Druida',
-        self::CLASS_DEMON_HUNTER => 'Cazador de Demonios',
-        self::CLASS_EVOKER => 'Evocador',
+        self::CLASS_WARRIOR => 'Warrior',
+        self::CLASS_PALADIN => 'Paladin',
+        self::CLASS_HUNTER => 'Hunter',
+        self::CLASS_ROGUE => 'Rogue',
+        self::CLASS_PRIEST => 'Priest',
+        self::CLASS_DEATH_KNIGHT => 'Death Knight',
+        self::CLASS_SHAMAN => 'Shaman',
+        self::CLASS_MAGE => 'Mage',
+        self::CLASS_WARLOCK => 'Warlock',
+        self::CLASS_MONK => 'Monk',
+        self::CLASS_DRUID => 'Druid',
+        self::CLASS_DEMON_HUNTER => 'Demon Hunter',
+        self::CLASS_EVOKER => 'Evoker',
     ];
 
     public const CLASS_COLORS = [
@@ -140,23 +140,23 @@ class WoWConstants
     ];
 
     public const RACE_NAMES = [
-        self::RACE_HUMAN => 'Humano',
+        self::RACE_HUMAN => 'Human',
         self::RACE_ORC => 'Orc',
-        self::RACE_DWARF => 'Enano',
-        self::RACE_NIGHT_ELF => 'Elfo Nocturno',
-        self::RACE_UNDEAD => 'Muerto',
+        self::RACE_DWARF => 'Dwarf',
+        self::RACE_NIGHT_ELF => 'Night Elf',
+        self::RACE_UNDEAD => 'Undead',
         self::RACE_TAUREN => 'Tauren',
-        self::RACE_GNOME => 'Gnomo',
+        self::RACE_GNOME => 'Gnome',
         self::RACE_TROLL => 'Troll',
-        self::RACE_BLOODELF => 'Elfo Sangre',
+        self::RACE_BLOODELF => 'Blood Elf',
         self::RACE_DRAENEI => 'Draenei',
-        self::RACE_WOLF => 'Lobo',
+        self::RACE_WOLF => 'Worgen',
         self::RACE_GOBLIN => 'Goblin',
         self::RACE_PANDAREN => 'Pandaren',
-        self::RACE_DARK_IRON_DWARF => 'Enano Oscuro',
-        self::RACE_HIGHMOUNTAIN_TAUREN => 'Tauren de Montaña',
-        self::RACE_VOID_ELF => 'Elfo del Vacío',
-        self::RACE_MAGHAR_ORC => 'Orc de la Muerte',
+        self::RACE_DARK_IRON_DWARF => 'Dark Iron Dwarf',
+        self::RACE_HIGHMOUNTAIN_TAUREN => 'Highmountain Tauren',
+        self::RACE_VOID_ELF => 'Void Elf',
+        self::RACE_MAGHAR_ORC => 'Mag\'har Orc',
     ];
 
     public const RACE_ICONS = [

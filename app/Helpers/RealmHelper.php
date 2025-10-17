@@ -54,8 +54,6 @@ class RealmHelper
                 return WoWConstants::CLASS_NAMES[$id] ?? null;
             case 'race':
                 return WoWConstants::RACE_NAMES[$id] ?? null;
-            case 'avatar':
-                return WoWConstants::RACE_ICONS[$id] ?? null;
             default:
                 return null;
         }
