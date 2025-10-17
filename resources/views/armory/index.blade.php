@@ -47,43 +47,70 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <!-- Character Header -->
                 @if ($data->count())
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($data as $player)
-                    <div class="bg-gray-800 rounded-lg p-6 mb-8 border border-gray-700">
-                        <div class="flex items-center justify-between flex-wrap gap-4">
-                            <div class="flex items-center gap-6">
+                    <a href="" class="group relative bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 overflow-hidden">
+                        {{-- Faction glow --}}
+                        <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300
+                            {{ App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance' ? 'bg-blue-500' : 'bg-red-500' }}"></div>
+
+                        <div class="relative z-10 flex flex-col h-full">
+                            <!-- Header -->
+                            <div class="flex items-center gap-4 mb-4">
                                 <img src="{{ App\Helpers\RealmHelper::getWoWConstant('avatar', $player->race) }}" 
-                                    alt="Character" class="w-24 h-24 rounded-lg border-2 border-blue-500">
+                                    alt="{{ $player->name }}" 
+                                    class="w-16 h-16 rounded-full border-2 border-gray-700 group-hover:border-indigo-500 transition duration-300">
                                 <div>
-                                    <h2 class="text-3xl font-bold cinzel mb-2">{{ $player->name }}</h2>
-                                    <div class="flex items-center gap-4 text-gray-400">
-                                        <span class="flex items-center gap-2">
-                                            <i class="fas fa-shield-alt text-blue-500"></i> Level {{ $player->level }} {{ App\Helpers\RealmHelper::getWoWConstant('race', $player->race) }}
-                                        </span>
-                                        <span class="flex items-center gap-2">
-                                            <i class="fas fa-user text-green-500"></i> {{ App\Helpers\RealmHelper::getWoWConstant('class', $player->class) }}
-                                        </span>
-                                        <span class="flex items-center gap-2">
-                                            <i class="fas fa-server text-purple-500"></i> Realm Name
-                                        </span>
-                                    </div>
-                                    <div class="mt-2">
-                                        <span class="inline-block {{ App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance' ? 'bg-blue-600' : 'bg-red-600' }} text-white px-3 py-1 rounded text-sm font-medium">
-                                            @if (App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance')
-                                                <i class="fas fa-shield-alt mr-1"></i> Alliance
-                                            @else
-                                                <i class="fas fa-fist-raised mr-1"></i> Horde
-                                            @endif
-                                        </span>
-                                    </div>
+                                    <h3 class="text-xl font-bold cinzel text-gray-100 group-hover:text-indigo-400 transition">{{ $player->name }}</h3>
+                                    <span class="inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs font-semibold
+                                        {{ App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance' ? 'bg-blue-900/50 text-blue-300' : 'bg-red-900/50 text-red-300' }}">
+                                        @if (App\Helpers\RealmHelper::getFactionByRace($player->race) === 'Alliance')
+                                            <i class="fas fa-shield-alt"></i> Alliance
+                                        @else
+                                            <i class="fas fa-fist-raised"></i> Horde
+                                        @endif
+                                    </span>
+                                    <span class="inline-flex items-center gap-2 px-2 py-1 text-xs">
+                                        <i class="fas fa-home text-purple-400"></i>
+                                        <span>{{ $player->guild_name ?? 'No Guild' }}</span>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-yellow-500 mb-1">2,456</div>
-                                <div class="text-gray-400 text-sm">Achievement Points</div>
+
+                            <!-- Body -->
+                            <div class="flex-1 grid grid-cols-2 gap-3 text-sm text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-shield-alt text-blue-400"></i>
+                                    <span>Level {{ $player->level }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-user text-green-400"></i>
+                                    <span>{{ App\Helpers\RealmHelper::getWoWConstant('race', $player->race) }} / {{ App\Helpers\RealmHelper::getWoWConstant('class', $player->class) }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="mt-4 pt-3 border-t border-gray-700 text-center">
+                                <div class="text-yellow-400 font-bold text-lg">2,456</div>
+                                <div class="text-gray-500 text-xs">Achievement Points</div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                     @endforeach
+                </div>
+                @else
+                    <div class="max-w-md mx-auto">
+                        <div class="bg-yellow-900/30 border border-yellow-700 rounded-lg p-4 text-center">
+                            <div class="flex items-center justify-center mb-2">
+                                <svg class="w-6 h-6 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <h3 class="text-yellow-400 font-semibold">No Character Found</h3>
+                            </div>
+                            <p class="text-yellow-200 text-sm">We couldn't find any character with that name. Please check the spelling and try again.</p>
+                        </div>
+                    </div>
                 @endif
             @endif
         </div>
