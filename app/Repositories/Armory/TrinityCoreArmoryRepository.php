@@ -198,12 +198,30 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
      * @param int $guildId Guild ID
      * @return Collection Collection of guild or empty collection if connection failed
      */
-    public function getGuild(int $guildId)
+    public function getGuildByMember(int $memberGuid)
     {
         $conn = $this->getCharacters();
         if (!$conn) return collect();
 
-        return $conn->table('guild')->where('guildid', $guildId)->first();
+        return $conn->table('guild as g')
+            ->join('guild_member as gm', 'gm.guildid', '=', 'g.guildid')
+            ->where('gm.guid', $memberGuid)
+            ->first();
     }
+
+    public function getGuildRankMember(int $guildId, int $memberGuid)
+    {
+        $conn = $this->getCharacters();
+        if (!$conn) return collect();
+
+        return $conn->table('guild_member as gm')
+            ->join('guild_rank as gr', 'gr.guildid', '=', 'gm.guildid')
+            ->where('gm.guildid', $guildId)
+            ->where('gm.guid', $memberGuid)
+            ->get([
+                'gr.rname',
+            ])->first();
+    }
+
 }
 

@@ -38,8 +38,8 @@
                     <div class="flex items-center gap-3">
                         <i class="fas fa-shield-alt text-2xl"></i>
                         <div>
-                            <div class="text-sm text-purple-200">Guild Master of</div>
-                            <div class="text-xl font-bold">&lt;Eternal Champions&gt;</div>
+                            <div class="text-sm text-purple-200">{{ $memberRank->rname }} of</div>
+                            <div class="text-xl font-bold">&lt;{{ $guild->name }}&gt;</div>
                         </div>
                     </div>
                 </div>

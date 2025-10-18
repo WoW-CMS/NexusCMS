@@ -62,6 +62,8 @@ class ArmoryController extends Controller
         abort_if(!$character, 404);
 
         $items = $this->armoryRepo->getCharacterItems($guid);
+        $guild = $this->armoryRepo->getGuildByMember($character->guid);
+        $memberRank = $this->armoryRepo->getGuildRankMember($guild->guildid, $character->guid);
 
         // Enrich items with Wowhead data
         $item = $items->map(function ($equip) {
@@ -71,6 +73,6 @@ class ArmoryController extends Controller
 
         $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
 
-        return view($this->views['show'], compact('character', 'item', 'achievement'));
+        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank'));
     }
 }
