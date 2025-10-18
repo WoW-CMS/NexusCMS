@@ -26,10 +26,7 @@
                 
                 <div class="flex items-center gap-6 text-xl mb-6">
                     <span class="flex items-center gap-2">
-                        <i class="fas fa-user text-gray-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('race', $character->race) }}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        <i class="fas fa-skull-crossbones text-red-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}
+                        <i class="fas fa-user text-red-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('race', $character->race) }} / {{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}
                     </span>
                     <span class="flex items-center gap-2">
                         <i class="fas fa-server text-purple-400"></i> Icecrown

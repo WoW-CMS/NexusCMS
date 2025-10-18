@@ -184,11 +184,6 @@ h1, h2, h3, h4, h5, h6 {
     border-style: dashed;
 }
 
-.item-quality-epic { border-color: #a855f7; }
-.item-quality-rare { border-color: #3b82f6; }
-.item-quality-uncommon { border-color: #22c55e; }
-.item-quality-legendary { border-color: #ff8000; }
-
 .character-model {
     background: radial-gradient(circle at center, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
     position: relative;

@@ -3,8 +3,6 @@
 namespace App\Helpers;
 
 use App\Models\Realm;
-use App\Enums\WowExpansion;
-use App\Enums\WowVersion;
 use App\Enums\WoWConstants;
 
 class RealmHelper
@@ -88,8 +86,7 @@ class RealmHelper
             WoWConstants::RACE_MAGHAR_ORC,
             WoWConstants::RACE_HIGHMOUNTAIN_TAUREN,
             WoWConstants::RACE_DARK_IRON_DWARF,
-            WoWConstants::RACE_PANDAREN, // Pandaren pueden elegir, tal vez devuelves null
-            WoWConstants::RACE_WOLF,     // si es un NPC
+            WoWConstants::RACE_PANDAREN,
         ];
 
         if (in_array($race, $allianceRaces, true)) {
