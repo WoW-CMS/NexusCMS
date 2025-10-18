@@ -127,7 +127,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('armory.show', [$player->realm_name ?? 'N/A', $player->guid]) }}"
+                        <a href="{{ route('armory.show', [$player->guid]) }}"
                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 inline-block text-center">
                             <i class="fas fa-eye mr-2"></i> View Profile
                         </a>

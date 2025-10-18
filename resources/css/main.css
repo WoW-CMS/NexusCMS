@@ -146,3 +146,124 @@ h1, h2, h3, h4, h5, h6 {
     background-position: center;
     background-attachment: fixed;
 }
+
+/* Character Show */
+.hero-bg {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.3) 0%, rgba(17, 24, 39, 0.9) 50%, rgba(0, 0, 0, 0.95) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://wow.zamimg.com/uploads/screenshots/normal/1049878.jpg') center/cover;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.item-slot {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border: 2px solid rgba(75, 85, 99, 0.5);
+    position: relative;
+}
+
+.item-slot:hover {
+    border-color: #a855f7;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+.item-slot.empty {
+    opacity: 0.4;
+    border-style: dashed;
+}
+
+.item-quality-epic { border-color: #a855f7; }
+.item-quality-rare { border-color: #3b82f6; }
+.item-quality-uncommon { border-color: #22c55e; }
+.item-quality-legendary { border-color: #ff8000; }
+
+.character-model {
+    background: radial-gradient(circle at center, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
+    position: relative;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+}
+
+.tab-btn {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.5);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #dc2626, transparent);
+}
+
+.achievement-badge {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.3) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    transition: all 0.3s ease;
+}
+
+.achievement-badge:hover {
+    border-color: #f59e0b;
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.5);
+}
+
+.guild-banner {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border: 2px solid #8b5cf6;
+}
+
+.class-rogue { color: #FFF569; }
+
+.talent-tree {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.6) 0%, rgba(17, 24, 39, 0.8) 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.talent-point {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border: 2px solid #4b5563;
+    transition: all 0.3s ease;
+}
+
+.talent-point.active {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    border-color: #ef4444;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+}
+
+.talent-point:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}

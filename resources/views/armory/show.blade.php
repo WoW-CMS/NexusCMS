@@ -1,272 +1,130 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-gray-900 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div
-                class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-gray-700 rounded-3xl p-8 shadow-2xl backdrop-blur-lg">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div class="flex items-center space-x-6">
-                        <div class="relative">
-                            <div class="p-4 bg-gray-700/80 rounded-full shadow-lg border-4"
-                                style="border-color: white">
-                                <i class="fa-solid fa-shield text-4xl" style="color: white"></i>
-                            </div>
-                            <span
-                                class="absolute -bottom-2 -right-2 bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full shadow">Lv
-                                Item Level : 0</span>
-                        </div>
-                        <div>
-                            <h1 class="text-4xl font-extrabold drop-shadow" style="color: white">
-                                {{ $character->name }}</h1>
-                            <div class="mt-2 flex flex-wrap items-center gap-2 text-gray-300 text-lg font-medium">
-                                <span style="color: {{ App\Helpers\RealmHelper::getWoWConstant('class_color', $character->class) }}">{{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}</span>
-                                <span class="text-gray-500">|</span>
-                                <span>{{ App\Helpers\RealmHelper::getWoWConstant('race', $character->race) }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:space-x-8 space-y-4 sm:space-y-0 justify-end items-end">
-                        <div
-                            class="bg-gray-800/70 border border-yellow-400 rounded-xl px-6 py-4 text-center shadow-md hover:scale-105 transition">
-                            <div class="text-3xl font-bold text-yellow-400 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-trophy"></i>
-                                0
-                            </div>
-                            <div class="text-gray-300 text-sm mt-1">Achievement Points</div>
-                        </div>
-                        <div
-                            class="bg-gray-800/70 border border-purple-400 rounded-xl px-6 py-4 text-center shadow-md hover:scale-105 transition">
-                            <div class="text-3xl font-bold text-purple-400 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-medal"></i>
-                                0
-                            </div>
-                            <div class="text-gray-300 text-sm mt-1">Arena Rating</div>
-                        </div>
-                    </div>
-                    <div class="col-span-1 mt-6">
-                        {{-- @if ($item->guild)
-                            <div class="flex items-center space-x-3">
-                                <i class="fa-solid fa-users text-blue-400 text-xl"></i>
-                                <a href="#" class="text-blue-400 hover:underline font-semibold transition">
-                                    {{ $item->guild->guild_name }}
-                                </a>
-                                <span
-                                    class="bg-gray-700/60 text-gray-200 text-xs px-2 py-0.5 rounded ml-2">{{ $item->guild->rank_name }}</span>
-                            </div>
-                        @else
-                            <div class="text-gray-500 text-sm">
-                                Not a member of any guild
-                            </div>
-                        @endif --}}
-                    </div>
-                    <div class="col-span-1 mt-6 text-gray-400 text-xs text-right">
-                        <span class="inline-flex items-center gap-1">
-                            <i class="fa-regular fa-clock"></i>
-                            Last seen: {{-- {{ \Carbon\Carbon::createFromTimestamp($item->logout_time)->diffForHumans() }} --}}
-                        </span>
+<div class="hero-bg pt-32 pb-16 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex items-start gap-8 flex-wrap lg:flex-nowrap">
+            <!-- Character Portrait -->
+            <div class="flex-shrink-0">
+                <div class="relative">
+                    <img src="https://wow.zamimg.com/images/wow/icons/large/achievement_character_{{ strtolower(App\Helpers\RealmHelper::getWoWConstant('race', $character->race)) }}_{{ strtolower($character->gender == 1 ? 'male' : 'female') }}.jpg" 
+                        alt="Character" class="w-48 h-48 rounded-2xl border-4 border-red-600 shadow-2xl">
+                    <div class="absolute -bottom-4 -right-4 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full w-20 h-20 flex items-center justify-center border-4 border-gray-900 shadow-xl">
+                        <span class="text-3xl font-bold">{{ $character->level }}</span>
                     </div>
                 </div>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="space-y-8 lg:col-span-1">
-                    <!-- Statistics Card (Unified Style) -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 shadow-lg backdrop-blur space-y-6">
-                        <h2 class="text-2xl font-bold text-indigo-400 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-bar"></i>
-                            Statistics
-                        </h2>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-heart text-red-400 text-xl"></i>
-                                    <span class="text-gray-300 font-medium">Health</span>
-                                </div>
-                                <div class="text-2xl font-extrabold text-white mt-2">{{-- $item->health --}}</div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-bolt text-blue-400 text-xl"></i>
-                                    <span class="text-gray-300 font-medium">Mana</span>
-                                </div>
-                                <div class="text-2xl font-extrabold text-white mt-2">{{-- $item->power1 --}}</div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <span class="text-gray-300 font-medium flex items-center gap-1">
-                                    <i class="fa-solid fa-dumbbell text-orange-400"></i>
-                                    Strength
-                                </span>
-                                <span class="text-xl font-bold text-white mt-1">{{-- $item->strength --}}</span>
-                            </div>
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <span class="text-gray-300 font-medium flex items-center gap-1">
-                                    <i class="fa-solid fa-person-running text-green-400"></i>
-                                    Agility
-                                </span>
-                                <span class="text-xl font-bold text-white mt-1">{{-- $item->agility --}}</span>
-                            </div>
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <span class="text-gray-300 font-medium flex items-center gap-1">
-                                    <i class="fa-solid fa-hat-wizard text-cyan-400"></i>
-                                    Intellect
-                                </span>
-                                <span class="text-xl font-bold text-white mt-1">{{-- $item->intellect --}}</span>
-                            </div>
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <span class="text-gray-300 font-medium flex items-center gap-1">
-                                    <i class="fa-solid fa-heart text-pink-400"></i>
-                                    Stamina
-                                </span>
-                                <span class="text-xl font-bold text-white mt-1">{{-- $item->stamina --}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- PvP Card (Unified Style) -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 shadow-lg backdrop-blur space-y-6">
-                        <h2 class="text-2xl font-bold text-pink-300 flex items-center gap-2">
-                            <i class="fa-solid fa-fire"></i>
-                            PvP
-                        </h2>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-medal text-purple-400 text-xl"></i>
-                                    <span class="text-gray-300 font-medium">Arena</span>
-                                </div>
-                                <div class="text-2xl font-extrabold text-purple-400 mt-2">{{-- $item->arena_rating ?? 0 --}}</div>
-                            </div>
-                            <div
-                                class="flex flex-col items-center bg-gray-900/70 rounded-xl p-4 shadow border border-gray-700">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-skull-crossbones text-red-400 text-xl"></i>
-                                    <span class="text-gray-300 font-medium">Kills</span>
-                                </div>
-                                <div class="text-2xl font-extrabold text-red-400 mt-2">{{-- $item->totalKills ?? 0 --}}</div>
-                            </div>
+
+            <!-- Character Info -->
+            <div class="flex-1">
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-6xl font-bold cinzel class-{{ strtolower(App\Helpers\RealmHelper::getWoWConstant('class', $character->class)) }}">{{ $character->name }}</h1>
+                    <span class="px-4 py-2 {{ App\Helpers\RealmHelper::getFactionByRace($character->race) === 'horde' ? 'bg-red-600' : 'bg-blue-600' }} rounded-lg font-bold text-lg">
+                        <i class="fas fa-fist-raised mr-2"></i> {{ strtoupper(App\Helpers\RealmHelper::getFactionByRace($character->race)) }}
+                    </span>
+                </div>
+                
+                <div class="flex items-center gap-6 text-xl mb-6">
+                    <span class="flex items-center gap-2">
+                        <i class="fas fa-user text-gray-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('race', $character->race) }}
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i class="fas fa-skull-crossbones text-red-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i class="fas fa-server text-purple-400"></i> Icecrown
+                    </span>
+                </div>
+
+                <!-- Guild -->
+                <div class="guild-banner inline-block px-6 py-3 rounded-xl mb-6">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                        <div>
+                            <div class="text-sm text-purple-200">Guild Master of</div>
+                            <div class="text-xl font-bold">&lt;Eternal Champions&gt;</div>
                         </div>
                     </div>
                 </div>
-                <div class="space-y-6 lg:col-span-2" x-data="{ tab: 'equipment' }">
-                    <!-- Tabs Header -->
-                    <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-2 mb-4 flex backdrop-blur-sm shadow">
-                        <button class="flex-1 px-4 py-2 rounded-xl font-semibold focus:outline-none transition text-white"
-                            :class="tab === 'equipment' ? 'bg-indigo-600 shadow-inner' : 'bg-transparent'"
-                            @click="tab = 'equipment'">
-                            Equipment
-                        </button>
-                        <button class="flex-1 px-4 py-2 rounded-xl font-semibold focus:outline-none transition text-white"
-                            :class="tab === 'achievements' ? 'bg-indigo-600 shadow-inner' : 'bg-transparent'"
-                            @click="tab = 'achievements'">
-                            Achievements
-                        </button>
-                        <button class="flex-1 px-4 py-2 rounded-xl font-semibold focus:outline-none transition text-white"
-                            :class="tab === 'statistics' ? 'bg-indigo-600 shadow-inner' : 'bg-transparent'"
-                            @click="tab = 'statistics'">
-                            Statistics
-                        </button>
-                    </div>
-                    <div x-show="tab === 'equipment'" x-transition x-cloak>
-                        <div id="tab-equipment"
-                            class="tab-pane bg-gray-800/50 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm space-y-4 shadow">
-                            <h2 class="text-xl font-semibold text-white">Equipment</h2>
-                            <div class="grid grid-cols-2 gap-4">
-                                {{--
-                                @foreach ($item->equipment as $equip)
-                                    <div
-                                        class="group flex items-center space-x-3 bg-gray-700/50 border border-gray-600 rounded-lg p-3 hover:bg-gray-700/60 hover:shadow-lg transition">
-                                        <div>
-                                            <p class="font-semibold">
-                                                <a href="#" data-wh-icon-size="large"
-                                                    data-wowhead="item={{ $equip->entry }}">
-                                                    {{ $equip->name }}</a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                --}}
-                            </div>
-                        </div>
-                    </div>
-                    <div x-show="tab === 'achievements'" x-transition x-cloak>
-                        <div
-                            class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm space-y-4 shadow">
-                            <h2 class="text-xl font-semibold text-white">Achievements</h2>
-                            <div class="text-gray-300">
-                                {{-- Example achievements, replace with real data --}}
-                                @if (isset($achievement) && count($achievement))
-                                    <ul class="list-disc ml-6 space-y-2">
-                                        @foreach ($achievement as $achievements)
-                                        <div class="flex items-center gap-2">
-                                            <a href="#" data-wh-icon-size="large"
-                                                data-wowhead="achievement={{ $achievements['id'] }}">
-                                                {{ $achievements['title'] ?? 'No title' }}</a>
-                                            <span class="text-xs text-gray-400">{{ \Carbon\Carbon::createFromTimestamp($achievements['date'])->format('d/m/Y') }}</span>
-                                        </div>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <div class="text-gray-500">No achievements found.</div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div x-show="tab === 'statistics'" x-transition x-cloak>
-                        <div
-                            class="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm space-y-4 shadow">
-                            <h2 class="text-xl font-semibold text-white">Statistics</h2>
-                            <div class="grid grid-cols-2 gap-4 items-center">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-heart text-red-400"></i>
-                                    <span class="text-gray-200 font-medium">Health</span>
-                                </div>
-                                <div class="text-white text-right font-bold"></div>
 
-                                <div class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bolt text-blue-400"></i>
-                                    <span class="text-gray-200 font-medium">Mana</span>
-                                </div>
-                                <div class="text-white text-right font-bold"></div>
-                            </div>
-                            <hr class="border-gray-700">
-                            <div class="grid grid-cols-2 gap-4 text-gray-300">
-                                <div class="flex flex-col items-start">
-                                    <span>Strength</span>
-                                    <span class="text-white font-bold"></span>
-                                </div>
-                                <div class="flex flex-col items-start">
-                                    <span>Agility</span>
-                                    <span class="text-white font-bold"></span>
-                                </div>
-                                <div class="flex flex-col items-start">
-                                    <span>Intellect</span>
-                                    <span class="text-white font-bold">}</span>
-                                </div>
-                                <div class="flex flex-col items-start">
-                                    <span>Stamina</span>
-                                    <span class="text-white font-bold"></span>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card p-4 rounded-xl">
+                        <div class="text-gray-400 text-sm mb-1">Item Level</div>
+                        <div class="text-3xl font-bold text-purple-400">264</div>
+                    </div>
+                    <div class="stat-card p-4 rounded-xl">
+                        <div class="text-gray-400 text-sm mb-1">Achievement Points</div>
+                        <div class="text-3xl font-bold text-yellow-500">2,456</div>
+                    </div>
+                    <div class="stat-card p-4 rounded-xl">
+                        <div class="text-gray-400 text-sm mb-1">Arena Rating</div>
+                        <div class="text-3xl font-bold text-purple-500">2,456</div>
+                    </div>
+                    <div class="stat-card p-4 rounded-xl">
+                        <div class="text-gray-400 text-sm mb-1">Honorable Kills</div>
+                        <div class="text-3xl font-bold text-red-400">15,234</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        const whTooltips = {
-            colorLinks: true,
-            iconizeLinks: true,
-            renameLinks: true
-        };
-    </script>
-    <script src="https://wow.zamimg.com/js/tooltips.js"></script>
+</div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Tabs -->
+    <div class="mb-8 overflow-x-full">
+        <div class="flex gap-2 border-b border-gray-700 min-w-max">
+            <button class="tab-btn active px-8 py-4 font-bold rounded-t-lg" onclick="switchTab('equipment')">
+                <i class="fas fa-vest mr-2"></i> Equipment
+            </button>
+            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('stats')">
+                <i class="fas fa-chart-bar mr-2"></i> Statistics
+            </button>
+            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('achievements')">
+                <i class="fas fa-trophy mr-2"></i> Achievements
+            </button>
+            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('pvp')">
+                <i class="fas fa-skull-crossbones mr-2"></i> PvP
+            </button>
+            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('professions')">
+                <i class="fas fa-hammer mr-2"></i> Professions
+            </button>
+        </div>
+    </div>
+
+    @include('armory.partials.equipment', ['item' => $item])
+    @include('armory.partials.statistics', ['achievement' => $achievement])
+    @include('armory.partials.achievements', ['achievement' => $achievement])   
+    @include('armory.partials.pvp', ['achievement' => $achievement])
+    @include('armory.partials.professions', ['achievement' => $achievement])
+</div>
+
+<script>
+    function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.add('hidden');
+        });
+        
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-gray-800');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName + '-tab').classList.remove('hidden');
+        
+        // Add active class to clicked button
+        event.target.closest('.tab-btn').classList.add('active');
+        event.target.closest('.tab-btn').classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-gray-800');
+    }
+    
+    const whTooltips = {
+        colorLinks: true,
+        iconizeLinks: true,
+        renameLinks: true
+    };
+</script>
+<script src="https://wow.zamimg.com/js/tooltips.js"></script>
 @endsection

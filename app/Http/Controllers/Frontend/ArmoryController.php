@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\ArmoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Services\Parser\WowheadParserService;
 
 /**
  * Frontend Armory Controller
@@ -22,26 +23,29 @@ class ArmoryController extends Controller
     ];
 
     protected ArmoryRepositoryInterface $armoryRepo;
+    protected WowheadParserService $wowheadParser;
 
-    public function __construct(ArmoryRepositoryInterface $armoryRepo)
+    public function __construct(ArmoryRepositoryInterface $armoryRepo, WowheadParserService $wowheadParser)
     {
         $this->armoryRepo = $armoryRepo;
+        $this->wowheadParser = $wowheadParser;
     }
 
     /**
      * Display a paginated list of Armory characters
      */
-    /**
-     * Show list of characters, optionally filtered by search query
-     */
     public function index(Request $request)
     {
+        $characters = [];
         $q = $request->input('q');
+        $faction = $request->input('faction') ?: null;
+        $class = $request->input('class') ?: null;
+        $minLevel = $request->input('min_level') ?: null;
 
-        if ($q) {
-            $characters = $this->armoryRepo->search($q);
+        if ($q || $faction || $class || $minLevel) {
+            $characters = $this->armoryRepo->search($q, $faction, $class, $minLevel);
         }
-
+        
         return view($this->views['index'], [
             'data' => $characters ?? [],
             'search' => $q ?? '',
@@ -57,7 +61,14 @@ class ArmoryController extends Controller
 
         abort_if(!$character, 404);
 
-        $item = $this->armoryRepo->getCharacterItems($guid);
+        $items = $this->armoryRepo->getCharacterItems($guid);
+
+        // Enrich items with Wowhead data
+        $item = $items->map(function ($equip) {
+            $data = $this->wowheadParser->parse('item', (string) $equip['entry']);
+            return array_merge($equip, ['wowhead' => $data]);
+        });
+
         $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
 
         return view($this->views['show'], compact('character', 'item', 'achievement'));

@@ -4,6 +4,7 @@ namespace App\Repositories\Armory;
 use App\Interfaces\ArmoryRepositoryInterface;
 use App\Traits\ConnectsToExternalDatabase;
 use Illuminate\Database\Connection;
+use Predis\Command\Redis\DUMP;
 
 class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
 {
@@ -87,14 +88,33 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
      * @param string $q Search query
      * @return Collection Collection of characters matching the query or empty collection if connection failed
      */
-    public function search(string $q)
+    public function search(string $q, ?string $faction, ?string $class, ?int $minLevel)
     {
         $conn = $this->getCharacters();
         if (!$conn) return collect();
 
-        return $conn->table('characters')
-                    ->where('name', 'like', "%{$q}%")
-                    ->get();
+        $query = $conn->table('characters');
+
+        if ($q) {
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        if (!empty($faction)) {
+            $races = $faction === 'horde'
+                ? [2, 5, 6, 8, 9, 10]
+                : [1, 3, 4, 7, 11];
+
+            $query->whereIn('race', $races);
+        }
+
+        if ($class) {
+            $query->where('class', $class);
+        }
+        if ($minLevel) {
+            $query->where('level', '>=', $minLevel);
+        }
+        
+        return $query->orderByDesc('level')->get();
     }
 
     /**
@@ -130,13 +150,15 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             ->join('item_instance AS ii', 'ii.guid', '=', 'ci.item')
             ->orderBy('ci.slot')
             ->get([
+                'ci.bag',
                 'ci.slot',
                 'ii.itemEntry',
             ]);
         
         return $rows->map(function ($row) {
             return [
-                'slot' => $row->slot,
+                'bag'   => $row->bag,
+                'slot'  => $row->slot,
                 'entry' => $row->itemEntry,
             ];
         });
