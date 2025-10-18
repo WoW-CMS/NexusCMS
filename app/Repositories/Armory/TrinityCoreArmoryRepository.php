@@ -21,7 +21,7 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
      * Connection to characters database
      */
     protected ?Connection $characters = null;
-    
+
     /**
      * Connection to world database
      */
@@ -53,6 +53,19 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             $this->characters = $this->connectToExternalDatabase($this->realmConfig['character_database'], 'characters');
         }
         return $this->characters;
+    }
+
+    /**
+     * Get connection to world database
+     *
+     * @return ?Connection Connection to world database or null if connection failed
+     */
+    protected function getWorld(): ?Connection
+    {
+        if (!$this->world) {
+            $this->world = $this->connectToExternalDatabase($this->realmConfig['world_database'], 'world');
+        }
+        return $this->world;
     }
 
     /**
@@ -106,10 +119,55 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
      */
     public function getCharacterItems(int $guid)
     {
-        $conn = $this->getCharacters();
-        if (!$conn) return collect();
+        $characters = $this->getCharacters();
+        $world = $this->getWorld();
 
-        return $conn->table('character_inventory')->where('guid', $guid)->get();
+        if (!$characters || !$world) return collect();
+
+        $rows = $characters->table('character_inventory AS ci')
+            ->where('ci.guid', $guid)
+            ->whereBetween('ci.slot', [0, 18])
+            ->join('item_instance AS ii', 'ii.guid', '=', 'ci.item')
+            ->orderBy('ci.slot')
+            ->get([
+                'ci.slot',
+                'ii.itemEntry',
+            ]);
+        
+        return $rows->map(function ($row) {
+            return [
+                'slot' => $row->slot,
+                'entry' => $row->itemEntry,
+            ];
+        });
+    }
+
+    /**
+     * Get character achievements by GUID
+     *
+     * @param int $guid Character GUID
+     * @return Collection Collection of character achievements or empty collection if connection failed
+     */
+    public function getAchievementsCharacter(int $guid)
+    {
+        $characters = $this->getCharacters();
+        $world = $this->getWorld();
+
+        if (!$characters || !$world) return collect();
+
+        $rows = $characters->table('character_achievement')
+            ->where('guid', $guid)
+            ->get([
+                'achievement',
+                'date'
+            ]);
+        
+        return $rows->map(function ($row) {
+            return [
+                'id' => $row->achievement,
+                'date' => $row->date,
+            ];
+        });
     }
 
     /**

@@ -9,4 +9,5 @@ interface ArmoryRepositoryInterface
     public function getAllCharacters();
     public function search(string $q);
     public function getGuild(int $guid);
+    public function getAchievementsCharacter(int $guid);
 }

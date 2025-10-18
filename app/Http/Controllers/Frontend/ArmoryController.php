@@ -39,7 +39,7 @@ class ArmoryController extends Controller
         $q = $request->input('q');
 
         if ($q) {
-            $characters = $this->armoryRepo->search($q); // <-- Método search en el repo
+            $characters = $this->armoryRepo->search($q);
         }
 
         return view($this->views['index'], [
@@ -57,8 +57,9 @@ class ArmoryController extends Controller
 
         abort_if(!$character, 404);
 
-        $items = $this->armoryRepo->getCharacterItems($guid);
+        $item = $this->armoryRepo->getCharacterItems($guid);
+        $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
 
-        return view($this->views['show'], compact('character', 'items'));
+        return view($this->views['show'], compact('character', 'item', 'achievement'));
     }
 }
