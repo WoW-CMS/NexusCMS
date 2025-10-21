@@ -6,19 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Helpers\GeneralHelper;
 use Illuminate\View\View;
-
 /**
  * Frontend Home Controller for handling main website pages
- *
- * This controller handles the main frontend pages and views for the website,
- * including the homepage, landing pages, and other public-facing content.
- *
- * @category Controllers
- * @package  App\Http\Controllers\Frontend
- * @author   NexusCMS <noreply@wow-cms.com>
- * @license  GNU General Public License (GPL)
- * @version  1.0.0
- * @link     wow-cms.com
  */
 class NewsController extends Controller
 {
@@ -51,18 +40,11 @@ class NewsController extends Controller
         'show' => 'news.show',
     ];
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return View
-     */
     public function index()
     {
-        $items = News::where('is_published', true)
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+        $query = News::where('is_published', true)->orderBy('created_at', 'desc');
+        $items = (new News)->getCachedList($query, $this->perPage);
 
-        // Add reading time to each item
         $items->each(function ($item) {
             $item->reading_time = GeneralHelper::readingTime($item->content);
         });
@@ -70,34 +52,19 @@ class NewsController extends Controller
         return view($this->views['index'], ['data' => $items]);
     }
 
-    /**
-     * Show specific resource
-     *
-     * @param int $id
-     * @param string|null $view
-     * @return JsonResponse|View
-     */
-    public function show(int|string $id, ?string $view = null)
+    public function show(string $slug, ?string $view = null)
     {
-        try {
-            $item = News::where('slug', $id)
-                ->with(['comments' => function ($query) {
-                    $query->where('is_active', true)
-                        ->with('user')
-                        ->orderBy('created_at', 'desc');
-                }])
-                ->firstOrFail();
+        $item = (new News)->getCachedByField('slug', $slug);
+        if (!$item) abort(404);
 
-            // Add reading time to the item
-            $item->reading_time = GeneralHelper::readingTime($item->content);
+        $item->load(['comments' => function ($query) {
+            $query->where('is_active', true)
+                ->with('user')
+                ->orderBy('created_at', 'desc');
+        }]);
 
-            return view($this->views['show'], ['item' => $item]);
-        } catch (\Exception $e) {
-            if (request()->expectsJson()) {
-                return response()->json(['error' => 'Record not found'], 404);
-            }
+        $item->reading_time = GeneralHelper::readingTime($item->content);
 
-            return view('errors.404', ['message' => 'Record not found']);
-        }
+        return view($this->views['show'], ['item' => $item]);
     }
 }

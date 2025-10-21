@@ -19,33 +19,53 @@ trait Cacheable
     {
         $cacheKey = $this->getCacheKey($id);
 
-        return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($id) {
+        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($id) {
             return static::query()->find($id);
+        });
+    }
+
+    /**
+     * Get cached model by a unique field (slug, email, etc.)
+     */
+    public function getCachedByField(string $field, $value)
+    {
+        $cacheKey = $this->getCacheKey("{$field}.{$value}");
+
+        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($field, $value) {
+            return static::query()->where($field, $value)->first();
         });
     }
 
     /**
      * Get cached list with query builder
      */
-    public function getCachedList($query = null, $perPage = null)
+    public function getCachedList(Builder $query, ?int $perPage)
     {
         $query = $query ?: static::query();
-
         $perPage = $perPage ?: request()->get('per_page', 15);
+
         $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
 
-        return app('cache')->remember($cacheKey, $this->cacheTTL, function () use ($query, $perPage) {
+        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($query, $perPage) {
             return $query->paginate($perPage);
         });
     }
 
     /**
-     * Clear model cache
+     * Clear cache for this model
      */
     public function clearCache()
     {
-        app('cache')->forget($this->getCacheKey($this->id));
-        app('cache')->tags([$this->getCacheTag()])->flush();
+        // Clear ID-based cache
+        if ($this->id) {
+            Cache::forget($this->getCacheKey($this->id));
+        }
+
+        // Clear all tagged cache only if driver supports it
+        $store = Cache::getStore();
+        if (method_exists($store, 'tags')) {
+            Cache::tags($this->getCacheTag())->flush();
+        }
     }
 
     /**
@@ -63,11 +83,11 @@ trait Cacheable
     }
 
     /**
-     * Get cache key for a specific ID
+     * Get cache key for a specific identifier (ID, slug, etc.)
      */
-    protected function getCacheKey($id): string
+    protected function getCacheKey($identifier): string
     {
-        return sprintf('%s.%s', $this->getCacheTag(), $id);
+        return sprintf('%s.%s', $this->getCacheTag(), $identifier);
     }
 
     /**
