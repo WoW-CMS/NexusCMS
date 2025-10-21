@@ -48,7 +48,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="stat-card p-4 rounded-xl">
                         <div class="text-gray-400 text-sm mb-1">Item Level</div>
-                        <div class="text-3xl font-bold text-purple-400">264</div>
+                        <div class="text-3xl font-bold text-purple-400">{{ $promedItemLevel }}</div>
                     </div>
                     <div class="stat-card p-4 rounded-xl">
                         <div class="text-gray-400 text-sm mb-1">Achievement Points</div>

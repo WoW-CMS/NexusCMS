@@ -100,4 +100,21 @@ class RealmHelper
         return null;
     }
 
+    /**
+     * Calculate item level promed
+     * 
+     * @param array $itemLevels Array of item levels
+     * @return float|null Returns the promed item level, or null if the array is empty
+     */
+    public static function calculateItemLevelPromed(array $itemLevels): ?float
+    {
+        if (empty($itemLevels)) {
+            return null;
+        }
+        
+        $totalItemLevel = array_sum($itemLevels);
+        $promedItemLevel = $totalItemLevel / count($itemLevels);
+
+        return $promedItemLevel;
+    }
 }

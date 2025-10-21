@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Helpers\RealmHelper;
 use App\Http\Controllers\Controller;
 use App\Interfaces\ArmoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use App\Services\Parser\WowheadParserService;
 
 /**
@@ -71,8 +73,12 @@ class ArmoryController extends Controller
             return array_merge($equip, ['wowhead' => $data]);
         });
 
+        // PromedItemLevel
+        $itemLevels = $item->pluck('wowhead.level')->filter(fn($lvl) => is_numeric($lvl))->toArray();
+        $promedItemLevel = (int) RealmHelper::calculateItemLevelPromed($itemLevels);
+
         $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
 
-        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank'));
+        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank', 'promedItemLevel'));
     }
 }
