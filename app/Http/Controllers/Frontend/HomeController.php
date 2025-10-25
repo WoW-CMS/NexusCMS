@@ -53,12 +53,16 @@ class HomeController extends Controller
         $realms = RealmHelper::all();
         $perPage = $request->get('per_page', $this->perPage);
     
-        $news = \App\Models\News::query()
+        $allNews = \App\Models\News::query()
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
+
+        $featuredNews = $allNews->shift();
+        $news = $allNews;
     
         $data = [
             'realms' => $realms,
+            'featuredNews' => $featuredNews,
             'news'   => $news,
         ];
     

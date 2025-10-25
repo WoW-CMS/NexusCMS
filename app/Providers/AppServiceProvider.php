@@ -12,6 +12,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (app()->environment('production')) {
+            $forbidden = [
+                'laravel/telescope',
+                'laravel/pulse',
+                'barryvdh/laravel-debugbar',
+            ];
+
+        foreach ($forbidden as $package) {
+            if (class_exists(str_replace('/', '\\', $package))) {
+                abort(503, "Package {$package} is not allowed in production.");
+            }
+        }
+    }
+
     }
 
     /**

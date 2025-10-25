@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 
 trait Cacheable
@@ -13,15 +14,33 @@ trait Cacheable
     protected $cacheTTL = 60;
 
     /**
+     * Log current cache driver
+     */
+    protected function logDriver()
+    {
+        $driver = config('cache.default');
+        Log::debug("[Cacheable] Using cache driver: {$driver}");
+        return $driver;
+    }
+
+    /**
      * Get cached model by ID
      */
     public function getCached($id)
     {
         $cacheKey = $this->getCacheKey($id);
+        $driver = $this->logDriver();
 
-        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($id) {
-            return static::query()->find($id);
-        });
+        if (Cache::has($cacheKey)) {
+            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            return Cache::get($cacheKey);
+        }
+
+        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        $data = static::query()->find($id);
+        Cache::put($cacheKey, $data, $this->cacheTTL * 60);
+
+        return $data;
     }
 
     /**
@@ -30,10 +49,18 @@ trait Cacheable
     public function getCachedByField(string $field, $value)
     {
         $cacheKey = $this->getCacheKey("{$field}.{$value}");
+        $driver = $this->logDriver();
 
-        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($field, $value) {
-            return static::query()->where($field, $value)->first();
-        });
+        if (Cache::has($cacheKey)) {
+            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            return Cache::get($cacheKey);
+        }
+
+        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        $data = static::query()->where($field, $value)->first();
+        Cache::put($cacheKey, $data, $this->cacheTTL * 60);
+
+        return $data;
     }
 
     /**
@@ -43,12 +70,19 @@ trait Cacheable
     {
         $query = $query ?: static::query();
         $perPage = $perPage ?: request()->get('per_page', 15);
-
         $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
+        $driver = $this->logDriver();
 
-        return Cache::remember($cacheKey, $this->cacheTTL * 60, function () use ($query, $perPage) {
-            return $query->paginate($perPage);
-        });
+        if (Cache::has($cacheKey)) {
+            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            return Cache::get($cacheKey);
+        }
+
+        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching list from DB");
+        $data = $query->paginate($perPage);
+        Cache::put($cacheKey, $data, $this->cacheTTL * 60);
+
+        return $data;
     }
 
     /**
@@ -56,15 +90,20 @@ trait Cacheable
      */
     public function clearCache()
     {
-        // Clear ID-based cache
+        $driver = config('cache.default');
+        Log::debug("[Cacheable] clearCache() for model=" . static::class . " id=" . ($this->id ?? 'null') . " driver={$driver}");
+
         if ($this->id) {
-            Cache::forget($this->getCacheKey($this->id));
+            $key = $this->getCacheKey($this->id);
+            Cache::forget($key);
+            Log::debug("[Cacheable] Cleared cache key={$key}");
         }
 
-        // Clear all tagged cache only if driver supports it
         $store = Cache::getStore();
         if (method_exists($store, 'tags')) {
-            Cache::tags($this->getCacheTag())->flush();
+            $tag = $this->getCacheTag();
+            Cache::tags($tag)->flush();
+            Log::debug("[Cacheable] Flushed cache tag={$tag}");
         }
     }
 
@@ -74,10 +113,12 @@ trait Cacheable
     protected static function bootCacheable()
     {
         static::saved(function ($model) {
+            Log::debug("[Cacheable] bootCacheable() saved() triggered for " . static::class);
             $model->clearCache();
         });
 
         static::deleted(function ($model) {
+            Log::debug("[Cacheable] bootCacheable() deleted() triggered for " . static::class);
             $model->clearCache();
         });
     }

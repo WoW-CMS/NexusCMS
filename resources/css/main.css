@@ -1,58 +1,21 @@
 /* Home page */
-body {
-    font-family: 'Inter', sans-serif;
-    padding-top: 5rem;
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
 }
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cinzel', serif;
+.float { animation: float 6s ease-in-out infinite; }
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
 }
-.bg-wow {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-.text-shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-.bg-blur {
-    backdrop-filter: blur(8px);
-    background-color: rgba(0, 0, 0, 0.7);
-}
-.realm-status-online { color: #22c55e; }
-.realm-status-offline { color: #ef4444; }
-.realm-status-maintenance { color: #eab308; }
-.news-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-.news-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-}
-.feature-icon {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.feature-card:hover .feature-icon {
-    transform: scale(1.2) rotate(5deg);
-}
-.nav-link {
-    position: relative;
-}
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 50%;
-    background-color: #3b82f6;
-    transition: all 0.3s ease;
-}
-.nav-link:hover::after {
-    width: 100%;
-    left: 0;
+.glow { animation: glow 3s ease-in-out infinite; }
+
+.gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 /* How to Play */
 .step-card {
