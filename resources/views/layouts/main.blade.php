@@ -23,17 +23,17 @@
                         </div>
                     </div>
                     <div class="hidden md:flex gap-6">
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOME</a>
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">NEWS</a>
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOW TO PLAY</a>
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">FORUMS</a>
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">ARMORY</a>
+                        <a href="{{ route('home') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOME</a>
+                        <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">NEWS</a>
+                        <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOW TO PLAY</a>
+                        <a href="{{ route('forums') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">FORUMS</a>
+                        <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">ARMORY</a>
                         <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
                     </div>
                 </div>
                 <div class="flex gap-3">
-                    <button class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</button>
-                    <button class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</button>
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
                 </div>
             </div>
         </div>
@@ -58,9 +58,9 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">News</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Forums</a></li>
+                        <li><a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="{{ route('news') }}" class="hover:text-white transition-colors">News</a></li>
+                        <li><a href="{{ route('forums') }}" class="hover:text-white transition-colors">Forums</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Download</a></li>
                     </ul>
                 </div>
