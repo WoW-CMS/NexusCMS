@@ -26,7 +26,7 @@
                         <a href="{{ route('home') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOME</a>
                         <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">NEWS</a>
                         <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOW TO PLAY</a>
-                        <a href="{{ route('forums') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">FORUMS</a>
+                        <!-- <a href="{{ route('forums') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">FORUMS</a> -->
                         <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">ARMORY</a>
                         <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
                     </div>
