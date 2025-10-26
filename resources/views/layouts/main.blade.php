@@ -18,8 +18,8 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center gap-8">
                     <div class="flex items-center gap-2">
-                        <div class="w-10 h-10 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center text-2xl font-bold shadow-lg shadow-red-900/50">
-                            ?
+                        <div class="rounded-lg flex items-center justify-center text-2xl font-bold shadow-lg shadow-red-900/50">
+                            {{ config('app.name', 'NexusCMS') }}
                         </div>
                     </div>
                     <div class="hidden md:flex gap-6">
@@ -31,13 +31,39 @@
                         <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
                     </div>
                 </div>
-                <div class="flex gap-3">
-                    <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
-                    <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex gap-3">
+                        <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
+                        <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
+                    </div>
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" class="md:hidden lg:hidden text-slate-300 hover:text-white focus:outline-none focus:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col gap-2">
+                    <a href="{{ route('home') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOME</a>
+                    <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">NEWS</a>
+                    <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOW TO PLAY</a>
+                    <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">ARMORY</a>
+                    <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">DONATE</a>
+                    <div class="flex gap-3 pt-2">
+                        <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
+                        <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
 
     @yield('content')
 
