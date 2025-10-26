@@ -32,18 +32,6 @@
         <svg class="w-6 h-6 text-slate-400 group-hover:text-white transition-all duration-300 transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
-        <style>
-            @keyframes gentleBounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-8px); }
-            }
-            .group {
-                animation: gentleBounce 2s ease-in-out infinite;
-            }
-            .group:hover {
-                animation-play-state: paused;
-            }
-        </style>
     </a>
 </section>
 
