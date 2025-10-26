@@ -19,7 +19,7 @@
                     @if($loop->first)
                         <article class="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 ">
                             <div class="relative">
-                                <img src="{{ asset('storage/images/' . $item->image) }}" alt="{{ $item->title }}" class="w-full h-80 object-cover hover:scale-105 transition-transform duration-500">
+                                <img src="{{ $item->image ? asset('storage/images/' . $item->image) : 'https://placehold.co/600x400' }}" alt="{{ $item->title }}" class="w-full h-80 object-cover hover:scale-105 transition-transform duration-500">
                                 <div class="absolute top-4 left-4">
                                     <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
                                 </div>
@@ -46,7 +46,7 @@
                     <article class="bg-slate-800/30 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700/50 hover:border-slate-600 transition-all duration-300 ">
                         <div class="md:flex">
                             <div class="md:w-64 h-48 md:h-auto">
-                                <img src="{{ asset('storage/images/' . $item->image) }}" alt="Tournament" class="w-full h-full object-cover -hover:scale-105 transition-transform duration-500">
+                                <img src="{{ $item->image ? asset('storage/images/' . $item->image) : 'https://placehold.co/600x400' }}" alt="{{ $item->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                             </div>
                             <div class="p-6 flex-1 space-y-3">
                                 <div class="flex items-center gap-3 text-sm text-slate-400">
