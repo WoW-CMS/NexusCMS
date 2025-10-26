@@ -66,7 +66,7 @@ class HomeController extends Controller
             'news'   => $news,
         ];
     
-        return $this->renderView($view ?? $this->views['index'], ['data' => $data]);
+        return view($this->views['index'], [ 'data' => $data ]);
     }
     
     /**
@@ -78,22 +78,6 @@ class HomeController extends Controller
      */
     public function howToPlay(Request $request, ?string $view = null)
     {
-        return $this->renderView($view ?? $this->views['howtoplay']);
-    }
-
-    /**
-     * Render a Blade view safely.
-     *
-     * @param string $view
-     * @param array  $data
-     * @return \Illuminate\Contracts\View\View
-     */
-    protected function renderView(string $view, array $data = [])
-    {
-        if (!View::exists($view)) {
-            abort(404, "View [{$view}] not found.");
-        }
-
-        return view($view, $data);
+        return view($this->views['howtoplay']);
     }
 }

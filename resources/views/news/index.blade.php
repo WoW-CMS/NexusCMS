@@ -1,121 +1,128 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="min-h-screen bg-slate-950 py-16">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Hero Section -->
-            <div class="text-center lg:text-left mb-16">
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                    Latest News
-                </h2>
-                <p class="mt-3 max-w-2xl mx-auto lg:mx-0 text-xl text-gray-400 sm:mt-4">
-                    Stay up to date with the latest server news, events, and updates.
-                </p>
-            </div>
-            
-            <!-- Alerts -->
-            @if (session('success'))
-                <div class="bg-emerald-500/10 border border-emerald-500/20 p-4 mb-8 rounded-lg">
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-5 w-5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <p class="text-sm text-emerald-400">{{ session('success') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="bg-red-500/10 border border-red-500/20 p-4 mb-8 rounded-lg">
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <p class="text-sm text-red-400">{{ session('error') }}</p>
-                    </div>
-                </div>
-            @endif
-
-            <!-- News Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                @forelse ($data as $news)
-                    <article class="bg-gray-900/50 rounded-2xl overflow-hidden backdrop-blur-md shadow-lg border border-gray-800 hover:border-gray-700 transition-all duration-300 group">
-                        <a href="{{ route('news.show', $news->slug) }}" class="block">
-                            <!-- Featured Image -->
-                            @if ($news->image)
-                                <div class="relative h-64 overflow-hidden">
-                                    <img class="w-full h-48 md:h-full object-cover" 
-                                        src="{{ asset('storage/images/' . $news->image) }}" 
-                                        alt="{{ $news->title }}">
-                                </div>
-                            @endif
-
-                            <!-- Content -->
-                            <div class="p-6">
-                                <!-- Meta Information -->
-                                <div class="flex flex-wrap items-center gap-3 text-gray-400 text-sm mb-4">
-                                    <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full">News</span>
-                                    <span class="flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span>{{ $news->published_at ? $news->published_at->format('M d, Y') : 'Unpublished' }}</span>
-                                    </span>
-                                    <span class="flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span>5 min read</span>
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="text-2xl font-bold text-white leading-tight mb-3 group-hover:text-indigo-400 transition-colors">
-                                    {{ $news->title }}
-                                </h3>
-
-                                <!-- Excerpt -->
-                                <p class="text-gray-400 leading-relaxed mb-6 line-clamp-3">
-                                    {{ Str::limit($news->excerpt ?? $news->content, 150) }}
-                                </p>
-
-                                <!-- Author Information -->
-                                <div class="flex items-center space-x-3 pt-4 border-t border-gray-800">
-                                    <img class="h-10 w-10 rounded-full ring-2 ring-indigo-500/30"
-                                        src="{{ $news->author->avatar ?? asset('images/default-avatar.png') }}" 
-                                        alt="Author">
-                                    <div>
-                                        <p class="text-white font-medium text-sm">{{ $news->author->name ?? 'Anonymous' }}</p>
-                                        <p class="text-xs text-gray-400">{{ $news->author->role ?? 'Editor' }}</p>
-                                    </div>
+    <section class="relative pt-32 pb-16 overflow-hidden">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                Latest <span class="gradient-text">News</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl">Stay informed with the latest updates, events, and announcements from NexusCMS</p>
+        </div>
+    </section>
+    <section class="relative py-12 bg-gradient-to-b from-slate-950 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- News Articles -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Featured Article -->
+                    @foreach($data as $item)
+                    @if($loop->first)
+                        <article class="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 ">
+                            <div class="relative">
+                                <img src="{{ asset('storage/images/' . $item->image) }}" alt="{{ $item->title }}" class="w-full h-80 object-cover hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
                                 </div>
                             </div>
-                        </a>
+                            <div class="p-8 space-y-4">
+                                <div class="flex items-center gap-4 text-sm text-slate-400">
+                                    <span>{{ $item->published_at->format('F j, Y') }}</span>
+                                    <span>•</span>
+                                    <span>By {{ $item->author->name ?? 'Admin' }}</span>
+                                    <span>•</span>
+                                    <span class="text-blue-400">{{ $item->category->name ?? 'Announcements' }}</span>
+                                </div>
+                                <h2 class="text-3xl font-bold text-white hover:text-blue-400 transition-colors duration-200">{{ $item->title }}</h2>
+                                <p class="text-slate-300 leading-relaxed text-lg">{{ Str::limit($item->excerpt ?? $item->content, 200) }}</p>
+                                <a href="{{ route('news.show', $item->slug) }}" class="mt-4 text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2">
+                                    Read Full Article
+                                    <svg class="w-4 h-4 hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </article>
+                    @else
+                    <article class="bg-slate-800/30 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700/50 hover:border-slate-600 transition-all duration-300 ">
+                        <div class="md:flex">
+                            <div class="md:w-64 h-48 md:h-auto">
+                                <img src="{{ asset('storage/images/' . $item->image) }}" alt="Tournament" class="w-full h-full object-cover -hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-6 flex-1 space-y-3">
+                                <div class="flex items-center gap-3 text-sm text-slate-400">
+                                    <span>{{ $item->published_at->format('F j, Y') }}</span>
+                                    <span>•</span>
+                                    <span class="text-red-400">{{ $item->category->name ?? 'Announcements' }}</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white -hover:text-blue-400 transition-colors">{{ $item->title }}</h3>
+                                <p class="text-slate-300">
+                                    {{ Str::limit($item->excerpt ?? $item->content, 200) }}
+                                </p>
+                                <a href="{{ route('news.show', $item->slug) }}" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2 /btn">
+                                    Read More
+                                    <svg class="w-4 h-4 -hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </article>
-                @empty
-                    <div class="col-span-2 text-center py-20">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2" />
-                        </svg>
-                        <h3 class="text-xl font-semibold text-slate-400 mb-2">No News Available</h3>
-                        <p class="text-slate-500">Check back later for the latest updates.</p>
+                    @endif
+                    @endforeach
+                    <div class="flex justify-center items-center gap-2 pt-8">
+                        <div class="mt-16">
+                            <x-pagination :paginator="$data" />
+                        </div>
                     </div>
-                @endforelse
-            </div>
-
-            <!-- Pagination -->
-            @if ($data instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                <div class="mt-16">
-                    <x-pagination :paginator="$data" />
                 </div>
-            @endif
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Categories -->
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 top-24">
+                        <h3 class="text-xl font-bold text-white mb-4">Categories</h3>
+                        <div class="space-y-2">
+                            <a href="{{ route('news', ['category' => 'all']) }}" class="flex items-center justify-between p-3 rounded-lg {{ request('category') == 'all' || request('category') == null ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : 'hover:bg-slate-700/30 text-slate-300 hover:text-white transition-all' }}">
+                                <span class="font-medium">All News</span>
+                                <span class="text-sm text-slate-400">{{ App\Models\News::count() }}</span>
+                            </a>
+                            @foreach($category as $item)
+                            <a href="{{ route('news', ['category' => $item->id]) }}" class="flex items-center justify-between p-3 rounded-lg {{ request('category') == $item->id ? 'bg-blue-500/10 border border-blue-500/30 text-blue-400' : 'hover:bg-slate-700/30 text-slate-300 hover:text-white transition-all' }}">
+                                <span>{{ $item->name }}</span>
+                                <span class="text-sm text-slate-400">{{ $item->news_count }}</span>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Recent Posts -->
+                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+                        <h3 class="text-xl font-bold text-white mb-4">Recent Posts</h3>
+                        <div class="space-y-4">
+                            @foreach($recentNews as $item)
+                            <a href="#" class="block ">
+                                <div class="text-sm text-slate-400 mb-1">{{ $item->published_at->format('M d, Y') }}</div>
+                                <h4 class="text-white -hover:text-blue-400 transition-colors font-medium">{{ $item->title }}</h4>
+                            </a>
+                            @if(!$loop->last)
+                            <div class="border-t border-slate-700"></div>
+                            @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl p-6 border border-blue-500/20">
+                        <h3 class="text-xl font-bold text-white mb-3">Stay Updated</h3>
+                        <p class="text-slate-300 text-sm mb-4">Subscribe to our newsletter and never miss an update!</p>
+                        <form action="{{ route('subscribe') }}" method="POST">
+                        @csrf
+                        <input type="email" id="email" placeholder="Your email" class="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors mb-3">
+                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                            Subscribe
+                        </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 @endsection

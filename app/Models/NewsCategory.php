@@ -32,4 +32,9 @@ class NewsCategory extends Model
     {
         return $this->hasMany(News::class, 'category_id');
     }
+
+    public function getAllCategoriesWithCount()
+    {
+        return self::withCount('news')->get();
+    }
 }
