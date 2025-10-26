@@ -1,11 +1,19 @@
 @extends('layouts.main')
 
 <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl float"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl float" style="animation-delay: -3s;"></div>
-        <div class="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl float" style="animation-delay: -1.5s;"></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none select-none">
+        <div
+            class="absolute top-20 left-10 w-72 h-72 rounded-full bg-blue-500/10 opacity-60 animate-float-smooth"
+            style="filter: blur(24px); will-change: transform; transform: translate3d(0, 0, 0);">
+        </div>
+        <div
+            class="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-purple-500/10 opacity-50 animate-float-smooth"
+            style="filter: blur(28px); will-change: transform; animation-delay: -2s;">
+        </div>
+        <div
+            class="absolute top-1/2 left-1/2 w-80 h-80 rounded-full bg-cyan-500/10 opacity-50 animate-float-smooth"
+            style="filter: blur(32px); will-change: transform; animation-delay: -1s;">
+        </div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

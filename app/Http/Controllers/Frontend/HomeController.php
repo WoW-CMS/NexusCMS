@@ -69,7 +69,6 @@ class HomeController extends Controller
         return $this->renderView($view ?? $this->views['index'], ['data' => $data]);
     }
     
-
     /**
      * Display the "How to Play" page.
      *
