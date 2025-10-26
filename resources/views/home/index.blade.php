@@ -11,7 +11,7 @@
     <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="space-y-8">
             <h1 class="text-5xl md:text-7xl font-bold tracking-tight">
-                Welcome to <span class="gradient-text">NexusCMS</span>
+                Welcome to <span class="gradient-text">{{ config('app.name', 'NexusCMS') }}</span>
             </h1>
             <p class="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
                 Experience the ultimate World of Warcraft private server with custom content, balanced gameplay, and an amazing community.
@@ -35,10 +35,10 @@
     </a>
 </section>
 
-<section class="relative py-20 bg-gradient-to-b from-slate-900 to-slate-950">
+<section id="features" class="relative py-20 bg-gradient-to-b from-slate-900 to-slate-950">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Why Choose NexusCMS?</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Why Choose {{ config('app.name', 'NexusCMS') }}?</h2>
             <p class="text-slate-400 text-lg max-w-2xl mx-auto">Discover what makes our server stand out from the rest</p>
         </div>
 
