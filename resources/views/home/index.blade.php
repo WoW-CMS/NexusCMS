@@ -1,5 +1,6 @@
 @extends('layouts.main')
 
+@section('content')
 <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
     <div class="absolute inset-0 overflow-hidden pointer-events-none select-none">
         <div
@@ -216,3 +217,4 @@
         </div>
     </div>
 </section>
+@endsection
