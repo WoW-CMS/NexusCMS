@@ -138,7 +138,7 @@
                                         src="{{ $comment->user->avatar_url ?? asset('images/default-avatar.png') }}"
                                         alt="Avatar">
                                         @else
-                                        {{ $comment->user->name ?? 'Anonymous' }}
+                                        {{ $comment->user->name[0] ?? 'Anonymous' }}
                                         @endif
                                     </div>
                                 </div>
