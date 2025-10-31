@@ -145,7 +145,9 @@
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-3 mb-2">
                                         <h4 class="font-bold text-white"> {{ $comment->user->name ?? 'Anonymous' }}</h4>
+                                        @if($comment->user->role)
                                         <span class="px-2 py-0.5 bg-blue-500/20 border border-blue-500/30 rounded text-xs text-blue-400 font-medium">{{ $comment->user->role }}</span>
+                                        @endif
                                         <span class="text-sm text-slate-500">{{ date('d/m/Y H:i', $comment->created_at) }}</span>
                                     </div>
                                     <p class="text-slate-300 leading-relaxed mb-3">
