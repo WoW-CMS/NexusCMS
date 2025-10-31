@@ -133,9 +133,13 @@
                             <div class="flex items-start gap-4">
                                 <div class="flex-shrink-0">
                                     <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center font-bold text-white">
+                                        @if($item->author->avatar)
                                         <img class="h-12 w-12 rounded-full ring-2 ring-indigo-500 mt-1"
                                         src="{{ $comment->user->avatar_url ?? asset('images/default-avatar.png') }}"
                                         alt="Avatar">
+                                        @else
+                                        {{ $comment->user->name ?? 'Anonymous' }}
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="flex-1 min-w-0">
