@@ -54,11 +54,13 @@
 </section>
 
 <!-- Featured Image -->
+@if($item->image)
 <section class="bg-slate-900">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <img src="{{ $item->image ? asset('storage/images/' . $item->image) : 'https://placehold.co/600x400' }}" alt="{{ $item->title }}" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
+        <img src="{{ asset('storage/images/' . $item->image) }}" alt="{{ $item->title }}" class="w-full h-96 object-cover rounded-2xl shadow-2xl">
     </div>
 </section>
+@endif
 
 <!-- Article Content -->
 <section class="py-12 bg-gradient-to-b from-slate-900 to-slate-950">
