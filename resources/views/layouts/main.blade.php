@@ -32,11 +32,22 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="hidden md:flex gap-3">
-                        <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
-                        <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
-                    </div>
-                    <!-- Mobile menu button -->
+                    @auth
+                        <div class="hidden md:flex items-center gap-3">
+                            <a href="{{ route('ucp.dashboard') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">
+                            <span class="text-slate-300 text-sm">{{ Auth::user()->name }}</span>
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Logout</button>
+                            </form>
+                        </div>
+                    @else
+                        <div class="hidden md:flex gap-3">
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
+                            <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
+                        </div>
+                    @endauth
                     <button id="mobile-menu-button" class="md:hidden lg:hidden text-slate-300 hover:text-white focus:outline-none focus:text-white">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
@@ -50,10 +61,22 @@
                     <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOW TO PLAY</a>
                     <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">ARMORY</a>
                     <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">DONATE</a>
-                    <div class="flex gap-3 pt-2">
-                        <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
-                        <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
-                    </div>
+                    @auth
+                        <div class="flex flex-col gap-2 pt-2">
+                            <a href="{{ route('ucp.dashboard') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">
+                                <span class="text-slate-300 text-sm">{{ Auth::user()->name }}</span>
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Logout</button>
+                            </form>
+                        </div>
+                    @else
+                        <div class="flex gap-3 pt-2">
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">Login</a>
+                            <a href="{{ route('register') }}" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg shadow-blue-900/30">Register</a>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>

@@ -28,6 +28,31 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* Login Page */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+
+@keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.gradient-animated {
+    background: linear-gradient(135deg, #1e293b, #0f172a, #1e293b);
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+}
+
+.hero-image {
+    background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop');
+    background-size: cover;
+    background-position: center;
+}
+
 /* How to Play */
 .step-card {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
