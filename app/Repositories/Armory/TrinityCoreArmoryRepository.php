@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Armory;
 
+use App\Enums\Professions;
 use App\Interfaces\ArmoryRepositoryInterface;
 use App\Traits\ConnectsToExternalDatabase;
 use Illuminate\Database\Connection;
@@ -209,6 +210,13 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             ->first();
     }
 
+    /**
+     * Get guild rank of member
+     *
+     * @param int $guildId Guild ID
+     * @param int $memberGuid Member GUID
+     * @return Collection Collection of guild rank or empty collection if connection failed
+     */
     public function getGuildRankMember(int $guildId, int $memberGuid)
     {
         $conn = $this->getCharacters();
@@ -223,5 +231,35 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             ])->first();
     }
 
-}
+    /**
+     * Get Skill of character
+     *
+     * @param int $guid Character GUID
+     * @return Collection Collection of skill or empty collection if connection failed
+     */
+    public function getSkillCharacter(int $guid)
+    {
+        $conn = $this->getCharacters();
+        if (!$conn) return collect();
 
+        $skill = $conn->table('character_skills')
+            ->where('guid', $guid) 
+            ->where('professionSlot', 0)
+            ->get([
+                'skill',
+                'max',
+                'value',
+            ]);
+        
+        return $skill->map(function ($row) {
+            return [
+                'id' => $row->skill,
+                'name' => Professions::getName($row->skill),
+                'type' => Professions::getType($row->skill),
+                'icon' => Professions::getIcon($row->skill),
+                'max' => $row->max,
+                'value' => $row->value,
+            ];
+        });
+    }
+}

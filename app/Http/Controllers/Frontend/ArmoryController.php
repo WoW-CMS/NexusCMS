@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use App\Services\Parser\WowheadParserService;
+use App\Services\ArmoryService;
 
 /**
  * Frontend Armory Controller
@@ -26,11 +27,16 @@ class ArmoryController extends Controller
 
     protected ArmoryRepositoryInterface $armoryRepo;
     protected WowheadParserService $wowheadParser;
+    protected ArmoryService $armoryService;
 
-    public function __construct(ArmoryRepositoryInterface $armoryRepo, WowheadParserService $wowheadParser)
-    {
+    public function __construct(
+        ArmoryRepositoryInterface $armoryRepo, 
+        WowheadParserService $wowheadParser,
+        ArmoryService $armoryService
+    ) {
         $this->armoryRepo = $armoryRepo;
         $this->wowheadParser = $wowheadParser;
+        $this->armoryService = $armoryService;
     }
 
     /**
@@ -38,7 +44,6 @@ class ArmoryController extends Controller
      */
     public function index(Request $request)
     {
-        $characters = [];
         $q = $request->input('q');
         $faction = $request->input('faction') ?: null;
         $realm = $request->input('realm') ?: 1; // Default to realm 1 if not specified
@@ -48,12 +53,12 @@ class ArmoryController extends Controller
         // Pass realm to the repository through the request
         $request->merge(['realm' => $realm]);
 
-        if ($q || $faction || $class || $minLevel) {
-            $characters = $this->armoryRepo->search($q, $faction, $class, $minLevel);
-        }
+        $characters = ($q || $faction || $class || $minLevel) 
+            ? $this->armoryService->searchCharacters($q, $faction, $class, $minLevel)
+            : collect();
         
         return view($this->views['index'], [
-            'data' => $characters ?? [],
+            'data' => $characters,
             'search' => $q ?? '',
             'realm' => $realm,
         ]);
@@ -70,26 +75,10 @@ class ArmoryController extends Controller
         // Pass realm to the repository through the request
         $request->merge(['realm' => $realm]);
 
-        $character = $this->armoryRepo->getCharacter($guid);
+        $profile = $this->armoryService->getCharacterProfile($guid);
+        
+        abort_if(empty($profile), 404);
 
-        abort_if(!$character, 404);
-
-        $items = $this->armoryRepo->getCharacterItems($guid);
-        $guild = $this->armoryRepo->getGuildByMember($character->guid);
-        $memberRank = $this->armoryRepo->getGuildRankMember($guild->guildid, $character->guid);
-
-        // Enrich items with Wowhead data
-        $item = $items->map(function ($equip) {
-            $data = $this->wowheadParser->parse('item', (string) $equip['entry']);
-            return array_merge($equip, ['wowhead' => $data]);
-        });
-
-        // PromedItemLevel
-        $itemLevels = $item->pluck('wowhead.level')->filter(fn($lvl) => is_numeric($lvl))->toArray();
-        $promedItemLevel = (int) RealmHelper::calculateItemLevelPromed($itemLevels);
-
-        $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
-
-        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank', 'promedItemLevel', 'realm'));
+        return view($this->views['show'], array_merge($profile, ['realm' => $realm]));
     }
 }
