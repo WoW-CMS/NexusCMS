@@ -14,7 +14,7 @@
         <!-- Advanced Search -->
         <form action="{{ route('armory') }}" method="GET" class="search-container max-w-4xl mx-auto p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="md:col-span-3">
+                <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-400 mb-2">Character Name</label>
                     <input type="text"
                            name="q"
@@ -22,6 +22,15 @@
                            placeholder="Enter character name..."
                            value="{{ old('q', request('q')) }}"
                            class="w-full px-6 py-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Realm</label>
+                    <select name="realm" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Any</option>
+                        @foreach(App\Models\Realm::all() as $realm)
+                            <option value="{{ $realm->id }}" {{ request('realm') == $realm->id ? 'selected' : '' }}>{{ $realm->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -127,7 +136,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('armory.show', [$player->guid]) }}"
+                        <a href="{{ route('armory.show.realm', [$player->guid, $player->realm_id ?? 1]) }}"
                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 inline-block text-center">
                             <i class="fas fa-eye mr-2"></i> View Profile
                         </a>

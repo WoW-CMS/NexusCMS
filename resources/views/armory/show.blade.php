@@ -29,7 +29,7 @@
                         <i class="fas fa-user text-red-400"></i> {{ App\Helpers\RealmHelper::getWoWConstant('race', $character->race) }} / {{ App\Helpers\RealmHelper::getWoWConstant('class', $character->class) }}
                     </span>
                     <span class="flex items-center gap-2">
-                        <i class="fas fa-server text-purple-400"></i> Icecrown
+                        <i class="fas fa-server text-purple-400"></i> {{ App\Helpers\RealmHelper::find($realm)->name }}
                     </span>
                 </div>
 

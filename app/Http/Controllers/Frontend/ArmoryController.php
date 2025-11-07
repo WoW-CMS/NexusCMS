@@ -41,8 +41,12 @@ class ArmoryController extends Controller
         $characters = [];
         $q = $request->input('q');
         $faction = $request->input('faction') ?: null;
+        $realm = $request->input('realm') ?: 1; // Default to realm 1 if not specified
         $class = $request->input('class') ?: null;
         $minLevel = $request->input('min_level') ?: null;
+
+        // Pass realm to the repository through the request
+        $request->merge(['realm' => $realm]);
 
         if ($q || $faction || $class || $minLevel) {
             $characters = $this->armoryRepo->search($q, $faction, $class, $minLevel);
@@ -51,14 +55,21 @@ class ArmoryController extends Controller
         return view($this->views['index'], [
             'data' => $characters ?? [],
             'search' => $q ?? '',
+            'realm' => $realm,
         ]);
     }
 
     /**
      * Show a single character by GUID
      */
-    public function show(int $guid)
+    public function show(int $guid, Request $request, ?int $realm = null)
     {
+        // Get realm from URL parameter or query string, default to 1
+        $realm = $realm ?: $request->input('realm', 1);
+        
+        // Pass realm to the repository through the request
+        $request->merge(['realm' => $realm]);
+
         $character = $this->armoryRepo->getCharacter($guid);
 
         abort_if(!$character, 404);
@@ -79,6 +90,6 @@ class ArmoryController extends Controller
 
         $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
 
-        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank', 'promedItemLevel'));
+        return view($this->views['show'], compact('character', 'item', 'achievement', 'guild', 'memberRank', 'promedItemLevel', 'realm'));
     }
 }

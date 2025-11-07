@@ -49,6 +49,7 @@ Route::prefix('news')->group(function () {
 Route::prefix('armory')->group(function () {
     Route::get('/', [ArmoryController::class, 'index'])->name('armory');
     Route::get('{id}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->name('armory.show');
+    Route::get('{id}/{realm?}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->where('realm', '[0-9]+')->name('armory.show.realm');
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('news.comment.destroy');
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
