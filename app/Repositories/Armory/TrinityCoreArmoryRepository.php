@@ -4,8 +4,9 @@ namespace App\Repositories\Armory;
 use App\Enums\Professions;
 use App\Interfaces\ArmoryRepositoryInterface;
 use App\Traits\ConnectsToExternalDatabase;
+use App\Enums\Achievement;
 use Illuminate\Database\Connection;
-use Predis\Command\Redis\DUMP;
+use Illuminate\Support\Collection;
 
 class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
 {
@@ -180,6 +181,9 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
 
         $rows = $characters->table('character_achievement')
             ->where('guid', $guid)
+            ->whereNotIn('achievement', Achievement::BLOCK_ACHIEVEMENTS)
+            ->orderByDesc('date')
+            ->limit(10)
             ->get([
                 'achievement',
                 'date'

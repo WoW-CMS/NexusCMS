@@ -76,14 +76,8 @@
             <button class="tab-btn active px-8 py-4 font-bold rounded-t-lg" onclick="switchTab('equipment')">
                 <i class="fas fa-vest mr-2"></i> Equipment
             </button>
-            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('stats')">
-                <i class="fas fa-chart-bar mr-2"></i> Statistics
-            </button>
             <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('achievements')">
                 <i class="fas fa-trophy mr-2"></i> Achievements
-            </button>
-            <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('pvp')">
-                <i class="fas fa-skull-crossbones mr-2"></i> PvP
             </button>
             <button class="tab-btn px-8 py-4 font-bold rounded-t-lg text-gray-400 hover:text-white hover:bg-gray-800" onclick="switchTab('professions')">
                 <i class="fas fa-hammer mr-2"></i> Professions
@@ -92,9 +86,7 @@
     </div>
 
     @include('armory.partials.equipment', ['item' => $items ?? collect()])
-    @include('armory.partials.statistics', ['achievement' => $achievement ?? collect()])
-    @include('armory.partials.achievements', ['achievement' => $achievement ?? collect()])   
-    @include('armory.partials.pvp', ['achievement' => $achievement ?? collect()])
+    @include('armory.partials.achievements', ['achievements' => $achievement ?? collect()])
     @include('armory.partials.professions', ['skill' => $skill ?? collect()])
 </div>
 
