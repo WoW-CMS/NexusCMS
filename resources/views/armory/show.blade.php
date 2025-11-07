@@ -47,22 +47,18 @@
                 @endif
 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="stat-card p-4 rounded-xl">
                         <div class="text-gray-400 text-sm mb-1">Item Level</div>
                         <div class="text-3xl font-bold text-purple-400">{{ $promedItemLevel ?? '0' }}</div>
                     </div>
                     <div class="stat-card p-4 rounded-xl">
-                        <div class="text-gray-400 text-sm mb-1">Achievement Points</div>
-                        <div class="text-3xl font-bold text-yellow-500">2,456</div>
-                    </div>
-                    <div class="stat-card p-4 rounded-xl">
                         <div class="text-gray-400 text-sm mb-1">Arena Rating</div>
-                        <div class="text-3xl font-bold text-purple-500">2,456</div>
+                        <div class="text-3xl font-bold text-purple-500">{{ $arenaTeam[0]['personalRating'] ?? '0' }}</div>
                     </div>
                     <div class="stat-card p-4 rounded-xl">
                         <div class="text-gray-400 text-sm mb-1">Honorable Kills</div>
-                        <div class="text-3xl font-bold text-red-400">15,234</div>
+                        <div class="text-3xl font-bold text-red-400">{{ $character->totalKills ?? '0' }}</div>
                     </div>
                 </div>
             </div>

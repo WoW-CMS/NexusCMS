@@ -37,6 +37,7 @@ class ArmoryService
         $skill = $this->armoryRepo->getSkillCharacter($character->guid);
         $achievement = $this->armoryRepo->getAchievementsCharacter($guid);
         $promedItemLevel = $this->calculateAverageItemLevel($items);
+        $arenaTeam = $this->armoryRepo->getArenaTeam($guid);
 
         return [
             'character' => $character,
@@ -46,6 +47,7 @@ class ArmoryService
             'skill' => $skill,
             'achievement' => $achievement,
             'promedItemLevel' => $promedItemLevel,
+            'arenaTeam' => $arenaTeam,
         ];
     }
 

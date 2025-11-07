@@ -266,4 +266,35 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             ];
         });
     }
+
+    /**
+     * Get Arena Team of character
+     *
+     * @param int $guid Character GUID
+     * @return Collection Collection of arena team or empty collection if connection failed
+     */
+    public function getArenaTeam(int $guid)
+    {
+        $conn = $this->getCharacters();
+        if (!$conn) return collect();
+
+        $arenaTeam = $conn->table('arena_team')
+            ->join('arena_team_member as atm', 'atm.arenaTeamId', '=', 'arena_team.arenaTeamId')
+            ->where('atm.guid', $guid)
+            ->get([
+                'arena_team.arenaTeamId',
+                'arena_team.name',
+                'arena_team.rating',
+                'atm.personalRating',
+            ]);
+        
+        return $arenaTeam->map(function ($row) {
+            return [
+                'id' => $row->arenaTeamId,
+                'name' => $row->name,
+                'points' => $row->rating,
+                'personalRating' => $row->personalRating,
+            ];
+        });
+    }
 }

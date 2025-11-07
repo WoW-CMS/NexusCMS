@@ -12,4 +12,5 @@ interface ArmoryRepositoryInterface
     public function getGuildRankMember(int $guildId, int $memberGuid);
     public function getAchievementsCharacter(int $guid);
     public function getSkillCharacter(int $guid);
+    public function getArenaTeam(int $guid);
 }
