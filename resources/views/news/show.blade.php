@@ -4,10 +4,14 @@
 <section class="pt-24 pb-6 bg-slate-950">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-2 text-sm text-slate-400">
-            <a href="#" class="hover:text-white transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <span>›</span>
+            <a href="{{ route('news') }}" class="hover:text-white transition-colors">News</a>
+            <span>›</span>
+            @if($item->category)
             <a href="{{ route('news', ['category' => $item->category->id]) }}" class="hover:text-white transition-colors">{{ $item->category->name }}</a>
             <span>›</span>
+            @endif
             <span class="text-white">{{ $item->title }}</span>
         </div>
     </div>
@@ -16,9 +20,11 @@
 <!-- Article Header -->
 <section class="relative pb-8 overflow-hidden bg-slate-950">
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        @if($item->category)
         <div class="mb-6">
             <span class="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">{{ $item->category->name }}</span>
-        </div>
+        </div>            
+        @endif
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             {{ $item->title }}
         </h1>
