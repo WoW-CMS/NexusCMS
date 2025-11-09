@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('realms', function (Blueprint $table) {
-            $table->boolean('bnet')->nullable()->after('port');
+            $table->json('character_database')->nullable()->after('auth_database');
         });
     }
 
     public function down(): void
     {
         Schema::table('realms', function (Blueprint $table) {
-            $table->dropColumn('bnet');
+            $table->dropColumn('character_database');
         });
     }
 };

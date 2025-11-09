@@ -337,7 +337,7 @@ class UserController extends Controller
             $accountLinked->target_id = $acc->id;
             $accountLinked->save();
 
-            return redirect()->route($this->views['gameaccount'])
+            return redirect()->route($this->views['gameAccount'])
                 ->with('success', 'Cuenta de juego creada y vinculada exitosamente.');
 
         } catch (\Exception $e) {

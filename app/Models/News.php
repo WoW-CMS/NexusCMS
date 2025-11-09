@@ -53,4 +53,13 @@ class News extends Model
             ->take($limit)
             ->get();
     }
+
+    public function recentNews($limit = 3)
+    {
+        return static::query()
+            ->where('is_published', 1)
+            ->orderBy('published_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
 }
