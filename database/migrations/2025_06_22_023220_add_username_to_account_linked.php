@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('account_linked', function (Blueprint $table) {
-            $table->boolean('username')->nullable()->after('user_id');
+            $table->string('username')->nullable()->after('user_id');
         });
     }
 

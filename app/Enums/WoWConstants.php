@@ -32,6 +32,25 @@ class WoWConstants
     public const CLASS_DEMON_HUNTER = 12;
     public const CLASS_EVOKER = 13;
 
+    // Races
+    public const RACE_HUMAN = 1;
+    public const RACE_ORC = 2;
+    public const RACE_DWARF = 3;
+    public const RACE_NIGHT_ELF = 4;
+    public const RACE_UNDEAD = 5;
+    public const RACE_TAUREN = 6;
+    public const RACE_GNOME = 7;
+    public const RACE_TROLL = 8;
+    public const RACE_BLOODELF = 9;
+    public const RACE_DRAENEI = 10;
+    public const RACE_WOLF = 11;
+    public const RACE_GOBLIN = 12;
+    public const RACE_PANDAREN = 13;
+    public const RACE_DARK_IRON_DWARF = 14;
+    public const RACE_HIGHMOUNTAIN_TAUREN = 15;
+    public const RACE_VOID_ELF = 16;
+    public const RACE_MAGHAR_ORC = 17;
+    
     public const EXPANSION_NAMES = [
         self::EXPANSION_VANILLA => 'Vanilla',
         self::EXPANSION_TBC => 'The Burning Crusade',
@@ -89,18 +108,64 @@ class WoWConstants
     ];
     
     public const CLASS_NAMES = [
-        self::CLASS_WARRIOR => 'Guerrero',
-        self::CLASS_PALADIN => 'Paladín',
-        self::CLASS_HUNTER => 'Cazador',
-        self::CLASS_ROGUE => 'Pícaro',
-        self::CLASS_PRIEST => 'Sacerdote',
-        self::CLASS_DEATH_KNIGHT => 'Caballero de la Muerte',
-        self::CLASS_SHAMAN => 'Chamán',
-        self::CLASS_MAGE => 'Mago',
-        self::CLASS_WARLOCK => 'Brujo',
-        self::CLASS_MONK => 'Monje',
-        self::CLASS_DRUID => 'Druida',
-        self::CLASS_DEMON_HUNTER => 'Cazador de Demonios',
-        self::CLASS_EVOKER => 'Evocador',
+        1  => 'Warrior',
+        2  => 'Paladin',
+        3  => 'Hunter',
+        4  => 'Rogue',
+        5  => 'Priest',
+        6  => 'Death Knight',
+        7  => 'Shaman',
+        8  => 'Mage',
+        9  => 'Warlock',
+        10 => 'Monk',
+        11 => 'Druid',
+        12 => 'Demon Hunter',
+        13 => 'Evoker',
+    ];
+
+    public const CLASS_COLORS = [
+        self::CLASS_WARRIOR => 'border-red-500',
+        self::CLASS_PALADIN => 'border-yellow-500',
+        self::CLASS_HUNTER => 'border-green-500',
+        self::CLASS_ROGUE => 'border-orange-500',
+        self::CLASS_PRIEST => 'border-purple-500',
+        self::CLASS_DEATH_KNIGHT => 'border-blue-500',
+        self::CLASS_SHAMAN => 'border-pink-500',
+        self::CLASS_MAGE => 'border-cyan-500',
+        self::CLASS_WARLOCK => 'border-gray-500',
+        self::CLASS_MONK => 'border-lime-500',
+        self::CLASS_DRUID => 'border-orange-500',
+        self::CLASS_DEMON_HUNTER => 'border-purple-500',
+        self::CLASS_EVOKER => 'border-yellow-500',
+    ];
+
+    public const RACE_NAMES = [
+        1  => 'Human',
+        2  => 'Orc',
+        3  => 'Dwarf',
+        4  => 'Night Elf',
+        5  => 'Undead',
+        6  => 'Tauren',
+        7  => 'Gnome',
+        8  => 'Troll',
+        9  => 'Goblin',
+        10 => 'Blood Elf',
+        11 => 'Draenei',
+        22 => 'Worgen',
+        24 => 'Pandaren',
+        25 => 'Pandaren',
+        26 => 'Pandaren',
+        27 => 'Nightborne',
+        28 => 'Highmountain Tauren',
+        29 => 'Void Elf',
+        30 => 'Lightforged Draenei',
+        31 => 'Zandalari Troll',
+        32 => 'Kul Tiran Human',
+        34 => 'Dark Iron Dwarf',
+        35 => 'Vulpera',
+        36 => "Mag'har Orc",
+        37 => 'Mechagnome',
+        52 => 'Dracthyr',
+        70 => 'Dracthyr',
     ];
 }

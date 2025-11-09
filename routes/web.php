@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\ArmoryController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
@@ -8,10 +9,29 @@ use App\Http\Controllers\Frontend\InstallController;
 use App\Http\Controllers\Frontend\ForumsController;
 use App\Http\Controllers\Frontend\SubscriptionController;
 use App\Http\Controllers\Frontend\CommentController;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->name('howtoplay');
+
+Route::get('/test-redis', function() {
+    try {
+        $pong = Redis::ping(); // devuelve +PONG
+        $keys = Redis::keys('*'); // lista todas las keys
+        return response()->json([
+            'connected' => $pong === '+PONG',
+            'keys_count' => count($keys),
+            'keys' => $keys
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'connected' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+});
+
 
 Route::middleware([])->group(function () {
     if (!file_exists(storage_path('installed.lock'))) {
@@ -25,6 +45,11 @@ Route::middleware([])->group(function () {
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
+});
+Route::prefix('armory')->group(function () {
+    Route::get('/', [ArmoryController::class, 'index'])->name('armory');
+    Route::get('{id}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->name('armory.show');
+    Route::get('{id}/{realm?}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->where('realm', '[0-9]+')->name('armory.show.realm');
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('news.comment.destroy');
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
