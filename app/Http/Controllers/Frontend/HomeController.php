@@ -2,34 +2,29 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Helpers\RealmHelper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
+use App\Models\News;
 
 /**
  * Handles frontend home and public-facing pages.
  *
  * This controller manages the homepage and other primary
  * frontend views. It retrieves realm and news data, prepares
- * it for rendering, and delegates view rendering to the
- * {@see BaseController}.
+ * it for rendering, and delegates view rendering.
  *
  * @category Controllers
  * @package  App\Http\Controllers\Frontend
- * @author   NexusCMS <noreply@wow-cms.com>
- * @license  GNU General Public License (GPL)
- * @version  1.0.0
- * @link     https://wow-cms.com
  * @since    1.0.0
- * @api
  */
-class HomeController extends BaseController
+class HomeController extends Controller
 {
     /**
      * Default views for the home pages.
      *
-     * @var array<string, string> Associative array mapping actions to Blade views
-     * @since 1.0.0
+     * @var array<string, string>
      */
     protected $views = [
         'index' => 'home.index',
@@ -37,74 +32,52 @@ class HomeController extends BaseController
     ];
 
     /**
-     * Indicates if this controller has an associated model.
-     *
-     * @var bool
-     * @since 1.0.0
-     */
-    protected $hasModel = true;
-
-    /**
-     * The model name associated with this controller.
-     *
-     * Used for retrieving and rendering model-specific data.
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    protected $model = 'news';
-
-    /**
-     * Indicates if model data should be paginated.
-     *
-     * @var bool
-     * @since 1.0.0
-     */
-    protected $isPaginated = true;
-
-    /**
-     * The default number of items per page.
+     * Default pagination limit.
      *
      * @var int
-     * @since 1.0.0
      */
     protected $perPage = 2;
 
     /**
      * Display the homepage.
      *
-     * Retrieves available realms and paginated news entries, compiles
-     * the data, and renders the homepage view.
+     * Retrieves available realms and paginated news entries,
+     * then renders the homepage view.
      *
-     * @param Request     $request The incoming HTTP request
-     * @param string|null $view    Optional custom view to render
-     * @return \Illuminate\View\View The rendered homepage view
-     * @since 1.0.0
+     * @param Request     $request
+     * @param string|null $view
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request, ?string $view = null)
     {
         $realms = RealmHelper::all();
         $perPage = $request->get('per_page', $this->perPage);
-        $news = $this->getModelData($perPage);
+    
+        $allNews = \App\Models\News::query()
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
 
+        $featuredNews = $allNews->shift();
+        $news = $allNews;
+    
         $data = [
             'realms' => $realms,
+            'featuredNews' => $featuredNews,
             'news'   => $news,
         ];
-
-        return $this->renderView($view ?? $this->views['index'], compact('data'));
+    
+        return view($this->views['index'], [ 'data' => $data ]);
     }
-
+    
     /**
-     * Display the how to play page.
+     * Display the "How to Play" page.
      *
-     * @param Request     $request The incoming HTTP request
-     * @param string|null $view    Optional custom view to render
-     * @return \Illuminate\View\View The rendered how to play view
-     * @since 1.0.0
+     * @param Request     $request
+     * @param string|null $view
+     * @return \Illuminate\Contracts\View\View
      */
     public function howToPlay(Request $request, ?string $view = null)
     {
-        return $this->renderView($view ?? $this->views['howtoplay']);
+        return view($this->views['howtoplay']);
     }
 }

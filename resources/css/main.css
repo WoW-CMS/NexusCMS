@@ -1,59 +1,108 @@
 /* Home page */
-body {
-    font-family: 'Inter', sans-serif;
-    padding-top: 5rem;
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
 }
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cinzel', serif;
+.float { animation: float 6s ease-in-out infinite; }
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
 }
-.bg-wow {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt5440cbe6b11972e5/6384d83f6a2be57c0507a991/dragonflight-key-art-16-9.jpg');
+.glow { animation: glow 3s ease-in-out infinite; }
+
+@keyframes gentleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.group {
+    animation: gentleBounce 2s ease-in-out infinite;
+}
+.group:hover {
+    animation-play-state: paused;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* News */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+
+.gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.prose p {
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+}
+
+.prose h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.prose h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.prose ul, .prose ol {
+    margin: 1.25rem 0;
+    padding-left: 1.5rem;
+}
+
+.prose li {
+    margin-bottom: 0.5rem;
+}
+
+.prose blockquote {
+    border-left: 4px solid #3b82f6;
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #cbd5e1;
+}
+
+/* Login Page */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+
+@keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.gradient-animated {
+    background: linear-gradient(135deg, #1e293b, #0f172a, #1e293b);
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+}
+
+.hero-image {
+    background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
 }
-.text-shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-.bg-blur {
-    backdrop-filter: blur(8px);
-    background-color: rgba(0, 0, 0, 0.7);
-}
-.realm-status-online { color: #22c55e; }
-.realm-status-offline { color: #ef4444; }
-.realm-status-maintenance { color: #eab308; }
-.news-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-.news-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-}
-.feature-icon {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.feature-card:hover .feature-icon {
-    transform: scale(1.2) rotate(5deg);
-}
-.nav-link {
-    position: relative;
-}
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 50%;
-    background-color: #3b82f6;
-    transition: all 0.3s ease;
-}
-.nav-link:hover::after {
-    width: 100%;
-    left: 0;
-}
+
 /* How to Play */
 .step-card {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -145,4 +194,120 @@ h1, h2, h3, h4, h5, h6 {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+}
+
+/* Character Show */
+.hero-bg {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.3) 0%, rgba(17, 24, 39, 0.9) 50%, rgba(0, 0, 0, 0.95) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://wow.zamimg.com/uploads/screenshots/normal/1049878.jpg') center/cover;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.item-slot {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border: 2px solid rgba(75, 85, 99, 0.5);
+    position: relative;
+}
+
+.item-slot:hover {
+    border-color: #a855f7;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+.item-slot.empty {
+    opacity: 0.4;
+    border-style: dashed;
+}
+
+.character-model {
+    background: radial-gradient(circle at center, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
+    position: relative;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+}
+
+.tab-btn {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.5);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #dc2626, transparent);
+}
+
+.achievement-badge {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.3) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    transition: all 0.3s ease;
+}
+
+.achievement-badge:hover {
+    border-color: #f59e0b;
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.5);
+}
+
+.guild-banner {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border: 2px solid #8b5cf6;
+}
+
+.class-rogue { color: #FFF569; }
+
+.talent-tree {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.6) 0%, rgba(17, 24, 39, 0.8) 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.talent-point {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border: 2px solid #4b5563;
+    transition: all 0.3s ease;
+}
+
+.talent-point.active {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    border-color: #ef4444;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+}
+
+.talent-point:hover {
+    transform: scale(1.1);
+    cursor: pointer;
 }
