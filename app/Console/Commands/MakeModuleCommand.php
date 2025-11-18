@@ -6,20 +6,32 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+/**
+ * Artisan command to scaffold a new module.
+ *
+ * Generates the full folder structure, base controller,
+ * service provider and configuration files.
+ */
 class MakeModuleCommand extends Command
 {
     /**
-     * Nombre del comando para Artisan
+     * The console command signature.
+     *
+     * @var string
      */
     protected $signature = 'make:module {name : The name of the module} {--force : Overwrite existing module if it exists}';
 
     /**
-     * Descripción
+     * The console command description.
+     *
+     * @var string
      */
     protected $description = 'Create a new module with its folder structure and base ServiceProvider';
 
     /**
-     * Ejecuta el comando
+     * Execute the console command.
+     *
+     * @return int Exit code: 0 on success, 1 on failure.
      */
     public function handle(): int
     {
@@ -31,7 +43,12 @@ class MakeModuleCommand extends Command
             return self::FAILURE;
         }
 
-        // Estructura de carpetas
+        // Ensure clean slate when --force is used
+        if ($this->option('force') && File::exists($path)) {
+            File::deleteDirectory($path);
+        }
+
+        // Directory structure to be created inside the module
         $directories = [
             'Services',
             'Domain/Models',
@@ -48,7 +65,7 @@ class MakeModuleCommand extends Command
             File::makeDirectory("{$path}/{$dir}", 0755, true, true);
         }
 
-        // module.json
+        // Generate module.json configuration file
         $moduleJson = [
             'name' => $name,
             'enabled' => true,
@@ -60,55 +77,54 @@ class MakeModuleCommand extends Command
 
         File::put("{$path}/module.json", json_encode($moduleJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-        // routes.php
+        // Generate default routes file
         $routes = <<<PHP
-        <?php
+<?php
 
-        use Illuminate\\Support\\Facades\\Route;
+use Illuminate\\Support\\Facades\\Route;
 
-        Route::middleware('web')
-            ->prefix(strtolower('{$name}'))
-            ->group(function () {
-                Route::get('/', [\\Modules\\{$name}\\Http\\Controllers\\{$name}Controller::class, 'index']);
-            });
-        PHP;
+Route::middleware('web')
+    ->prefix(strtolower('{$name}'))
+    ->group(function () {
+        Route::get('/', [\\Modules\\{$name}\\Http\\Controllers\\{$name}Controller::class, 'index']);
+    });
+PHP;
         File::put("{$path}/Http/routes.php", $routes);
 
-        // Controller base
+        // Generate base controller
         $controller = <<<PHP
-        <?php
+<?php
 
-        namespace Modules\\{$name}\\Http\\Controllers;
+namespace Modules\\{$name}\\Http\\Controllers;
 
-        use App\\Http\\Controllers\\Controller;
+use App\\Http\\Controllers\\Controller;
 
-        class {$name}Controller extends Controller
-        {
-            public function index()
-            {
-                return response()->json(['message' => '{$name} module is working']);
-            }
-        }
-        PHP;
+class {$name}Controller extends Controller
+{
+    public function index()
+    {
+        return response()->json(['message' => '{$name} module is working']);
+    }
+}
+PHP;
         File::put("{$path}/Http/Controllers/{$name}Controller.php", $controller);
 
-        // ServiceProvider
+        // Generate module service provider
         $provider = <<<PHP
-        <?php
+<?php
 
-        namespace Modules\\{$name}\\Providers;
+namespace Modules\\{$name}\\Providers;
 
-        use App\\Providers\\BaseModuleServiceProvider;
+use App\\Providers\\BaseModuleServiceProvider;
 
-        class {$name}ServiceProvider extends BaseModuleServiceProvider
-        {
-            protected string \$moduleName = '{$name}';
-        }
-        PHP;
+class {$name}ServiceProvider extends BaseModuleServiceProvider
+{
+    protected string \$moduleName = '{$name}';
+}
+PHP;
         File::put("{$path}/Providers/{$name}ServiceProvider.php", $provider);
 
         $this->info("Module [{$name}] created successfully at app/Modules/{$name}");
         return self::SUCCESS;
     }
 }
-
