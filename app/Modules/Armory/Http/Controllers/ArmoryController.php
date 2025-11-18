@@ -10,17 +10,51 @@ use Modules\Armory\Services\ArmoryService;
 
 class ArmoryController extends Controller
 {
+    /**
+     * Number of characters to display per page in listings.
+     *
+     * @var int
+     */
     protected int $perPage = 9;
 
+    /**
+     * View paths used by the controller.
+     *
+     * @var array<string,string>
+     */
     protected array $views = [
         'index' => 'armory::armory.index',
         'show'  => 'armory::armory.show',
     ];
 
+    /**
+     * Armory repository instance.
+     *
+     * @var ArmoryRepositoryInterface
+     */
     protected ArmoryRepositoryInterface $armoryRepo;
+
+    /**
+     * Wowhead parser service instance.
+     *
+     * @var WowheadParserService
+     */
     protected WowheadParserService $wowheadParser;
+
+    /**
+     * Armory service instance.
+     *
+     * @var ArmoryService
+     */
     protected ArmoryService $armoryService;
 
+    /**
+     * ArmoryController constructor.
+     *
+     * @param ArmoryRepositoryInterface $armoryRepo     Armory repository instance.
+     * @param WowheadParserService      $wowheadParser  Wowhead parser service instance.
+     * @param ArmoryService             $armoryService  Armory service instance.
+     */
     public function __construct(
         ArmoryRepositoryInterface $armoryRepo,
         WowheadParserService $wowheadParser,
@@ -31,6 +65,12 @@ class ArmoryController extends Controller
         $this->armoryService = $armoryService;
     }
 
+    /**
+     * Display the character index page.
+     *
+     * @param Request $request Incoming request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $q = $request->input('q');
@@ -52,6 +92,14 @@ class ArmoryController extends Controller
         ]);
     }
 
+    /**
+     * Display the character profile page.
+     *
+     * @param int         $guid    Character GUID
+     * @param Request     $request Incoming request
+     * @param int|null    $realm   Realm ID (optional)
+     * @return \Illuminate\View\View
+     */
     public function show(int $guid, Request $request, ?int $realm = null)
     {
         $realm = $realm ?: $request->input('realm', 1);

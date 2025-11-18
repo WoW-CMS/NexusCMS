@@ -16,8 +16,8 @@ Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->name('howtoplay'
 
 Route::get('/test-redis', function() {
     try {
-        $pong = Redis::ping(); // devuelve +PONG
-        $keys = Redis::keys('*'); // lista todas las keys
+        $pong = Redis::ping();
+        $keys = Redis::keys('*');
         return response()->json([
             'connected' => $pong === '+PONG',
             'keys_count' => count($keys),
@@ -44,16 +44,12 @@ Route::middleware([])->group(function () {
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
-    // Comments for news
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('news.comment.destroy');
-    // Newsletter subscription under news
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
     Route::get('/confirm-subscription/{token}', [SubscriptionController::class, 'confirmSubscription'])->name('confirm.subscription');
     Route::get('/unsubscribe/{token}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 });
-// Armory: ahora servido desde el módulo ArmoryTest
-// Se dejan las rutas de comentarios/suscripción bajo news (si aplica) o se reubican aparte
 
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class,'showLoginForm'])->name('login');
@@ -63,7 +59,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// Rutas para users
 Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
@@ -73,18 +68,14 @@ Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(
     Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
 });
 
-// Forums routes
 Route::prefix('forums')->group(function () {
     Route::get('/', [ForumsController::class, 'index'])->name('forums');
-    
-    // Routes that require authentication
     Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
         Route::get('/{slug}/create', [ForumsController::class, 'createThread'])->name('forums.create_thread');
         Route::post('/{slug}/create', [ForumsController::class, 'storeThread'])->name('forums.store_thread');
         Route::post('/{forumSlug}/{threadSlug}/reply', [ForumsController::class, 'storePost'])->name('forums.store_post');
     });
     
-    // These routes must be defined after the more specific routes above
     Route::get('/{forumSlug}/{threadSlug}', [ForumsController::class, 'showThread'])->name('forums.thread');
     Route::get('/{slug}', [ForumsController::class, 'showForum'])->name('forums.show');
 });

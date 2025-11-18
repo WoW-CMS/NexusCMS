@@ -33,9 +33,7 @@ class MakeModuleCommand extends Command
 
         // Estructura de carpetas
         $directories = [
-            'App/Services',
-            'App/UseCases',
-            'App/DTOs',
+            'Services',
             'Domain/Models',
             'Domain/Interfaces',
             'Infrastructure/Repositories',

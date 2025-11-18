@@ -1,19 +1,16 @@
 <div id="equipment-tab" class="tab-content">
     @php
-        // Orden de slots (según el orden visual clásico de WoW)
         $slotOrder = [
             'Head', 'Neck', 'Shoulders', 'Back', 'Chest', 'Wrist',
             'Hands', 'Waist', 'Legs', 'Feet', 'Finger 1', 'Finger 2',
             'Trinket 1', 'Trinket 2', 'Main Hand', 'Off Hand'
         ];
 
-        // Indexación de ítems por slot numérico si lo necesitas más adelante
         $equippedBySlot = [];
         foreach ($item as $equip) {
             $equippedBySlot[$equip['slot']] = $equip;
         }
 
-        // Conversión simple para mostrar nombre de slot (slot numérico → texto)
         $slotNames = [
             0 => 'Head', 1 => 'Neck', 2 => 'Shoulders', 14 => 'Back',
             4 => 'Chest', 8 => 'Wrist', 9 => 'Hands', 5 => 'Waist',
@@ -23,15 +20,12 @@
     @endphp
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- LEFT EQUIPMENT -->
         <div class="space-y-3">
             @foreach (array_slice($slotNames, 0, 6, true) as $slot => $label)
                 @php $equip = $equippedBySlot[$slot] ?? null; @endphp
                 @include('armory.partials.equipment-slot', ['equip' => $equip, 'label' => $label])
             @endforeach
         </div>
-
-        <!-- CENTER - CHARACTER MODEL -->
         <div class="character-model rounded-2xl p-8 flex items-center justify-center relative overflow-hidden border border-gray-700">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-900 opacity-30"></div>
             <div class="relative z-10 text-center">
@@ -39,8 +33,6 @@
                      alt="{{ $character->name }}" class="w-80 h-80 mx-auto mb-6 opacity-90 rounded-full border-4 border-red-600 shadow-2xl">
             </div>
         </div>
-
-        <!-- RIGHT EQUIPMENT -->
         <div class="space-y-3">
             @foreach (array_slice($slotNames, 6, 6, true) as $slot => $label)
                 @php $equip = $equippedBySlot[$slot] ?? null; @endphp
@@ -48,8 +40,6 @@
             @endforeach
         </div>
     </div>
-
-    <!-- BOTTOM ROW -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
         @foreach (array_slice($slotNames, 12, 4, true) as $slot => $label)
             @php $equip = $equippedBySlot[$slot] ?? null; @endphp
