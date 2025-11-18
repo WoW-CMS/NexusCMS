@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces;
+namespace Modules\Armory\Domain\Interfaces;
 
 interface ArmoryRepositoryInterface
 {

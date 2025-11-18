@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
-use App\Services\ArmoryService;
+use Modules\Armory\Services\ArmoryService;
 use App\Services\Parser\WowheadParserService;
-use App\Interfaces\ArmoryRepositoryInterface;
+use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {

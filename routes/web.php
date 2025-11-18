@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Frontend\ArmoryController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
@@ -45,17 +44,16 @@ Route::middleware([])->group(function () {
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
-});
-Route::prefix('armory')->group(function () {
-    Route::get('/', [ArmoryController::class, 'index'])->name('armory');
-    Route::get('{id}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->name('armory.show');
-    Route::get('{id}/{realm?}', [ArmoryController::class, 'show'])->where('id', '[0-9]+')->where('realm', '[0-9]+')->name('armory.show.realm');
+    // Comments for news
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('news.comment.destroy');
+    // Newsletter subscription under news
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
     Route::get('/confirm-subscription/{token}', [SubscriptionController::class, 'confirmSubscription'])->name('confirm.subscription');
     Route::get('/unsubscribe/{token}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 });
+// Armory: ahora servido desde el módulo ArmoryTest
+// Se dejan las rutas de comentarios/suscripción bajo news (si aplica) o se reubican aparte
 
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class,'showLoginForm'])->name('login');
