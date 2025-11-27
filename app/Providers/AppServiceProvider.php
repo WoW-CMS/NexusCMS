@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Libraries\Redis\RedisLibrary;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Modules\Armory\Services\ArmoryService;
@@ -10,9 +11,6 @@ use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         // Register ArmoryService
@@ -21,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(ArmoryRepositoryInterface::class),
                 $app->make(WowheadParserService::class)
             );
+        });
+
+        // Register RedisLibrary (solo prefix)
+        $this->app->singleton(RedisLibrary::class, function ($app) {
+            $prefix = config('cache.prefix', '');
+            return new RedisLibrary($prefix);
         });
 
         if (app()->environment('production')) {
@@ -38,9 +42,6 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if (!file_exists(storage_path('installed.lock'))) {
