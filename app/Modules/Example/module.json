@@ -1,0 +1,12 @@
+{
+    "name": "Example",
+    "description": "Módulo de ejemplo",
+    "version": "1.0.0",
+    "author": "WoW-CMS",
+    "author_url": "https://wow-cms.com",
+    "enabled": true,
+    "routes": true,
+    "migrations": false,
+    "views": false,
+    "namespace": "Modules\\Example"
+}
