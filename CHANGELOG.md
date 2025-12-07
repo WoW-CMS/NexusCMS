@@ -90,4 +90,12 @@
 - Remove unused 'use' (Haritz Lopez)
 - Merge branch 'WoW-CMS:main' into implement-base-for-armory (Haritz Lopez)
 - Code quality fix (Haritz Lopez)
-- Implement the base for the armory page (Haritz Lopez)
+- Implement the base for the armory page (Haritz Lopez)## Sync from Gitea - 2025-12-07
+- Sync from Gitea (github-actions[bot])
+- Merge pull request 'feat/0.1.6' (#13) from feat/0.1.6 into main (darthar)
+- build: update laravel framework and remove mysql ssl options (sayghteight)
+- refactor(MakeModuleCommand): improve module scaffolding command (sayghteight)
+- refactor(module-structure): simplify module directory structure and clean up code (sayghteight)
+- feat(armory): implement modular armory feature with repository pattern (sayghteight)
+- refactor(modules): remove armory module and implement dynamic module loading (sayghteight)
+- feat(modules): add modular system with example and armory modules (sayghteight)
