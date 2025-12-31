@@ -73,12 +73,6 @@ class HomeController extends Controller
             $redis->set($featuredKey, $featuredNews, 60);
         }   
     
-        if ($featuredNews)
-        {
-            
-        var_dump($featuredNews);
-        die();
-        }
         $data = [
             'realms' => $realms,
             'featuredNews' => $featuredNews,

@@ -3,6 +3,7 @@
 namespace App\Libraries\Redis;
 
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class RedisLibrary
@@ -14,6 +15,8 @@ class RedisLibrary
 {
     /** @var string Global key prefix */
     private string $prefix;
+    /** @var bool Whether Redis operations are enabled */
+    private bool $enabled;
 
     /**
      * RedisLibrary constructor.
@@ -23,6 +26,8 @@ class RedisLibrary
     public function __construct(string $prefix = '')
     {
         $this->prefix = $prefix;
+        // Leer flag desde .env (por petición explícita). Si no existe, por defecto deshabilitado.
+        $this->enabled = filter_var(env('REDIS_ENABLED', false), FILTER_VALIDATE_BOOL);
     }
 
     /**
@@ -53,11 +58,28 @@ class RedisLibrary
     {
         $key = $this->key($key);
 
-        if ($ttl > 0) {
-            return Redis::setex($key, $ttl, json_encode($value));
+        if (!$this->enabled) {
+            if ($ttl > 0) {
+                Cache::put($key, $value, now()->addSeconds($ttl));
+            } else {
+                Cache::forever($key, $value);
+            }
+            return true;
         }
 
-        return Redis::set($key, json_encode($value));
+        try {
+            if ($ttl > 0) {
+                return Redis::set($key, $ttl, json_encode($value));
+            }
+            return Redis::set($key, json_encode($value));
+        } catch (\Throwable $e) {
+            if ($ttl > 0) {
+                Cache::put($key, $value, now()->addSeconds($ttl));
+            } else {
+                Cache::forever($key, $value);
+            }
+            return true;
+        }
     }
 
     /**
@@ -68,8 +90,18 @@ class RedisLibrary
      */
     public function get(string $key): mixed
     {
-        $value = Redis::get($this->key($key));
-        return $value ? json_decode($value, true) : null;
+        $key = $this->key($key);
+
+        if (!$this->enabled) {
+            return Cache::get($key, null);
+        }
+
+        try {
+            $value = Redis::get($key);
+            return $value ? json_decode($value, true) : null;
+        } catch (\Throwable $e) {
+            return Cache::get($key, null);
+        }
     }
 
     /**
@@ -80,7 +112,15 @@ class RedisLibrary
      */
     public function delete(string $key): bool
     {
-        return Redis::del($this->key($key)) > 0;
+        $key = $this->key($key);
+        if (!$this->enabled) {
+            return Cache::forget($key);
+        }
+        try {
+            return Redis::del($key) > 0;
+        } catch (\Throwable $e) {
+            return Cache::forget($key);
+        }
     }
 
     /**
@@ -91,7 +131,15 @@ class RedisLibrary
      */
     public function exists(string $key): bool
     {
-        return Redis::exists($this->key($key)) === 1;
+        $key = $this->key($key);
+        if (!$this->enabled) {
+            return Cache::has($key);
+        }
+        try {
+            return Redis::exists($key) === 1;
+        } catch (\Throwable $e) {
+            return Cache::has($key);
+        }
     }
 
     /**
@@ -102,7 +150,15 @@ class RedisLibrary
      */
     public function ttl(string $key): int
     {
-        return Redis::ttl($this->key($key));
+        $key = $this->key($key);
+        if (!$this->enabled) {
+            return -1; // TTL no disponible en fallback de Cache
+        }
+        try {
+            return Redis::ttl($key);
+        } catch (\Throwable $e) {
+            return -1;
+        }
     }
 
     /**
@@ -114,7 +170,21 @@ class RedisLibrary
      */
     public function increment(string $key, int $amount = 1): int
     {
-        return Redis::incrby($this->key($key), $amount);
+        $key = $this->key($key);
+        if (!$this->enabled) {
+            $current = (int) (Cache::get($key, 0) ?? 0);
+            $new = $current + $amount;
+            Cache::put($key, $new);
+            return $new;
+        }
+        try {
+            return Redis::incrby($key, $amount);
+        } catch (\Throwable $e) {
+            $current = (int) (Cache::get($key, 0) ?? 0);
+            $new = $current + $amount;
+            Cache::put($key, $new);
+            return $new;
+        }
     }
 
     /**
@@ -126,7 +196,21 @@ class RedisLibrary
      */
     public function decrement(string $key, int $amount = 1): int
     {
-        return Redis::decrby($this->key($key), $amount);
+        $key = $this->key($key);
+        if (!$this->enabled) {
+            $current = (int) (Cache::get($key, 0) ?? 0);
+            $new = $current - $amount;
+            Cache::put($key, $new);
+            return $new;
+        }
+        try {
+            return Redis::decrby($key, $amount);
+        } catch (\Throwable $e) {
+            $current = (int) (Cache::get($key, 0) ?? 0);
+            $new = $current - $amount;
+            Cache::put($key, $new);
+            return $new;
+        }
     }
 
     /* ======================================================
