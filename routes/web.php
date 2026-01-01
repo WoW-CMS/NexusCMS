@@ -31,7 +31,6 @@ Route::get('/test-redis', function() {
     }
 });
 
-
 Route::middleware([])->group(function () {
     if (!file_exists(storage_path('installed.lock'))) {
         Route::get('/install', [InstallController::class, 'index'])->name('install.index');
