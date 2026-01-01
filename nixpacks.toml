@@ -1,25 +1,7 @@
-providers = ["php"]
-
-[variables]
-NIXPACKS_NODE_DISABLED = "1"
-
-[phases.setup]
-nixPkgs = [
-  "php84",
-  "php84Packages.composer",
-  "php84Extensions.pdo",
-  "php84Extensions.pdo_mysql",
-  "php84Extensions.mbstring",
-  "php84Extensions.bcmath",
-  "php84Extensions.openssl",
-  "php84Extensions.tokenizer",
-  "php84Extensions.xml"
-]
-
-[phases.install]
+[phases.postbuild]
 cmds = [
-  "composer install --no-dev --optimize-autoloader --ignore-platform-reqs"
+    "php /app/artisan optimize:clear",
+    "php /app/artisan migrate --force",
 ]
 
-[start]
-cmd = "php artisan migrate --force"
+dependsOn = ["build"]
