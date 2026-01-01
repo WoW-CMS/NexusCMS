@@ -41,10 +41,6 @@ class RedisLibrary
         return $this->prefix . $key;
     }
 
-    /* ======================================================
-     * Basic Key/Value Methods
-     * ====================================================== */
-
     /**
      * Store a value in Redis.
      *
@@ -212,10 +208,6 @@ class RedisLibrary
             return $new;
         }
     }
-
-    /* ======================================================
-     * Token Management (JWT / Sessions)
-     * ====================================================== */
 
     /**
      * Store a user token using a namespaced key.
