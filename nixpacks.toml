@@ -1,5 +1,24 @@
 providers = ["php"]
 
+[phases.setup]
+nixPkgs = [
+  "php84",
+  "php84Packages.composer",
+
+  # Extensiones típicas Laravel
+  "php84Extensions.pdo",
+  "php84Extensions.pdo_mysql",
+  "php84Extensions.mbstring",
+  "php84Extensions.bcmath",
+  "php84Extensions.openssl",
+  "php84Extensions.tokenizer",
+  "php84Extensions.xml",
+
+  # Necesario para nginx template
+  "nodejs_18",
+  "npm-9_x"
+]
+
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader --ignore-platform-reqs"
