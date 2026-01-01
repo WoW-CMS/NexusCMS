@@ -2,10 +2,8 @@ providers = ["php"]
 
 [phases.install]
 cmds = [
-  "composer install --no-dev --optimize-autoloader"
+  "composer install --no-dev --optimize-autoloader --ignore-platform-reqs"
 ]
 
-[phases.build]
-cmds = [
-  "php artisan migrate --force || true"
-]
+[start]
+cmd = "php artisan migrate --force || true && node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf)"
