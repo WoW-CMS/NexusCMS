@@ -15,6 +15,7 @@ class RedisLibrary
 {
     /** @var string Global key prefix */
     private string $prefix;
+    
     /** @var bool Whether Redis operations are enabled */
     private bool $enabled;
 
