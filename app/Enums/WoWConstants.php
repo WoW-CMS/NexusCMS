@@ -16,6 +16,7 @@ class WoWConstants
     public const EXPANSION_SHADOWLANDS = 8;
     public const EXPANSION_DRAGONFLIGHT = 9;
     public const EXPANSION_WAR_WITHIN = 10;
+    public const EXPANSION_MIDNIGHT = 11;
     
     // Classes
     public const CLASS_WARRIOR = 1;
@@ -41,16 +42,28 @@ class WoWConstants
     public const RACE_TAUREN = 6;
     public const RACE_GNOME = 7;
     public const RACE_TROLL = 8;
-    public const RACE_BLOODELF = 9;
-    public const RACE_DRAENEI = 10;
-    public const RACE_WOLF = 11;
-    public const RACE_GOBLIN = 12;
-    public const RACE_PANDAREN = 13;
-    public const RACE_DARK_IRON_DWARF = 14;
-    public const RACE_HIGHMOUNTAIN_TAUREN = 15;
-    public const RACE_VOID_ELF = 16;
-    public const RACE_MAGHAR_ORC = 17;
-    
+    public const RACE_GOBLIN = 9;
+    public const RACE_BLOODELF = 10;
+    public const RACE_DRAENEI = 11;
+    public const RACE_WORGEN = 22;
+    public const RACE_PANDAREN = 24; // Neutral Pandaren
+    public const RACE_PANDAREN_ALLIANCE = 25; // Alliance Pandaren
+    public const RACE_PANDAREN_HORDE = 26; // Horde Pandaren
+    public const RACE_NIGHTBORNE = 27; // Nightborne
+    public const RACE_HIGHMOUNTAIN_TAUREN = 28; // Highmountain Tauren
+    public const RACE_VOID_ELF = 29; // Void Elf
+    public const RACE_LIGHTFORGED_DRAENEI = 30; // Lightforged Draenei
+    public const RACE_ZANDALARI_TROLL = 31; // Zandalari Troll
+    public const RACE_KUL_TIRAN = 32; // Kul'Tiran
+    public const RACE_DARK_IRON_DWARF = 34; // Dark Iron Dwarf
+    public const RACE_VULPERA = 35; // Vulpera
+    public const RACE_MAGHAR_ORC = 36; // Maghar Orc
+    public const RACE_MECAGHOME = 37; // Mecaghome
+    public const RACE_DRACTHYR_ALLIANCE = 52; // Draconic
+    public const RACE_DRACTHYR_HORDE = 70; // Draconic
+    public const RACE_EARTHEN_HORDE  = 84; // Earthen
+    public const RACE_EARTHEN_ALLIANCE  = 85; // Earthen
+
     public const EXPANSION_NAMES = [
         self::EXPANSION_VANILLA => 'Vanilla',
         self::EXPANSION_TBC => 'The Burning Crusade',
@@ -63,6 +76,7 @@ class WoWConstants
         self::EXPANSION_SHADOWLANDS => 'Shadowlands',
         self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
         self::EXPANSION_WAR_WITHIN   => 'The War Within',
+        self::EXPANSION_MIDNIGHT     => 'Midnight',
     ];
 
     public const EXPANSION_VERSIONS = [
@@ -91,6 +105,7 @@ class WoWConstants
         self::EXPANSION_SHADOWLANDS => 'border-blue-500',
         self::EXPANSION_DRAGONFLIGHT => 'border-green-500',
         self::EXPANSION_WAR_WITHIN   => 'border-yellow-500',
+        self::EXPANSION_MIDNIGHT     => 'border-pink-500',
     ];
 
     public const EXPANSION_MAX_LEVEL = [
@@ -105,6 +120,7 @@ class WoWConstants
         self::EXPANSION_SHADOWLANDS => 60,
         self::EXPANSION_DRAGONFLIGHT => 70,
         self::EXPANSION_WAR_WITHIN   => 80,
+        self::EXPANSION_MIDNIGHT     => 90,
     ];
     
     public const CLASS_NAMES = [
@@ -153,8 +169,8 @@ class WoWConstants
         11 => 'Draenei',
         22 => 'Worgen',
         24 => 'Pandaren',
-        25 => 'Pandaren',
-        26 => 'Pandaren',
+        25 => 'Pandaren Alliance',
+        26 => 'Pandaren Horde',
         27 => 'Nightborne',
         28 => 'Highmountain Tauren',
         29 => 'Void Elf',
@@ -165,7 +181,9 @@ class WoWConstants
         35 => 'Vulpera',
         36 => "Mag'har Orc",
         37 => 'Mechagnome',
-        52 => 'Dracthyr',
-        70 => 'Dracthyr',
+        52 => 'Draconic Alliance',
+        70 => 'Draconic Horde',
+        84 => 'Earthen Horde',
+        85 => 'Earthen Alliance',
     ];
 }
