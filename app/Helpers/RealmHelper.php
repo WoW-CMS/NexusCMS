@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Realm;
 use App\Enums\WoWConstants;
+use Illuminate\Database\Eloquent\Collection;
 
 class RealmHelper
 {
@@ -12,7 +13,7 @@ class RealmHelper
      *
      * @return \Illuminate\Database\Eloquent\Collection<int, Realm>
      */
-    public static function all()
+    public static function all(): Collection
     {
         return Realm::all();
     }
@@ -23,7 +24,7 @@ class RealmHelper
      * @param int $id The ID of the realm to find
      * @return Realm|null Returns the realm if found, null otherwise
      */
-    public static function find($id)
+    public static function find(int $id): ?Realm
     {
         return Realm::find($id);
     }
@@ -35,28 +36,21 @@ class RealmHelper
      * @param int|null $id The ID of the constant to get
      * @return string|null Returns the constant value for the given type and ID, or null if not found
      */
-    public static function getWoWConstant(string $type = 'expansion', ?int $id = null)
+    public static function getWoWConstant(string $type = 'expansion', ?int $id = null): string|int|null
     {
         if ($id === null) {
             return null;
         }
 
-        switch ($type) {
-            case 'expansion':
-                return WoWConstants::EXPANSION_NAMES[$id] ?? null;
-            case 'version':
-                return WoWConstants::EXPANSION_VERSIONS[$id] ?? null;
-            case 'color':
-                return WoWConstants::EXPANSION_COLORS[$id] ?? null;
-            case 'class':
-                return WoWConstants::CLASS_NAMES[$id] ?? null;
-            case 'class_color':
-                return WoWConstants::CLASS_COLORS[$id] ?? null;
-            case 'race':
-                return WoWConstants::RACE_NAMES[$id] ?? null;
-            default:
-                return null;
-        }
+        return match ($type) {
+            'expansion'   => WoWConstants::EXPANSION_NAMES[$id] ?? null,
+            'version'     => WoWConstants::EXPANSION_VERSIONS[$id] ?? null,
+            'color'       => WoWConstants::EXPANSION_COLORS[$id] ?? null,
+            'class'       => WoWConstants::CLASS_NAMES[$id] ?? null,
+            'class_color' => WoWConstants::CLASS_COLORS[$id] ?? null,
+            'race'        => WoWConstants::RACE_NAMES[$id] ?? null,
+            default       => null,
+        };
     }
 
     /**
@@ -102,11 +96,11 @@ class RealmHelper
         ];
 
         if (in_array($race, $allianceRaces, true)) {
-            return 'Alliance';
+            return 'alliance';
         }
 
         if (in_array($race, $hordeRaces, true)) {
-            return 'Horde';
+            return 'horde';
         }
 
         return null;
