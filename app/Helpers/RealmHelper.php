@@ -73,7 +73,15 @@ class RealmHelper
             WoWConstants::RACE_NIGHT_ELF,
             WoWConstants::RACE_GNOME,
             WoWConstants::RACE_DRAENEI,
+            WoWConstants::RACE_WORGEN,
+            WoWConstants::RACE_PANDAREN_ALLIANCE,
             WoWConstants::RACE_VOID_ELF,
+            WoWConstants::RACE_LIGHTFORGED_DRAENEI,
+            WoWConstants::RACE_KUL_TIRAN,
+            WoWConstants::RACE_DARK_IRON_DWARF,
+            WoWConstants::RACE_MECAGHOME,
+            WoWConstants::RACE_DRACTHYR_ALLIANCE,
+            WoWConstants::RACE_EARTHEN_ALLIANCE,
         ];
 
         $hordeRaces = [
@@ -81,12 +89,16 @@ class RealmHelper
             WoWConstants::RACE_UNDEAD,
             WoWConstants::RACE_TAUREN,
             WoWConstants::RACE_TROLL,
-            WoWConstants::RACE_BLOODELF,
             WoWConstants::RACE_GOBLIN,
-            WoWConstants::RACE_MAGHAR_ORC,
+            WoWConstants::RACE_BLOODELF,
+            WoWConstants::RACE_PANDAREN_HORDE,
+            WoWConstants::RACE_NIGHTBORNE,
             WoWConstants::RACE_HIGHMOUNTAIN_TAUREN,
-            WoWConstants::RACE_DARK_IRON_DWARF,
-            WoWConstants::RACE_PANDAREN,
+            WoWConstants::RACE_ZANDALARI_TROLL,
+            WoWConstants::RACE_VULPERA,
+            WoWConstants::RACE_MAGHAR_ORC,
+            WoWConstants::RACE_DRACTHYR_HORDE,
+            WoWConstants::RACE_EARTHEN_HORDE,
         ];
 
         if (in_array($race, $allianceRaces, true)) {
