@@ -1,7 +1,0 @@
-[phases.postbuild]
-cmds = [
-    "php /app/artisan optimize:clear",
-    "php /app/artisan migrate --force",
-]
-
-dependsOn = ["build"]
