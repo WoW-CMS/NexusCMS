@@ -13,5 +13,4 @@ interface ArmoryRepositoryInterface
     public function getAchievementsCharacter(int $guid);
     public function getSkillCharacter(int $guid);
     public function getArenaTeam(int $guid);
-    public function getRealmById(int $id);
 }

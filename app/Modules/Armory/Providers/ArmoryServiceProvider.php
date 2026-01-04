@@ -20,8 +20,9 @@ class ArmoryServiceProvider extends BaseModuleServiceProvider
             $realmId = $request->get('realm', 1);
 
             $realm = Realm::find($realmId);
+            
             if (!$realm) {
-                throw new \Exception("Realm $realmId not found.");
+                return [];
             }
 
             $emulator = $realm->emulator;

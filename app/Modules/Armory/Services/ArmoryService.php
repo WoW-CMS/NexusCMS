@@ -75,11 +75,4 @@ class ArmoryService
     ): Collection {
         return $this->armoryRepo->search($q, $faction, $class, $minLevel);
     }
-
-    public function getRealmById(int $id): array
-    {
-        $realm = $this->armoryRepo->getRealmById($id);
-
-        return $realm ? $realm->toArray() : [];
-    }
 }
