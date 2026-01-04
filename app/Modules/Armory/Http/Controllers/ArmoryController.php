@@ -79,6 +79,15 @@ class ArmoryController extends Controller
         $class = $request->input('class') ?: null;
         $minLevel = $request->input('min_level') ?: null;
 
+        // Validate if realm is on db
+        $realm = $this->armoryRepo->getRealmById($realm);
+
+        if (empty($realm)) {
+            return view($this->views['index'], [
+                'error' => 'Realm not found',
+            ]);
+        }
+
         $request->merge(['realm' => $realm]);
 
         $characters = ($q || $faction || $class || $minLevel)
