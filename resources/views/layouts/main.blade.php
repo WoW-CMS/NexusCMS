@@ -28,7 +28,7 @@
                         <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOW TO PLAY</a>
                         <!-- <a href="{{ route('forums') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">FORUMS</a> -->
                         <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">ARMORY</a>
-                        <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
+                        <a href="{{ route('donate') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -60,7 +60,7 @@
                     <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">NEWS</a>
                     <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOW TO PLAY</a>
                     <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">ARMORY</a>
-                    <a href="#" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">DONATE</a>
+                    <a href="{{ route('donate') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">DONATE</a>
                     @auth
                         <div class="flex flex-col gap-2 pt-2">
                             <a href="{{ route('ucp.dashboard') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">
