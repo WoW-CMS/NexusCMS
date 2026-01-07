@@ -38,7 +38,8 @@ class DonateController extends Controller
             $user = $request->user();
             $rate = (int) config('donate.dp_rate', 100);
             $dp = (int) ($amount * $rate);
-            DB::transaction(function () use ($user, $gatewayId, $amount, $dp, $result) {
+            $txId = null;
+            DB::transaction(function () use ($user, $gatewayId, $amount, $dp, $result, &$txId) {
                 $tx = DonationTransaction::create([
                     'user_id' => $user->id,
                     'gateway' => $gatewayId,
@@ -50,13 +51,9 @@ class DonateController extends Controller
                     'meta' => ['raw' => $result],
                 ]);
                 $user->increment('dp', $dp);
+                $txId = $tx->id;
             });
-            return response()->json([
-                'status' => 'success',
-                'dp_awarded' => $dp,
-                'amount' => $amount,
-                'gateway' => $gatewayId,
-            ]);
+            return redirect()->route('donate.receipt', ['id' => $txId]);
         }
         return response()->json($result, 400);
     }
@@ -75,5 +72,14 @@ class DonateController extends Controller
         abort_unless($gw, 404);
         $result = $gw->handleWebhook($request);
         return response()->json($result);
+    }
+
+    public function receipt(int $id)
+    {
+        $tx = DonationTransaction::query()
+            ->where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+        return view('donate::receipt', ['tx' => $tx]);
     }
 }
