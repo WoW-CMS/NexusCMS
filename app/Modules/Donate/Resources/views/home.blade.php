@@ -95,15 +95,40 @@
             <div class="max-w-2xl mx-auto text-center">
                 <h3 class="text-2xl font-bold mb-4">Custom Donation Amount</h3>
                 <p class="text-slate-400 mb-6">Choose your own amount to support the server</p>
-                <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                    <div class="relative flex-1 w-full sm:max-w-xs">
-                        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl">$</span>
-                        <input type="number" placeholder="Enter amount" min="1" class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white">
+                @auth
+                    <form method="POST" action="{{ route('donate.checkout') }}" class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                        @csrf
+                        <div class="relative flex-1 w-full sm:max-w-xs">
+                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl">$</span>
+                            <input name="amount" type="number" placeholder="Enter amount" min="1" class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white">
+                        </div>
+                        <div class="flex-1 w-full sm:max-w-xs">
+                            <select name="gateway" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white">
+                                @foreach(($gateways ?? []) as $gw)
+                                    <option value="{{ $gw['id'] }}">{{ $gw['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-blue-900/30 w-full sm:w-auto">
+                            Donate
+                        </button>
+                    </form>
+                @else
+                    <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                        <div class="relative flex-1 w-full sm:max-w-xs">
+                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl">$</span>
+                            <input disabled placeholder="Login required" class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-500">
+                        </div>
+                        <div class="flex-1 w-full sm:max-w-xs">
+                            <select disabled class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-500">
+                                <option>Select gateway</option>
+                            </select>
+                        </div>
+                        <a href="{{ route('login') }}" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-200 text-white w-full sm:w-auto">
+                            Login to Donate
+                        </a>
                     </div>
-                    <button class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-blue-900/30 w-full sm:w-auto">
-                        Donate
-                    </button>
-                </div>
+                @endauth
                 <p class="text-slate-500 text-sm mt-4">Conversion rate: $1 = 100 Donation Points</p>
             </div>
         </div>

@@ -3,11 +3,77 @@
 namespace Modules\Donate\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Modules\Donate\Services\GatewayManager;
+use Modules\Donate\Domain\Models\DonationTransaction;
+use Illuminate\Support\Facades\DB;
 
 class DonateController extends Controller
 {
-    public function index()
+    public function index(GatewayManager $gateways)
     {
-        return view('donate::home');
+        $available = array_map(fn($g) => ['id' => $g->id(), 'name' => $g->displayName()], $gateways->all());
+        return view('donate::home', ['gateways' => $available]);
     }
-}   
+
+    public function checkout(Request $request, GatewayManager $gateways)
+    {
+        $gatewayId = $request->string('gateway')->toString();
+        $amount = (int) $request->input('amount', 0);
+        $gateway = $gateways->get($gatewayId);
+        abort_unless($gateway, 404);
+        $meta = ['user_id' => optional($request->user())->id];
+        
+        if ($request->filled('nonce')) {
+            $meta['nonce'] = $request->input('nonce');
+        }
+        $result = $gateway->createCheckout($amount, $meta);
+        if (isset($result['client_token'])) {
+            return view('donate::braintree', ['token' => $result['client_token'], 'amount' => $amount]);
+        }
+        if (isset($result['redirect_url'])) {
+            return redirect()->away($result['redirect_url']);
+        }
+        if (($result['status'] ?? null) === 'success') {
+            $user = $request->user();
+            $rate = (int) config('donate.dp_rate', 100);
+            $dp = (int) ($amount * $rate);
+            DB::transaction(function () use ($user, $gatewayId, $amount, $dp, $result) {
+                $tx = DonationTransaction::create([
+                    'user_id' => $user->id,
+                    'gateway' => $gatewayId,
+                    'transaction_id' => $result['transaction_id'] ?? null,
+                    'amount' => $amount,
+                    'currency' => 'USD',
+                    'dp_awarded' => $dp,
+                    'status' => 'completed',
+                    'meta' => ['raw' => $result],
+                ]);
+                $user->increment('dp', $dp);
+            });
+            return response()->json([
+                'status' => 'success',
+                'dp_awarded' => $dp,
+                'amount' => $amount,
+                'gateway' => $gatewayId,
+            ]);
+        }
+        return response()->json($result, 400);
+    }
+
+    public function callback(string $gateway, Request $request, GatewayManager $gateways)
+    {
+        $gw = $gateways->get($gateway);
+        abort_unless($gw, 404);
+        $result = $gw->handleCallback($request);
+        return response()->json($result);
+    }
+
+    public function webhook(string $gateway, Request $request, GatewayManager $gateways)
+    {
+        $gw = $gateways->get($gateway);
+        abort_unless($gw, 404);
+        $result = $gw->handleWebhook($request);
+        return response()->json($result);
+    }
+}
