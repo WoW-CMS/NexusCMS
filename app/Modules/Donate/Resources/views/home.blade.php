@@ -129,7 +129,7 @@
                         </a>
                     </div>
                 @endauth
-                <p class="text-slate-500 text-sm mt-4">Conversion rate: $1 = 100 Donation Points</p>
+                <p class="text-slate-500 text-sm mt-4">Conversion rate: $1 = {{ config('donate.dp_rate') }} Donation Points</p>
             </div>
         </div>
 

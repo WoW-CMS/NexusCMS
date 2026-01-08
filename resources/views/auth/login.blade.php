@@ -152,7 +152,7 @@
                     <div class="text-center pt-4">
                         <p class="text-slate-400">
                             Don't have an account? 
-                            <a href="#" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Register here</a>
+                            <a href="{{ route('register') }}" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Register here</a>
                         </p>
                     </div>
                 </form>
