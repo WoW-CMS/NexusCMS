@@ -1,5 +1,7 @@
 <?php
 
+use Modules\Donate\Domain\Models\DonationPlan;
+
 return [
     /**
      * Enabled gateways for donation transactions.
@@ -42,4 +44,15 @@ return [
             'private_key' => env('BRAINTREE_PRIVATE_KEY'),
         ],
     ],
+
+    /**
+     * Donation plans configuration.
+     * 
+     * @var array|callable
+     * 
+     * Development note: Set to null to load from database.
+     * 
+     * @example 'plans' => fn() => DonationPlan::active()->orderBy('sort_order')->get(),
+     */
+    'plans' => fn() => DonationPlan::active()->orderBy('sort_order')->get(),
 ];

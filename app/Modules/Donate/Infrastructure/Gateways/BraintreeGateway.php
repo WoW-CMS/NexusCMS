@@ -35,7 +35,7 @@ class BraintreeGateway implements PaymentGatewayInterface
     {
         if (isset($meta['nonce'])) {
             $result = $this->gateway->transaction()->sale([
-                'amount' => number_format($amount, 2, '.', ''),
+                'amount' => number_format($amount / 100, 2, '.', ''),
                 'paymentMethodNonce' => $meta['nonce'],
                 'options' => ['submitForSettlement' => true],
             ]);

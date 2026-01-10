@@ -23,72 +23,91 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-8 mb-16">
-            <!-- Bronze Package -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-8 hover:border-orange-600/50 transition-all duration-300">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-medal text-2xl"></i>
+            @foreach(($plans ?? collect())->take(3) as $plan)
+                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-8 hover:border-blue-600/50 transition-all duration-300">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-gift text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">{{ $plan->name }}</h3>
+                        <div class="text-4xl font-bold text-blue-500 mb-2">{{ $plan->formatted_amount }}</div>
+                        <p class="text-slate-400 text-sm">{{ $plan->description }}</p>
+                        @if($plan->is_promo)
+                            <span class="inline-block mt-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                                PROMO +{{ $plan->extra_pct }}%
+                            </span>
+                        @endif
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Bronze Supporter</h3>
-                    <div class="text-4xl font-bold text-orange-500 mb-2">$5</div>
-                    <p class="text-slate-400 text-sm">One-time donation</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-blue-500 mt-1"></i>
+                            <span class="text-slate-300">{{ number_format($plan->dp_total) }} Donation Points</span>
+                        </li>
+                        @if($plan->extra_pct > 0)
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-star text-yellow-500 mt-1"></i>
+                                <span class="text-slate-300">+{{ $plan->extra_pct }}% Bonus Points</span>
+                            </li>
+                        @endif
+                    </ul>
+                    @auth
+                        <form method="POST" action="{{ route('donate.checkout') }}">
+                            @csrf
+                            <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                            <input type="hidden" name="amount" value="{{ $plan->amount }}">
+                            <input type="hidden" name="gateway" value="braintree">
+                            <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-blue-900/30">
+                                Donate Now
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="block w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-200 text-center">
+                            Login to Donate
+                        </a>
+                    @endauth
                 </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i class="fas fa-check text-orange-500 mt-1"></i>
-                        <span class="text-slate-300">500 Donation Points</span>
-                    </li>
-                </ul>
-                <button class="w-full py-3 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-orange-900/30">
-                    Donate Now
-                </button>
-            </div>
-
-            <!-- Silver Package -->
-            <div class="bg-slate-900/50 border-2 border-slate-400 rounded-xl p-8 hover:border-slate-300 transition-all duration-300 relative transform md:scale-105">
-                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-1 rounded-full text-sm font-semibold">MOST POPULAR</span>
-                </div>
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-slate-400 to-slate-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-crown text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Silver Supporter</h3>
-                    <div class="text-4xl font-bold text-slate-400 mb-2">$15</div>
-                    <p class="text-slate-400 text-sm">One-time donation</p>
-                </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i class="fas fa-check text-slate-400 mt-1"></i>
-                        <span class="text-slate-300">1,800 Donation Points</span>
-                    </li>
-                </ul>
-                <button class="w-full py-3 bg-gradient-to-r from-slate-400 to-slate-600 hover:from-slate-500 hover:to-slate-700 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-slate-900/50">
-                    Donate Now
-                </button>
-            </div>
-
-            <!-- Gold Package -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-8 hover:border-yellow-600/50 transition-all duration-300">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-gem text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Gold Supporter</h3>
-                    <div class="text-4xl font-bold text-yellow-500 mb-2">$30</div>
-                    <p class="text-slate-400 text-sm">One-time donation</p>
-                </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i class="fas fa-check text-yellow-500 mt-1"></i>
-                        <span class="text-slate-300">4,000 Donation Points</span>
-                    </li>
-                </ul>
-                <button class="w-full py-3 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-yellow-900/30">
-                    Donate Now
-                </button>
-            </div>
+            @endforeach
         </div>
+
+        <!-- All Plans Grid -->
+        @if(($plans ?? collect())->count() > 3)
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-8 text-center">More Packages</h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    @foreach(($plans ?? collect())->skip(3) as $plan)
+                        <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-600/50 transition-all duration-300">
+                            <div class="text-center mb-4">
+                                <h4 class="font-bold mb-2">{{ $plan->name }}</h4>
+                                <div class="text-4xl font-bold text-blue-500 mb-2">{{ $plan->formatted_amount }}</div>
+                                @if($plan->is_promo)
+                                    <span class="inline-block bg-red-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                                        PROMO +{{ $plan->extra_pct }}%
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="text-center mb-4">
+                                <span class="text-slate-300">{{ number_format($plan->dp_total) }} DP</span>
+                            </div>
+                            @auth
+                                <form method="POST" action="{{ route('donate.checkout') }}">
+                                    @csrf
+                                    <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                                    <input type="hidden" name="amount" value="{{ $plan->amount }}">
+                                    <input type="hidden" name="gateway" value="braintree">
+                                    <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-200">
+                                        Donate
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="block w-full py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-200 text-center">
+                                    Login
+                                </a>
+                            @endauth
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         <!-- Custom Amount Section -->
         <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-8 mb-16">
