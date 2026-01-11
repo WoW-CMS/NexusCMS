@@ -97,7 +97,9 @@
 
                 <div id="features" class="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50">
                     <div class="relative">
+                        @if(!empty($data['featuredNews']->image))
                         <img src="{{ asset('storage/images/' . $data['featuredNews']->image) }}" alt="{{ $data['featuredNews']->title }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                        @endif
                         <div class="absolute top-4 left-4">
                             <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
                         </div>
