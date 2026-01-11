@@ -120,7 +120,7 @@
                 @endif
 
                 <div class="grid md:grid-cols-2 gap-6">
-                    @foreach($data['news'] as $item)
+                    @forelse($data['news'] as $item)
                     <div class="bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
                         <div class="text-xs text-slate-400 mb-2">{{ $item->published_at->format('F d, Y') }}</div>
                         <h4 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">{{ $item->title }}</h4>
@@ -132,7 +132,11 @@
                             </svg>
                         </a>
                     </div>
-                    @endforeach
+                    @empty
+                    <div class="bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
+                        <p class="text-slate-400 text-sm">No news available.</p>
+                    </div>
+                    @endforelse
                 </div>
 
                 <div class="text-center pt-4">
