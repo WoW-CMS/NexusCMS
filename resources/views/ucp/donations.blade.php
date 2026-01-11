@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-
 <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 py-8 pt-24">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         @include('ucp.components.sidebar')
@@ -17,7 +16,7 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Donated</p>
-                    <p class="text-3xl font-bold text-white">{{ number_format($transactions->sum('amount'), 2) }}</p>
+                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0.00' : number_format($transactions->sum('amount'), 2) }}</p>
                 </div>
 
                 <!-- Total Coins -->
@@ -28,7 +27,7 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Coins Earned</p>
-                    <p class="text-3xl font-bold text-white">{{ number_format($transactions->sum('dp_awarded')) }}</p>
+                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0' : number_format($transactions->sum('dp_awarded')) }}</p>
                 </div>
 
                 <!-- Transactions -->
@@ -39,7 +38,7 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Transactions</p>
-                    <p class="text-3xl font-bold text-white">{{ number_format($transactions->count()) }}</p>
+                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0' : number_format($transactions->count()) }}</p>
                 </div>
             </div>
 
@@ -146,3 +145,4 @@
         </main>
     </div>
 </div>
+@endsection
