@@ -95,6 +95,7 @@
                     <p class="text-slate-400 text-lg">Stay up to date with the latest server news, events, and updates.</p>
                 </div>
 
+                @if(!empty($data['featuredNews']))
                 <div id="features" class="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50">
                     <div class="relative">
                         @if(!empty($data['featuredNews']->image))
@@ -116,6 +117,7 @@
                         </a>
                     </div>
                 </div>
+                @endif
 
                 <div class="grid md:grid-cols-2 gap-6">
                     @foreach($data['news'] as $item)
