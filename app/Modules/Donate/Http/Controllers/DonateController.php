@@ -25,10 +25,10 @@ class DonateController extends Controller
         
         if ($request->filled('plan_id')) {
             $plan = DonationPlan::findOrFail($request->input('plan_id'));
-            $amount = (int) ($plan->amount);
+            $amount = $plan->amount;
             $dpAmount = $plan->dp_total;
         } else {
-            $amount = (int) ($request->input('amount', 0));
+            $amount = $request->input('amount', 0);
             $rate = (int) config('donate.dp_rate', 100);
             $dpAmount = (int) (($request->input('amount', 0)) * $rate);
         }

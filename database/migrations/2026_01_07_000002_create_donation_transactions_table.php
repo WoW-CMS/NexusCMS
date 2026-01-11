@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('gateway', 64);
             $table->string('transaction_id', 128)->nullable();
-            $table->unsignedInteger('amount'); // in whole currency units (e.g., USD)
+            $table->decimal('amount', 10, 2);
             $table->string('currency', 8)->default('USD');
             $table->unsignedInteger('dp_awarded')->default(0);
             $table->string('status', 32)->default('pending');

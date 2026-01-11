@@ -31,11 +31,11 @@ class BraintreeGateway implements PaymentGatewayInterface
         return 'Braintree';
     }
 
-    public function createCheckout(int $amount, array $meta = []): array
+    public function createCheckout(float $amount, array $meta = []): array
     {
         if (isset($meta['nonce'])) {
             $result = $this->gateway->transaction()->sale([
-                'amount' => number_format($amount / 100, 2, '.', ''),
+                'amount' => $amount,
                 'paymentMethodNonce' => $meta['nonce'],
                 'options' => ['submitForSettlement' => true],
             ]);

@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('amount', 10, 2); // decimal for proper price handling
-            $table->integer('dp_base'); // base donation points
-            $table->integer('extra_pct')->default(0); // extra percentage
+            $table->decimal('amount', 10, 2);
+            $table->integer('dp_base');
+            $table->integer('extra_pct')->default(0);
             $table->boolean('is_promo')->default(false);
             $table->boolean('active')->default(true);
             $table->integer('sort_order')->default(0);

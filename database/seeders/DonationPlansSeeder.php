@@ -13,7 +13,7 @@ class DonationPlansSeeder extends Seeder
             [
                 'name' => 'Bronze',
                 'description' => 'Perfect starter package',
-                'amount' => 5.00,
+                'amount' => 4.50,
                 'dp_base' => 500,
                 'extra_pct' => 0,
                 'is_promo' => false,
@@ -33,7 +33,7 @@ class DonationPlansSeeder extends Seeder
             [
                 'name' => 'Gold',
                 'description' => 'Premium package with bonus',
-                'amount' => 25.00,
+                'amount' => 25.50,
                 'dp_base' => 3000,
                 'extra_pct' => 20,
                 'is_promo' => false,
@@ -53,7 +53,7 @@ class DonationPlansSeeder extends Seeder
             [
                 'name' => 'Diamond',
                 'description' => 'Exclusive package with VIP benefits',
-                'amount' => 100.00,
+                'amount' => 95.25,
                 'dp_base' => 15000,
                 'extra_pct' => 50,
                 'is_promo' => false,

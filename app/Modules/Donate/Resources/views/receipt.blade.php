@@ -30,7 +30,7 @@
             </div>
             <div>
                 <div class="text-sm text-slate-400">Amount</div>
-                <div class="font-semibold text-white">${{ number_format($tx->amount, 2) }} {{ $tx->currency }}</div>
+                <div class="font-semibold text-white">${{ $tx->amount }} {{ $tx->currency }}</div>
             </div>
             <div>
                 <div class="text-sm text-slate-400">DP Awarded</div>
