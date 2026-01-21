@@ -1,0 +1,8 @@
+{
+    "name": "Store",
+    "enabled": true,
+    "routes": true,
+    "migrations": true,
+    "views": true,
+    "namespace": "Modules\\Store"
+}
