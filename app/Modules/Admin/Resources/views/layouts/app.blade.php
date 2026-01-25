@@ -155,8 +155,8 @@
                         A
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="text-sm font-semibold truncate">Administrator</div>
-                        <div class="text-xs text-gray-400">Super Admin</div>
+                        <div class="text-sm font-semibold truncate">{{ Auth::user()->name }}</div>
+                        <div class="text-xs text-gray-400">{{ Auth::user()->roles->pluck('name')->join(', ') }}</div>
                     </div>
                     <a href="#" class="text-gray-400 hover:text-white">
                         <i class="fas fa-sign-out-alt"></i>

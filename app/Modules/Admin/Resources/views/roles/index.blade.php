@@ -43,7 +43,7 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('admin.roles.edit', $role) }}" class="px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-xs">Edit</a>
-                                <button class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs">Delete</button>
+                                <a href="{{ route('admin.roles.destroy', $role) }}" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs" onclick="return confirm('Are you sure you want to delete this role?')">Delete</a>
                             </div>
                         </div>
                     </div>

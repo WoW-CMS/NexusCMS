@@ -15,4 +15,5 @@ Route::middleware(['auth', 'role:Admin', 'web'])
         Route::post('/roles', [\Modules\Admin\Http\Controllers\RoleController::class, 'store'])->name('admin.roles.store');
         Route::get('/roles/{role}/edit', [\Modules\Admin\Http\Controllers\RoleController::class, 'edit'])->name('admin.roles.edit');
         Route::put('/roles/{role}', [\Modules\Admin\Http\Controllers\RoleController::class, 'update'])->name('admin.roles.update');
+        Route::delete('/roles/{role}', [\Modules\Admin\Http\Controllers\RoleController::class, 'destroy'])->name('admin.roles.destroy');
     });
