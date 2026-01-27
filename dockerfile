@@ -1,7 +1,5 @@
-# Imagen base con PHP 8.4 FPM
 FROM php:8.4-fpm
 
-# Instalar dependencias del sistema y extensiones necesarias para Laravel
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -10,23 +8,27 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
+    nginx \
+    openssl \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath sockets \
     && docker-php-ext-enable pdo_mysql mbstring zip exif pcntl bcmath sockets
 
-# Instalar Composer globalmente
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Crear directorio de la aplicación
 WORKDIR /app
 
-# Copiar archivos de Laravel
 COPY . .
 
-# Dar permisos de almacenamiento
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
-# Exponer puerto PHP-FPM
-EXPOSE 9000
+# Nginx config
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/default-ssl.conf /etc/nginx/conf.d/default-ssl.conf
 
-# Comando por defecto
-CMD ["php-fpm"]
+# Entrypoint para ejecutar php-fpm y nginx
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 80
+
+CMD ["/entrypoint.sh"]
