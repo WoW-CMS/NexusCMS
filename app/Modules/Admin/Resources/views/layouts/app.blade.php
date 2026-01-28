@@ -60,7 +60,7 @@
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Management</h3>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-users w-5"></i>
                         <span>Users</span>
                     </a>
