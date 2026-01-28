@@ -17,12 +17,6 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        dump($request->user()->cannot('access.admin.panel'));
-        die();
-        if (!$request->user()->cannot('access.admin.panel')) {
-            return abort(403);
-        }
-
         $latestRelease = $this->apiService->latestRelease();
         $checkVersion = $this->apiService->checkVersion('wow-cms', 'nexuscms', config('app.version'));
 
