@@ -257,9 +257,7 @@
                             <p class="text-base text-gray-800 font-semibold mb-1">NexusCMS v{{ $latestRelease['tag_name'] ?? 'N/A' }} is now available</p>
                             <p class="text-sm text-gray-600 mb-3">{{ $latestRelease['body'] ?? 'N/A' }}</p>
                             <div class="flex items-center gap-3">
-                                <a href="{{ $latestRelease['html_url'] ?? '#' }}" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
-                                <span class="text-gray-300">•</span>
-                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Update now</a>
+                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
                             </div>
                         </div>
                     </div>
