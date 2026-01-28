@@ -259,7 +259,7 @@
                             <div class="flex items-center gap-3">
                                 <a href="{{ $latestRelease['html_url'] ?? '#' }}" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
                                 <span class="text-gray-300">•</span>
-                                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Update now</a>
+                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Update now</a>
                             </div>
                         </div>
                     </div>
@@ -273,7 +273,7 @@
                             <p class="text-sm text-gray-600">Version {{ $latestRelease['tag_name'] ?? 'N/A' }}</p>
                             <p class="text-sm text-gray-600">Released on {{ $latestRelease['published_at'] ?? 'N/A' }}</p>
                             <div class="flex items-center gap-3">
-                                <a href="{{ $latestRelease['html_url'] ?? '#' }}" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
+                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
                                 <span class="text-gray-300">•</span>
                             </div>
                         </div>
