@@ -33,7 +33,7 @@
                 </a>
             </div>
 
-            @if($user->hasRole(['GameMaster', 'Admin']))
+            @can('access.gm.panel')
             <div class="mt-6 pt-6 border-t border-slate-700/50">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">GAMEMASTER</p>
                 <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-slate-700/50 hover:text-white transition-all duration-200">
@@ -41,9 +41,9 @@
                     <span class="font-medium">GM Panel</span>
                 </a>
             </div>
-            @endif
+            @endcan
 
-            @if($user->hasRole('Admin'))
+            @can('access.admin.panel')
             <div class="mt-6 pt-6 border-t border-slate-700/50">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">ADMIN</p>
                 <a href="{{ route('admin.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-slate-700/50 hover:text-white transition-all duration-200">
@@ -51,7 +51,7 @@
                     <span class="font-medium">Admin Panel</span>
                 </a>
             </div>
-            @endif
+            @endcan
         </nav>
     </div>
 </aside>

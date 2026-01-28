@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:Admin', 'web'])
     ->prefix(strtolower('acp'))
     ->group(function () {
-        Route::get('/', [\Modules\Admin\Http\Controllers\AdminController::class, 'index']);
+        Route::get('/', [\Modules\Admin\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
         Route::get('/permissions', [\Modules\Admin\Http\Controllers\PermissionController::class, 'index'])->name('admin.permissions');
         
         // Roles
