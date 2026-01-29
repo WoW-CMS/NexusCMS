@@ -39,12 +39,9 @@ class AdminUserController extends Controller
         $user->save();
 
         $roles = $validated['roles'] ?? [];
-        if (!in_array('Admin', $roles, true)) {
-            $roles[] = 'Admin';
-        }
         $user->syncRoles($roles);
 
-        return redirect()->route('admin.users.index')->with('success', 'Administrador creado');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
 
     public function edit(User $user)
@@ -72,21 +69,19 @@ class AdminUserController extends Controller
         $user->save();
 
         $roles = $validated['roles'] ?? [];
-        if (!in_array('Admin', $roles, true)) {
-            $roles[] = 'Admin';
-        }
+
         $user->syncRoles($roles);
 
-        return redirect()->route('admin.users.index')->with('success', 'Administrador actualizado');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
 
     public function destroy(User $user)
     {
         if ($user->hasRole('Admin')) {
             $user->delete();
-            return redirect()->route('admin.users.index')->with('success', 'Administrador eliminado');
+            return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
         }
-        return redirect()->route('admin.users.index')->with('error', 'El usuario no es administrador');
+        return redirect()->route('admin.users.index')->with('error', 'The user is not an administrator');
     }
 }
 
