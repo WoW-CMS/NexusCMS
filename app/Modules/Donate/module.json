@@ -1,0 +1,8 @@
+{
+    "name": "Donate",
+    "enabled": true,
+    "routes": true,
+    "migrations": true,
+    "views": true,
+    "namespace": "Modules\\Donate"
+}

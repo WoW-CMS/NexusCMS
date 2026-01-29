@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Helpers\RealmHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use App\Libraries\Redis\RedisLibrary;
 use App\Models\News;
 
 /**
@@ -48,17 +49,29 @@ class HomeController extends Controller
      * @param string|null $view
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(Request $request, ?string $view = null)
+    public function index(Request $request, \App\Libraries\Redis\RedisLibrary $redis, ?string $view = null)
     {
         $realms = RealmHelper::all();
         $perPage = $request->get('per_page', $this->perPage);
-    
-        $allNews = \App\Models\News::query()
+        $page = (int) ($request->get('page', 1));
+
+        $cacheKey = "news:list:perpage:{$perPage}:page:{$page}";
+        $featuredKey = 'home_featured';
+
+        $news = $redis->get($cacheKey);
+        $featuredNews = $redis->get($featuredKey);
+
+        if (!$news || !$featuredNews) {
+            $allNews = \App\Models\News::query()
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
 
-        $featuredNews = $allNews->shift();
-        $news = $allNews;
+            $featuredNews = $allNews->shift();
+            $news = $allNews;
+
+            $redis->set($cacheKey, $news, 60);
+            $redis->set($featuredKey, $featuredNews, 60);
+        }   
     
         $data = [
             'realms' => $realms,

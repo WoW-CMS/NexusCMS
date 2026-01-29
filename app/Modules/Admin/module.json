@@ -1,0 +1,8 @@
+{
+    "name": "Admin",
+    "enabled": true,
+    "routes": true,
+    "migrations": true,
+    "views": true,
+    "namespace": "Modules\\Admin"
+}

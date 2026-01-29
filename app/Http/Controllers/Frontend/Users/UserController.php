@@ -12,6 +12,7 @@ use App\Libraries\Auth\AccountLibrary;
 use App\Models\AccountLinked;
 use App\Models\Realm;
 use App\Traits\ConnectsToExternalDatabase;
+use Modules\Donate\Domain\Models\DonationTransaction;
 
 /**
  * User Controller for handling user-related actions in the frontend
@@ -30,6 +31,7 @@ class UserController extends Controller
         'create' => 'ucp.createAccount',
         'gameAccount' => 'ucp.gameAccount',
         'manage' => 'ucp.manageAccount',
+        'transaction' => 'ucp.donations',
     ];
 
     /**
@@ -68,11 +70,30 @@ class UserController extends Controller
             throw new UserNotFoundException('User not found', 404);
         }
 
-        // TODO: Remove this line when you have a real implementation
-        // at the moment we are just returning a dummy user
-        $user->coins = 0;
-
         return view($this->views['index'], compact('user'));
+    }
+
+    /**
+     * Show transaction page
+     *
+     * @throws UserNotFoundException
+     * @return \Illuminate\View\View
+     */
+    public function transaction()
+    {
+        $user = $this->auth->guard()->user();
+
+        $transactions = DonationTransaction::where('user_id', $user->id)->get();
+
+        if ($transactions->isEmpty()) {
+            $transactions = [];
+        }
+
+        if (!$user) {
+            throw new UserNotFoundException('User not found', 404);
+        }
+
+        return view($this->views['transaction'], compact('user', 'transactions'));
     }
 
     /**

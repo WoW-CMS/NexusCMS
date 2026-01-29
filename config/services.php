@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'nexus_api' => [
+        'key' => env('NEXUS_API_KEY'),
+        'header' => env('NEXUS_API_KEY_HEADER', 'X-API-Key'),
+    ],
 ];

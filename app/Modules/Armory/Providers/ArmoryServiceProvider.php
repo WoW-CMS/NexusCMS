@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Providers;
+namespace Modules\Armory\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Repositories\Armory\TrinityCoreArmoryRepository;
-use App\Interfaces\ArmoryRepositoryInterface;
+use App\Providers\BaseModuleServiceProvider;
+use Modules\Armory\Infrastructure\Repositories\TrinityCoreArmoryRepository;
+use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 use App\Models\Realm;
 use App\Enums\Emulator;
 
-class ArmoryServiceProvider extends ServiceProvider
+class ArmoryServiceProvider extends BaseModuleServiceProvider
 {
-    /**
-     * Register services.
-     */
+    protected string $moduleName = 'Armory';
+
+
     public function register(): void
     {
         $this->app->bind(ArmoryRepositoryInterface::class, function ($app) {
@@ -20,6 +20,7 @@ class ArmoryServiceProvider extends ServiceProvider
             $realmId = $request->get('realm', 1);
 
             $realm = Realm::find($realmId);
+
             if (!$realm) {
                 throw new \Exception("Realm $realmId not found.");
             }
@@ -32,20 +33,12 @@ class ArmoryServiceProvider extends ServiceProvider
                 'world_database' => json_decode($realm->world_database, true),
             ];
 
-            $emulatorEnum = Emulator::from($realm->emulator); // lanza excepción si no existe
+            $emulatorEnum = Emulator::from($realm->emulator);
 
             return match ($emulatorEnum) {
-                Emulator::TRINITYCORE => new TrinityCoreArmoryRepository($realmConfig),    
+                Emulator::TRINITYCORE => new TrinityCoreArmoryRepository($realmConfig),
                 default => throw new \Exception("Unsupported emulator: $emulator")
             };
         });
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
-    }
+    } 
 }

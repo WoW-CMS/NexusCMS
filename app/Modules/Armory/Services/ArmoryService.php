@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace Modules\Armory\Services;
 
-use App\Interfaces\ArmoryRepositoryInterface;
+use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 use App\Helpers\RealmHelper;
 use App\Services\Parser\WowheadParserService;
 use Illuminate\Support\Collection;
@@ -20,9 +20,6 @@ class ArmoryService
         $this->wowheadParser = $wowheadParser;
     }
 
-    /**
-     * Get complete character profile data
-     */
     public function getCharacterProfile(int $guid): array
     {
         $character = $this->armoryRepo->getCharacter($guid);
@@ -51,9 +48,6 @@ class ArmoryService
         ];
     }
 
-    /**
-     * Get character items enriched with Wowhead data
-     */
     public function getEnrichedCharacterItems(int $guid): Collection
     {
         $items = $this->armoryRepo->getCharacterItems($guid);
@@ -64,9 +58,6 @@ class ArmoryService
         });
     }
 
-    /**
-     * Calculate average item level from enriched items
-     */
     public function calculateAverageItemLevel(Collection $items): int
     {
         $itemLevels = $items->pluck('wowhead.level')
@@ -76,9 +67,6 @@ class ArmoryService
         return (int) RealmHelper::calculateItemLevelPromed($itemLevels);
     }
 
-    /**
-     * Search characters with filters
-     */
     public function searchCharacters(
         string $q = '',
         ?string $faction = null,

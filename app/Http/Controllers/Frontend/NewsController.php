@@ -7,6 +7,8 @@ use App\Models\News;
 use App\Helpers\GeneralHelper;
 use App\Models\NewsCategory;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+
 /**
  * Frontend Home Controller for handling main website pages
  */
@@ -28,20 +30,28 @@ class NewsController extends Controller
 
     /**
      * Per page
+     *
+     * @var int
      */
     protected $perPage = 5;
 
     /**
      * Default view for the controller
      *
-     * @var string
+     * @var array<string,string>
      */
     protected $views = [
         'index' => 'news.index',
         'show' => 'news.show',
     ];
 
-    public function index(Request $request)
+    /**
+     * Display a listing of published news articles with optional category filtering.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View
     {
         $category = $request->get('category', 'all');
         $query = News::where('is_published', true)->orderBy('created_at', 'desc');
@@ -59,7 +69,14 @@ class NewsController extends Controller
         return view($this->views['index'], ['data' => $items, 'recentNews' => $recentNews, 'category' => $category]);
     }
 
-    public function show(string $slug, ?string $view = null)
+    /**
+     * Display a single news article by slug.
+     *
+     * @param string $slug
+     * @param string|null $view
+     * @return View
+     */
+    public function show(string $slug, ?string $view = null): View
     {
         $item = (new News)->getCachedByField('slug', $slug);
         if (!$item) abort(404);
