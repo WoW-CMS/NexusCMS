@@ -16,51 +16,51 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Crear permisos
         // Permisos para administración general
-        Permission::create(['name' => 'access.admin.panel']);
-        Permission::create(['name' => 'manage.users']);
-        Permission::create(['name' => 'manage.news']);
-        Permission::create(['name' => 'manage.settings']);
-        Permission::create(['name' => 'manage.admin.users']);
-        Permission::create(['name' => 'manage.roles']);
-        Permission::create(['name' => 'manage.permissions']);
-        Permission::create(['name' => 'manage.pages']);
-        Permission::create(['name' => 'manage.announcements']);
-        Permission::create(['name' => 'view.logs']);
-        Permission::create(['name' => 'manage.backups']);
-        Permission::create(['name' => 'manage.realms']);
-        Permission::create(['name' => 'manage.bans']);
-        Permission::create(['name' => 'manage.reports']);
-        Permission::create(['name' => 'manage.store.products']);
-        Permission::create(['name' => 'manage.store.categories']);
-        Permission::create(['name' => 'view.store.transactions']);
+        Permission::firstOrCreate(['name' => 'access.admin.panel']);
+        Permission::firstOrCreate(['name' => 'manage.users']);
+        Permission::firstOrCreate(['name' => 'manage.news']);
+        Permission::firstOrCreate(['name' => 'manage.settings']);
+        Permission::firstOrCreate(['name' => 'manage.admin.users']);
+        Permission::firstOrCreate(['name' => 'manage.roles']);
+        Permission::firstOrCreate(['name' => 'manage.permissions']);
+        Permission::firstOrCreate(['name' => 'manage.pages']);
+        Permission::firstOrCreate(['name' => 'manage.announcements']);
+        Permission::firstOrCreate(['name' => 'view.logs']);
+        Permission::firstOrCreate(['name' => 'manage.backups']);
+        Permission::firstOrCreate(['name' => 'manage.realms']);
+        Permission::firstOrCreate(['name' => 'manage.bans']);
+        Permission::firstOrCreate(['name' => 'manage.reports']);
+        Permission::firstOrCreate(['name' => 'manage.store.products']);
+        Permission::firstOrCreate(['name' => 'manage.store.categories']);
+        Permission::firstOrCreate(['name' => 'view.store.transactions']);
         
         // Permisos para GameMasters
-        Permission::create(['name' => 'access.gm.panel']);
-        Permission::create(['name' => 'manage.characters']);
-        Permission::create(['name' => 'manage.items']);
-        Permission::create(['name' => 'moderate.chat']);
+        Permission::firstOrCreate(['name' => 'access.gm.panel']);
+        Permission::firstOrCreate(['name' => 'manage.characters']);
+        Permission::firstOrCreate(['name' => 'manage.items']);
+        Permission::firstOrCreate(['name' => 'moderate.chat']);
         
         // Permisos para usuarios normales
-        Permission::create(['name' => 'access.ucp']);
-        Permission::create(['name' => 'manage.own.account']);
-        Permission::create(['name' => 'view.characters']);
-        Permission::create(['name' => 'view.news']);
-        Permission::create(['name' => 'comment.news']);
-        Permission::create(['name' => 'forums.create.thread']);
-        Permission::create(['name' => 'forums.reply.post']);
-        Permission::create(['name' => 'forums.edit.own.post']);
-        Permission::create(['name' => 'forums.delete.own.post']);
-        Permission::create(['name' => 'store.browse']);
-        Permission::create(['name' => 'store.purchase']);
-        Permission::create(['name' => 'donate.browse']);
-        Permission::create(['name' => 'donate.purchase']);
+        Permission::firstOrCreate(['name' => 'access.ucp']);
+        Permission::firstOrCreate(['name' => 'manage.own.account']);
+        Permission::firstOrCreate(['name' => 'view.characters']);
+        Permission::firstOrCreate(['name' => 'view.news']);
+        Permission::firstOrCreate(['name' => 'comment.news']);
+        Permission::firstOrCreate(['name' => 'forums.create.thread']);
+        Permission::firstOrCreate(['name' => 'forums.reply.post']);
+        Permission::firstOrCreate(['name' => 'forums.edit.own.post']);
+        Permission::firstOrCreate(['name' => 'forums.delete.own.post']);
+        Permission::firstOrCreate(['name' => 'store.browse']);
+        Permission::firstOrCreate(['name' => 'store.purchase']);
+        Permission::firstOrCreate(['name' => 'donate.browse']);
+        Permission::firstOrCreate(['name' => 'donate.purchase']);
 
         // Crear roles y asignar permisos
-        $adminRole = Role::create(['name' => 'Admin']);
-        $adminRole->givePermissionTo(Permission::all());
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $adminRole->syncPermissions(Permission::all());
 
-        $gmRole = Role::create(['name' => 'GameMaster']);
-        $gmRole->givePermissionTo([
+        $gmRole = Role::firstOrCreate(['name' => 'GameMaster']);
+        $gmRole->syncPermissions([
             'access.gm.panel',
             'manage.characters',
             'manage.items',
@@ -70,8 +70,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'view.characters'
         ]);
 
-        $userRole = Role::create(['name' => 'User']);
-        $userRole->givePermissionTo([
+        $userRole = Role::firstOrCreate(['name' => 'User']);
+        $userRole->syncPermissions([
             'access.ucp',
             'manage.own.account',
             'view.characters',
