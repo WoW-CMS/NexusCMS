@@ -1,9 +1,9 @@
 # NexusCMS
 
 <p align="center">
-<a href="https://github.com/yourusername/NexusCMS/actions"><img src="https://github.com/yourusername/NexusCMS/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/wow-cms/nexuscms"><img src="https://img.shields.io/packagist/v/wow-cms/nexuscms" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/wow-cms/nexuscms"><img src="https://img.shields.io/packagist/l/wow-cms/nexuscms" alt="License"></a>
+![Downloads](https://img.shields.io/github/downloads/wow-cms/nexuscms/total)
+![License](https://img.shields.io/github/license/wow-cms/nexuscms)
+![Release](https://img.shields.io/github/v/release/wow-cms/nexuscms)
 </p>
 
 ## About NexusCMS
