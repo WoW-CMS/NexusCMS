@@ -1,10 +1,5 @@
 # NexusCMS
 
-<p align="center">
-![Downloads](https://img.shields.io/github/downloads/wow-cms/nexuscms/total)
-![License](https://img.shields.io/github/license/wow-cms/nexuscms)
-![Release](https://img.shields.io/github/v/release/wow-cms/nexuscms)
-</p>
 
 ## About NexusCMS
 
@@ -26,7 +21,15 @@ With a strong focus on community-driven development, we continue to refine and e
 
 NexusCMS is currently in **public alpha** and is **not recommended for production use**. While core functionality is stable and has been tested in several mid-scale environments, the software is still under active development. We are expanding modules, refining documentation, and welcoming community contributions.
 
-## Quick Start
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+![GitHub repo size](https://img.shields.io/github/repo-size/WOW-CMS/NexusCMS)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/WOW-CMS/NexusCMS/latest/feat/0.1.6)
+![Release](https://img.shields.io/github/v/release/WOW-CMS/NexusCMS)
+
+
+
+## Installation
 
 1. Clone the repository:
    ```bash
@@ -58,4 +61,7 @@ NexusCMS is currently in **public alpha** and is **not recommended for productio
 
 Visit [http://localhost:8000](http://localhost:8000) and log in with the default admin credentials provided in the `.env` file.
 
-For detailed setup instructions, Docker deployment, and advanced configuration, see the [full documentation]().
+## Documentation
+
+[Documentation]()
+
