@@ -8,7 +8,13 @@
 
 ## About NexusCMS
 
-Born from our earlier BlizzCMS, a PHP/CodeIgniter 3 project, NexusCMS is a Laravel-based platform engineered for teams that demand reliability, flexibility, and developer-friendly architecture. We have distilled years of client feedback, security audits, and performance tuning into a single codebase that grows with your business, not against it.
+Born from our earlier BlizzCMS, a PHP/CodeIgniter 3 project, NexusCMS is a Laravel-based platform designed for teams seeking reliability, flexibility, and a developer-friendly workflow. Over time, we’ve gathered years of community feedback, feature requests, and performance improvements, shaping a single, cohesive codebase that grows with your project, rather than getting in the way.
+
+Our focus has always been on making development easier and more approachable. While we are a team with technical training and experience, we are not “gurus”—we build tools that make sense for real people working on real projects. This philosophy has guided every decision in NexusCMS, from its architecture to its user interface.
+
+In addition to supporting modern features, we’ve ensured compatibility with all World of Warcraft expansions, including Classic, Retail, and Wrath of the Lich King, as well as the legacy versions of the game. Whether you’re managing a private server, building a community project, or experimenting with new ideas, NexusCMS provides a flexible, stable foundation to help you succeed.
+
+With a strong focus on community-driven development, we continue to refine and expand NexusCMS based on the feedback and needs of the people who use it, making it not just a tool, but a platform built with the community, for the community.
 
 ## Key Highlights
 
