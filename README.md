@@ -1,5 +1,11 @@
 # NexusCMS
 
+<p align="center">
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+![GitHub repo size](https://img.shields.io/github/repo-size/WOW-CMS/NexusCMS)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/WOW-CMS/NexusCMS/latest/feat/0.1.6)
+![Release](https://img.shields.io/github/v/release/WOW-CMS/NexusCMS)
+</p>
 
 ## About NexusCMS
 
@@ -20,13 +26,6 @@ With a strong focus on community-driven development, we continue to refine and e
 ## Project Maturity
 
 NexusCMS is currently in **public alpha** and is **not recommended for production use**. While core functionality is stable and has been tested in several mid-scale environments, the software is still under active development. We are expanding modules, refining documentation, and welcoming community contributions.
-
-
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-![GitHub repo size](https://img.shields.io/github/repo-size/WOW-CMS/NexusCMS)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/WOW-CMS/NexusCMS/latest/feat/0.1.6)
-![Release](https://img.shields.io/github/v/release/WOW-CMS/NexusCMS)
-
 
 
 ## Installation
