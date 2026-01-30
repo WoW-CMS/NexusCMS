@@ -1,11 +1,9 @@
 # NexusCMS
 
-<p align="center">
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 ![GitHub repo size](https://img.shields.io/github/repo-size/WOW-CMS/NexusCMS)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/WOW-CMS/NexusCMS/latest/feat/0.1.6)
 ![Release](https://img.shields.io/github/v/release/WOW-CMS/NexusCMS)
-</p>
 
 ## About NexusCMS
 
