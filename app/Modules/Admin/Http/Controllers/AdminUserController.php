@@ -131,11 +131,12 @@ class AdminUserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->hasRole('Admin')) {
+        if (!$user->hasRole('Admin')) {
             $user->delete();
             return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
         }
-        return redirect()->route('admin.users.index')->with('error', 'The user is not an administrator');
+
+        return redirect()->route('admin.users.index')->with('error', 'The user is an administrator and cannot be deleted');
     }
 }
 
