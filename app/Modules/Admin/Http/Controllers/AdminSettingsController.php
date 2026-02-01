@@ -13,7 +13,6 @@ class AdminSettingsController extends Controller
     protected $view = [
         'general' => 'admin::settings.general',
         'email' => 'admin::settings.email',
-        'database' => 'admin::settings.database',
         'realms' => 'admin::settings.realms',
         'payment' => 'admin::settings.payment',
         'security' => 'admin::settings.security',
@@ -36,7 +35,7 @@ class AdminSettingsController extends Controller
             abort(404);
         }
 
-        $settings = Setting::all();
+        $settings = Setting::all()->pluck('value', 'key');
         return view($this->view[$view], compact('settings', 'view'));
     }
 
@@ -45,7 +44,25 @@ class AdminSettingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $view = $request->get('view');
+
+        // Prevent storage for specific views that handle their own data or are read-only here
+        if (in_array($view, ['realms'])) {
+            return redirect()->route('admin.settings.index', ['view' => $view])
+                ->with('warning', 'Settings for this section cannot be saved via this form.');
+        }
+
+        $data = $request->except(['_token', 'view']);
+
+        foreach ($data as $key => $value) {
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+
+        return redirect()->route('admin.settings.index', ['view' => $view])
+            ->with('success', 'Settings updated successfully.');
     }
 
     /**

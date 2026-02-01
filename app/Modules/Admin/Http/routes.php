@@ -27,4 +27,5 @@ Route::middleware(['auth', 'role:Admin', 'web'])
     
         // Settings
         Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->name('admin.settings.index');
+        Route::post('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'store'])->name('admin.settings.store');
     });
