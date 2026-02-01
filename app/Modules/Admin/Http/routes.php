@@ -24,4 +24,7 @@ Route::middleware(['auth', 'role:Admin', 'web'])
         Route::get('/users/{user}/edit', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'edit'])->name('admin.users.edit');
         Route::put('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'update'])->name('admin.users.update');
         Route::delete('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    
+        // Settings
+        Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->name('admin.settings.index');
     });
