@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/ckeditor.css',
                 'resources/css/main.css',
-                'resources/js/editor/ckeditor.js'
+                'resources/js/editor/ckeditor.js',
+                'resources/js/scripts/listColumns.js'
             ],
             refresh: true,
         }),

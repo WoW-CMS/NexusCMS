@@ -5,7 +5,8 @@ namespace Modules\Admin\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Admin\Domain\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+
+use Illuminate\Support\Facades\Cache;
 
 class AdminSettingsController extends Controller
 {
@@ -60,6 +61,9 @@ class AdminSettingsController extends Controller
                 ['value' => $value]
             );
         }
+
+        // Clear settings cache
+        Cache::forget('site_settings');
 
         return redirect()->route('admin.settings.index', ['view' => $view])
             ->with('success', 'Settings updated successfully.');

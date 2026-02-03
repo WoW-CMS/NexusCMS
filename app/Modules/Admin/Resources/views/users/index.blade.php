@@ -105,7 +105,7 @@
                     </span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="toggleColumnsModal()" class="inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100">
+                    <button class="toggle-columns-modal inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
                         </svg>
@@ -246,7 +246,7 @@
     <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
         <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-900">Customize Columns</h3>
-            <button onclick="toggleColumnsModal()" class="text-gray-400 hover:text-gray-600">
+            <button class="toggle-columns-modal text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -254,65 +254,36 @@
         </div>
         <div class="p-6 space-y-3">
             <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
-                <input type="checkbox" checked onchange="toggleColumn('email')" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                <input type="checkbox" checked data-column="email" class="column-toggle w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
                 <span class="text-sm font-medium text-gray-900">Email</span>
             </label>
             <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
-                <input type="checkbox" checked onchange="toggleColumn('status')" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                <input type="checkbox" checked data-column="status" class="column-toggle w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
                 <span class="text-sm font-medium text-gray-900">Status</span>
             </label>
             <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
-                <input type="checkbox" checked onchange="toggleColumn('role')" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                <input type="checkbox" checked data-column="role" class="column-toggle w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
                 <span class="text-sm font-medium text-gray-900">Role</span>
             </label>
             <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
-                <input type="checkbox" checked onchange="toggleColumn('points')" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                <input type="checkbox" checked data-column="points" class="column-toggle w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
                 <span class="text-sm font-medium text-gray-900">Points (DP/VP)</span>
             </label>
             <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
-                <input type="checkbox" checked onchange="toggleColumn('registered')" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                <input type="checkbox" checked data-column="registered" class="column-toggle w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
                 <span class="text-sm font-medium text-gray-900">Registered Date</span>
             </label>
         </div>
         <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
-            <button onclick="resetColumns()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
+            <button class="reset-columns px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
                 Reset
             </button>
-            <button onclick="toggleColumnsModal()" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+            <button class="toggle-columns-modal px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                 Apply
             </button>
         </div>
     </div>
 </div>
 
-<script>
-function toggleColumnsModal() {
-    const modal = document.getElementById('columnsModal');
-    modal.classList.toggle('hidden');
-}
-
-function toggleColumn(columnName) {
-    const columns = document.querySelectorAll('.column-' + columnName);
-    columns.forEach(col => {
-        col.classList.toggle('hidden');
-    });
-}
-
-function resetColumns() {
-    const checkboxes = document.querySelectorAll('#columnsModal input[type="checkbox"]');
-    checkboxes.forEach(cb => {
-        cb.checked = true;
-    });
-    const allColumns = document.querySelectorAll('[class*="column-"]');
-    allColumns.forEach(col => {
-        col.classList.remove('hidden');
-    });
-}
-
-function confirmDelete(userId) {
-    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-        window.location.href = '{{ route("admin.users.destroy", ":id") }}'.replace(':id', userId);
-    }
-}
-</script>
+@vite('resources/js/scripts/listColumns.js')
 @endsection

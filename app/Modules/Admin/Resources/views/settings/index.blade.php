@@ -10,11 +10,9 @@
             <h1 class="text-2xl font-bold text-gray-800">System Settings</h1>
         </div>
         <div class="flex items-center gap-3">
-            @if(!in_array(request('view', 'general'), ['realms']))
-                <button id="save-settings-btn" form="settings-form" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-save"></i> Save All Changes
-                </button>
-            @endif
+            <button id="save-settings-btn" form="settings-form" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fas fa-save"></i> Save All Changes
+            </button>
         </div>
     </header>
     <main class="flex-1 flex overflow-hidden bg-gray-50">

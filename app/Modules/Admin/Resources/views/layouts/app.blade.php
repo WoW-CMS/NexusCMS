@@ -158,9 +158,15 @@
                         <div class="text-sm font-semibold truncate">{{ Auth::user()->name }}</div>
                         <div class="text-xs text-gray-400">{{ Auth::user()->roles->pluck('name')->join(', ') }}</div>
                     </div>
-                    <a href="#" class="text-gray-400 hover:text-white">
-                        <i class="fas fa-sign-out-alt"></i>
+                    <a href="" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-cog"></i>
                     </a>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>

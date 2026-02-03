@@ -7,7 +7,6 @@
                 $menuItems = [
                     'general' => ['icon' => 'globe', 'label' => 'General'],
                     'email' => ['icon' => 'envelope', 'label' => 'Email'],
-                    'realms' => ['icon' => 'server', 'label' => 'Realms'],
                     'payment' => ['icon' => 'credit-card', 'label' => 'Payment'],
                     'security' => ['icon' => 'shield-alt', 'label' => 'Security'],
                     'appearance' => ['icon' => 'palette', 'label' => 'Appearance'],
