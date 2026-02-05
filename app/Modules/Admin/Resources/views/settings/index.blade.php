@@ -19,12 +19,19 @@
         @include('admin::settings.extends.menu')
 
         <div class="flex-1 p-6 space-y-6 overflow-y-auto">
+            @if(session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p class="font-bold">Success!</p>
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
             <form id="settings-form" action="{{ route('admin.settings.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="view" value="{{ request('view', 'general') }}">
                 @yield('settings_content')
             </form>
         </div>
+
     </main>
 </div>
 
