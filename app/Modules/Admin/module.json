@@ -4,5 +4,6 @@
     "routes": true,
     "migrations": true,
     "views": true,
+    "translations": true,
     "namespace": "Modules\\Admin"
 }

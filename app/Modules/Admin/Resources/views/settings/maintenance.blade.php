@@ -3,19 +3,19 @@
 @section('settings_content')
 <div class="bg-white rounded-lg shadow">
     <div class="p-6 border-b border-gray-200">
-        <h2 class="text-xl font-bold text-gray-800">Maintenance Settings</h2>
-        <p class="text-sm text-gray-600 mt-1">Configure maintenance mode and access settings</p>
+        <h2 class="text-xl font-bold text-gray-800">{{ __('Maintenance Settings') }}</h2>
+        <p class="text-sm text-gray-600 mt-1">{{ __('Configure maintenance mode and access settings') }}</p>
     </div>
     <div class="p-6 space-y-6">
         <div class="flex items-center gap-2">
             <input type="hidden" name="maintenance_mode" value="0">
             <input type="checkbox" name="maintenance_mode" value="1" id="maintenance_mode" {{ ($settings['maintenance_mode'] ?? '0') == '1' ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-            <label for="maintenance_mode" class="text-sm font-medium text-gray-700">Enable Maintenance Mode</label>
+            <label for="maintenance_mode" class="text-sm font-medium text-gray-700">{{ __('Enable Maintenance Mode') }}</label>
         </div>
         <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Maintenance Message</label>
-            <textarea name="maintenance_message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ $settings['maintenance_message'] ?? 'We are currently performing scheduled maintenance. We will be back shortly.' }}</textarea>
-            <p class="text-xs text-gray-500 mt-1">This message will be displayed to users when maintenance mode is active.</p>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ __('Maintenance Message') }}</label>
+            <textarea name="maintenance_message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">{{ $settings['maintenance_message'] ?? __('We are currently performing scheduled maintenance. We will be back shortly.') }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">{{ __('This message will be displayed to users when maintenance mode is active.') }}</p>
         </div>
     </div>
 </div>

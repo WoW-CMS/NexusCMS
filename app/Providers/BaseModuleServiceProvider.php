@@ -36,6 +36,10 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         if ($this->config['views'] ?? false) {
             $this->loadViews();
         }
+
+        if ($this->config['translations'] ?? false) {
+            $this->loadTranslations();
+        }
     }
 
     private function loadModuleConfig(): void
@@ -69,6 +73,14 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         $path = $this->modulePath . '/Resources/views';
         if (is_dir($path)) {
             $this->loadViewsFrom($path, strtolower($this->moduleName));
+        }
+    }
+
+    private function loadTranslations(): void
+    {
+        $path = $this->modulePath . '/Resources/lang';
+        if (is_dir($path)) {
+            $this->loadJsonTranslationsFrom($path, strtolower($this->moduleName));
         }
     }
 }
