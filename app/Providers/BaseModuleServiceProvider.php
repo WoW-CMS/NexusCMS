@@ -79,8 +79,12 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
     private function loadTranslations(): void
     {
         $path = $this->modulePath . '/Resources/lang';
+
         if (is_dir($path)) {
-            $this->loadJsonTranslationsFrom($path, strtolower($this->moduleName));
+            $this->loadTranslationsFrom(
+                $path,
+                strtolower($this->moduleName)
+            );
         }
     }
 }
