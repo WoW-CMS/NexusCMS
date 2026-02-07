@@ -21,27 +21,48 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         $this->modulePath = base_path("app/Modules/{$this->moduleName}");
         $this->loadModuleConfig();
 
+        /**
+         * Check if the module is enabled.
+         * If not, skip loading any resources.
+         */
         if (!($this->config['enabled'] ?? true)) {
             return;
         }
 
+        /**
+         * Load module routes if enabled.
+         */
         if ($this->config['routes'] ?? false) {
             $this->loadRoutes();
         }
 
+        /**
+         * Load module migrations if enabled.
+         */
         if ($this->config['migrations'] ?? false) {
             $this->loadMigrations();
         }
 
+        /**
+         * Load module views if enabled.
+         */
         if ($this->config['views'] ?? false) {
             $this->loadViews();
         }
 
+        /**
+         * Load module translations if enabled.
+         */
         if ($this->config['translations'] ?? false) {
             $this->loadTranslations();
         }
     }
 
+    /**
+     * Load module configuration from the module.json file.
+     * 
+     * @return void
+     */
     private function loadModuleConfig(): void
     {
         $configFile = $this->modulePath . '/module.json';
@@ -50,6 +71,11 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Load routes from the module's Http/routes.php file.
+     * 
+     * @return void
+     */
     private function loadRoutes(): void
     {
         $routesPath = $this->modulePath . '/Http/routes.php';
@@ -60,6 +86,11 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Load migrations from the module's Infrastructure/Database/migrations directory.
+     * 
+     * @return void
+     */
     private function loadMigrations(): void
     {
         $path = $this->modulePath . '/Infrastructure/Database/migrations';
@@ -68,6 +99,11 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Load views from the module's resources/views directory.
+     * 
+     * @return void
+     */
     private function loadViews(): void
     {
         $path = $this->modulePath . '/Resources/views';
@@ -76,6 +112,11 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Load translations from the module's lang directory.
+     * 
+     * @return void
+     */
     private function loadTranslations(): void
     {
         $path = $this->modulePath . '/Resources/lang';

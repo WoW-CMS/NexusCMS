@@ -5,16 +5,17 @@
             @php
                 $currentView = request('view', 'general');
                 $menuItems = [
-                    'general' => ['icon' => 'globe', 'label' => 'General'],
-                    'email' => ['icon' => 'envelope', 'label' => 'Email'],
-                    'payment' => ['icon' => 'credit-card', 'label' => 'Payment'],
-                    'security' => ['icon' => 'shield-alt', 'label' => 'Security'],
-                    'appearance' => ['icon' => 'palette', 'label' => 'Appearance'],
-                    'seo' => ['icon' => 'search', 'label' => 'SEO'],
-                    'api' => ['icon' => 'code', 'label' => 'API'],
-                    'maintenance' => ['icon' => 'tools', 'label' => 'Maintenance'],
-                    'localization' => ['icon' => 'language', 'label' => 'Localization'],
-                    'advanced' => ['icon' => 'cogs', 'label' => 'Advanced'],
+                    'general' => ['icon' => 'globe', 'label' => __('admin::settings.menu.general')],
+                    'email' => ['icon' => 'envelope', 'label' => __('admin::settings.menu.email')],
+                    'payment' => ['icon' => 'credit-card', 'label' => __('admin::settings.menu.payment')],
+                    'security' => ['icon' => 'shield-alt', 'label' => __('admin::settings.menu.security')],  
+                    'appearance' => ['icon' => 'palette', 'label' => __('admin::settings.menu.appearance')],
+                    'seo' => ['icon' => 'search', 'label' => __('admin::settings.menu.seo')],  
+                    'api' => ['icon' => 'code', 'label' => __('admin::settings.menu.api')],
+                    'maintenance' => ['icon' => 'tools', 'label' => __('admin::settings.menu.maintenance')],        
+                    'maintenance' => ['icon' => 'tools', 'label' => __('admin::settings.menu.maintenance')],        
+                    'localization' => ['icon' => 'language', 'label' => __('admin::settings.menu.localization')],
+                    'advanced' => ['icon' => 'cogs', 'label' => __('admin::settings.menu.advanced')],
                 ];
             @endphp
 

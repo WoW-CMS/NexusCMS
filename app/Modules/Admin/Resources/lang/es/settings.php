@@ -1,6 +1,19 @@
 <?php
 
 return [
+    'menu' => [
+        'general' => 'General',
+        'email' => 'Email',
+        'payment' => 'Pago',
+        'security' => 'Seguridad',
+        'appearance' => 'Apariencia',
+        'seo' => 'SEO',
+        'api' => 'API',
+        'maintenance' => 'Mantenimiento',
+        'localization' => 'Localización',
+        'advanced' => 'Avanzado',
+    ],
+
     'localization' => [
         'title' => 'Configuración de localización',
         'description' => 'Configura las preferencias de idioma, hora y moneda',
