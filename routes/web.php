@@ -40,7 +40,7 @@ Route::middleware([])->group(function () {
     }
 });
 
-Route::prefix('news')->group(function () {
+Route::prefix('news')->middleware(['auth', 'permission:view.news'])->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
@@ -58,23 +58,11 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
+Route::prefix('ucp')->middleware(['auth', 'permission:access.ucp'])->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/donations', [UserController::class, 'transaction'])->name('ucp.transaction');
     Route::get('/gameaccount/create', [UserController::class, 'createAction'])->name('ucp.gameaccount.create');
     Route::post('/gameaccount/create', [UserController::class, 'createGameAccount'])->name('ucp.gameaccount.store');
-    Route::get('/manage', [UserController::class, 'manage'])->name('ucp.manageAccount');
-});
-
-Route::prefix('forums')->group(function () {
-    Route::get('/', [ForumsController::class, 'index'])->name('forums');
-    Route::prefix('ucp')->middleware(['auth', 'role:User,GameMaster,Admin'])->group(function () {
-        Route::get('/{slug}/create', [ForumsController::class, 'createThread'])->name('forums.create_thread');
-        Route::post('/{slug}/create', [ForumsController::class, 'storeThread'])->name('forums.store_thread');
-        Route::post('/{forumSlug}/{threadSlug}/reply', [ForumsController::class, 'storePost'])->name('forums.store_post');
-    });
-    
-    Route::get('/{forumSlug}/{threadSlug}', [ForumsController::class, 'showThread'])->name('forums.thread');
-    Route::get('/{slug}', [ForumsController::class, 'showForum'])->name('forums.show');
+    Route::get('/manage', [UserController::class, 'manage'])->middleware('permission:manage.own.account')->name('ucp.manageAccount');
 });

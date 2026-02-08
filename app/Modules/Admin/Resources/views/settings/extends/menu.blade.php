@@ -1,6 +1,7 @@
 <div class="flex">
     <!-- Settings Sidebar -->
     <div class="w-64 bg-white border-r border-gray-200 p-4">
+        @can('manage.settings')
         <nav class="space-y-1">
             @php
                 $currentView = request('view', 'general');
@@ -26,5 +27,6 @@
                 </a>
             @endforeach
         </nav>
+        @endcan
     </div>
 </div>

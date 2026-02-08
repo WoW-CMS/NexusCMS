@@ -48,103 +48,141 @@
             <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Main</h3>
+                    @can('access.admin.panel')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 bg-blue-600 rounded-lg mb-1">
                         <i class="fas fa-home w-5"></i>
                         <span>Dashboard</span>
                     </a>
+                    @endcan
+                    @can('access.admin.panel')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-chart-line w-5"></i>
                         <span>Analytics</span>
                     </a>
+                    @endcan
                 </div>
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Management</h3>
+                    @can('manage.admin.users')
                     <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-users w-5"></i>
                         <span>Users</span>
                     </a>
+                    @endcan
+                    @can('manage.characters')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-user-shield w-5"></i>
                         <span>Characters</span>
                     </a>
+                    @endcan
+                    @can('manage.bans')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-ban w-5"></i>
                         <span>Bans</span>
                     </a>
+                    @endcan
+                    @can('manage.reports')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-exclamation-triangle w-5"></i>
                         <span>Reports</span>
                         <span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full">12</span>
                     </a>
+                    @endcan
                 </div>
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Content</h3>
+                    @can('manage.news')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-newspaper w-5"></i>
                         <span>News</span>
                     </a>
+                    @endcan
+                    @can('manage.pages')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-file-alt w-5"></i>
                         <span>Pages</span>
                     </a>
+                    @endcan
+                    @can('manage.announcements')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-bullhorn w-5"></i>
                         <span>Announcements</span>
                     </a>
+                    @endcan
                 </div>
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Store</h3>
+                    @can('manage.store.products')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-shopping-cart w-5"></i>
                         <span>Products</span>
                     </a>
+                    @endcan
+                    @can('manage.store.categories')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-tags w-5"></i>
                         <span>Categories</span>
                     </a>
+                    @endcan
+                    @can('view.store.transactions')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-receipt w-5"></i>
                         <span>Transactions</span>
                     </a>
+                    @endcan
                 </div>
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Realms</h3>
+                    @can('manage.realms')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-server w-5"></i>
                         <span>Realm Management</span>
                     </a>
+                    @endcan
+                    @can('manage.realms')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-database w-5"></i>
                         <span>Database</span>
                     </a>
+                    @endcan
+                    @can('manage.realms')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-envelope w-5"></i>
                         <span>In-Game Mail</span>
                     </a>
+                    @endcan
                 </div>
 
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">System</h3>
+                    @can('manage.roles')
                     <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-user-shield w-5"></i>
                         <span>Roles & Permissions</span>
                     </a>
+                    @endcan
+                    @can('manage.settings')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-cog w-5"></i>
                         <span>Settings</span>
                     </a>
+                    @endcan
+                    @can('view.logs')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-terminal w-5"></i>
                         <span>Logs</span>
                     </a>
+                    @endcan
+                    @can('manage.backups')
                     <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-download w-5"></i>
                         <span>Backups</span>
                     </a>
+                    @endcan
                 </div>
             </nav>
 
