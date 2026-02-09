@@ -101,9 +101,18 @@
                         @if(!empty($data['featuredNews']->image))
                         <img src="{{ asset('storage/images/' . $data['featuredNews']->image) }}" alt="{{ $data['featuredNews']->title }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
                         @endif
-                        <div class="absolute top-4 left-4">
+
+                        @if(!empty($data['featuredNews']->image))
+                        <div class="absolute top-4 left-10">
                             <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
                         </div>
+                        @else
+                        <div class="mb-2">
+                            <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                Featured
+                            </span>
+                        </div>    
+                        @endif                   
                     </div>
                     <div class="p-6 space-y-3">
                         <div class="text-sm text-slate-400">{{ $data['featuredNews']->published_at ? $data['featuredNews']->published_at->format('F d, Y') : 'Draft' }}</div>
