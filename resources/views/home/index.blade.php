@@ -133,12 +133,12 @@
                         </a>
                     </div>
                     @empty
-                    <div class="bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
+                    <div class="col-span-full bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
                         <p class="text-slate-400 text-sm">No news available.</p>
                     </div>
                     @endforelse
                 </div>
-
+                
                 <div class="text-center pt-4">
                     <a href="{{ route('news') }}" class="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 text-white rounded-lg transition-all duration-300 font-medium border border-slate-700">
                         View All News

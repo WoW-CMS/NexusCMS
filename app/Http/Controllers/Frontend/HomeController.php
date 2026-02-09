@@ -37,7 +37,7 @@ class HomeController extends Controller
      *
      * @var int
      */
-    protected $perPage = 2;
+    protected $perPage = 5;
 
     /**
      * Display the homepage.

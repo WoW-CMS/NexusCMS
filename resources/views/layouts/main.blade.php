@@ -108,7 +108,7 @@
                     <ul class="space-y-2 text-slate-400 text-sm">
                         <li><a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a></li>
                         <li><a href="{{ route('news') }}" class="hover:text-white transition-colors">News</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Download</a></li>
+                        <li><a href="{{ route('howtoplay') }}" class="hover:text-white transition-colors">Download</a></li>
                     </ul>
                 </div>
                 <div>
