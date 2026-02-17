@@ -72,53 +72,58 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-700/50">
-                            @foreach ($transactions as $transaction)
-                            <!-- Transaction 1 -->
-                            <tr class="hover:bg-slate-700/20 transition-colors duration-200">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                                            <i class="fas fa-hashtag text-blue-400"></i>
+                            @forelse ($transactions as $transaction)
+                                <tr class="hover:bg-slate-700/20 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                                <i class="fas fa-hashtag text-blue-400"></i>
+                                            </div>
+                                            <span class="text-sm font-mono text-gray-300">{{ $transaction['transaction_id'] ?? 'N/A' }}</span>
                                         </div>
-                                        <span class="text-sm font-mono text-gray-300">{{ $transaction->transaction_id }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-300">{{ $transaction->created_at->format('M d, Y') }}</div>
-                                    <div class="text-xs text-gray-500">{{ $transaction->created_at->format('h:i A') }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-bold text-emerald-400">${{ number_format($transaction->amount, 2) }}</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-coins text-amber-400"></i>
-                                        <span class="text-sm font-semibold text-white">{{ number_format($transaction->dp_awarded, 0) }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-300 text-capitalize">{{ ucfirst($transaction->gateway) }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    @if($transaction->status == 'completed')
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
-                                        <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
-                                        Completed
-                                    </span>
-                                    @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                                        <div class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
-                                        Pending
-                                    </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-gray-400 hover:text-blue-400 transition-colors duration-200">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-300">{{ isset($transaction['created_at']) ? \Carbon\Carbon::parse($transaction['created_at'])->format('M d, Y') : '-' }}</div>
+                                        <div class="text-xs text-gray-500">{{ isset($transaction['created_at']) ? \Carbon\Carbon::parse($transaction['created_at'])->format('h:i A') : '-' }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-bold text-emerald-400">${{ number_format($transaction['amount'] ?? 0, 2) }}</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-coins text-amber-400"></i>
+                                            <span class="text-sm font-semibold text-white">{{ number_format($transaction['dp_awarded'] ?? 0, 0) }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-300 text-capitalize">{{ ucfirst($transaction['gateway'] ?? '-') }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @if(($transaction['status'] ?? '') == 'completed')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                                <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                                Completed
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                                <div class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
+                                                Pending
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-gray-400 hover:text-blue-400 transition-colors duration-200">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center text-gray-500 py-4">
+                                        No transactions found.
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
