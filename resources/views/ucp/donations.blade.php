@@ -6,7 +6,7 @@
         @include('ucp.components.sidebar')
 
         <main class="lg:col-span-3 space-y-6">
-                <!-- Stats Overview -->
+            <!-- Stats Overview -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <!-- Total Donated -->
                 <div class="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 rounded-xl p-6 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-200">
@@ -16,7 +16,9 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Donated</p>
-                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0.00' : number_format($transactions->sum('amount'), 2) }}</p>
+                    <p class="text-3xl font-bold text-white">
+                        {{ empty($transactions) ? '0.00' : number_format(array_sum(array_column($transactions, 'amount')), 2) }}
+                    </p>
                 </div>
 
                 <!-- Total Coins -->
@@ -27,7 +29,9 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Coins Earned</p>
-                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0' : number_format($transactions->sum('dp_awarded')) }}</p>
+                    <p class="text-3xl font-bold text-white">
+                        {{ empty($transactions) ? '0' : number_format(array_sum(array_column($transactions, 'dp_awarded'))) }}
+                    </p>
                 </div>
 
                 <!-- Transactions -->
@@ -38,9 +42,12 @@
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Transactions</p>
-                    <p class="text-3xl font-bold text-white">{{ $transactions->isEmpty() ? '0' : number_format($transactions->count()) }}</p>
+                    <p class="text-3xl font-bold text-white">
+                        {{ empty($transactions) ? '0' : count($transactions) }}
+                    </p>
                 </div>
             </div>
+
 
             <!-- Transactions Table -->
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 overflow-hidden shadow-xl">
