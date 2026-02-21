@@ -75,7 +75,7 @@ class ArmoryController extends Controller
     {
         $q = $request->input('q');
         $faction = $request->input('faction') ?: null;
-        $realm = $request->input('realm') ?: 1;
+        $realm = $request->input('realm') ?: false;
         $class = $request->input('class') ?: null;
         $minLevel = $request->input('min_level') ?: null;
 

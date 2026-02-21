@@ -7,11 +7,19 @@ use Modules\Armory\Infrastructure\Repositories\TrinityCoreArmoryRepository;
 use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 use App\Models\Realm;
 use App\Enums\Emulator;
+use Modules\Armory\Http\Middleware\EnsureRealmsExist;
 
 class ArmoryServiceProvider extends BaseModuleServiceProvider
 {
     protected string $moduleName = 'Armory';
 
+    public function boot(): void
+    {
+        parent::boot();
+
+        $router = $this->app->make('router');
+        $router->aliasMiddleware('realms.exists', EnsureRealmsExist::class);
+    }
 
     public function register(): void
     {
