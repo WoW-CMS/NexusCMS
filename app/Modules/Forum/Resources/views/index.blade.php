@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="flex-1">
                                             <div class="flex items-center space-x-3 mb-3">
-                                                <a href="{{ route('forums.show', $forum->slug) }}" 
+                                                <a href="{{ route('forum.show', $forum->slug) }}" 
                                                    class="text-2xl font-bold text-white hover:text-blue-400 transition-all duration-300 hover:translate-x-1 transform">
                                                     {{ $forum->name }}
                                                 </a>

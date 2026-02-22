@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'NexusCMS') }} - @yield('title', 'World of Warcraft Private Server')</title>
+    <title>{{ settings('site_name') }} - @yield('title', 'World of Warcraft Private Server')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -19,7 +19,7 @@
                 <div class="flex items-center gap-8">
                     <div class="flex items-center gap-2">
                         <div class="rounded-lg flex items-center justify-center text-2xl font-bold shadow-lg shadow-red-900/50">
-                            {{ config('app.name', 'NexusCMS') }}
+                            {{ settings('site_name') }}
                         </div>
                     </div>
                     <div class="hidden md:flex gap-6">

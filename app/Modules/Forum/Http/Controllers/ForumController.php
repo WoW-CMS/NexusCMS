@@ -13,11 +13,7 @@ class ForumController extends Controller
     protected ForumService $forumService;
 
     protected array $views = [
-        'index'         => 'forums.index',
-        'forum'         => 'forums.forum',
-        'thread'        => 'forums.thread',
-        'create_thread' => 'forums.create_thread',
-        'create_post'   => 'forums.create_post',
+        'index'         => 'forum::index',
     ];
 
     public function __construct(ForumService $forumService)
