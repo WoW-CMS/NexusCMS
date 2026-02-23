@@ -43,7 +43,7 @@
             <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Available Permissions</h3>
-                    <div id="available" class="min-h-[300px] p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
+                    <div id="available" class="h-[300px] overflow-y-auto p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
                         @foreach($permissions as $permission)
                             <div class="perm-item flex items-center justify-between p-2 bg-white border border-gray-200 rounded cursor-move"
                                  draggable="true"
@@ -61,11 +61,12 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Role Permissions</h3>
-                    <div id="selected" class="min-h-[300px] p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
+                    <div id="selected" class="h-[300px] overflow-y-auto p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
                         <div class="text-sm text-blue-700" id="selected-empty">Drag permissions here to add them to the role</div>
                     </div>
                 </div>
             </div>
+
             <div class="p-6 border-t border-gray-200 flex items-center justify-end gap-3">
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
                     Crear rol
@@ -87,11 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateHiddenInputs() {
         hiddenInputs.innerHTML = '';
         const names = Array.from(selected.querySelectorAll('.perm-item')).map(el => el.dataset.name);
-        if (names.length === 0) {
-            selectedEmpty.style.display = '';
-        } else {
-            selectedEmpty.style.display = 'none';
-        }
+        selectedEmpty.style.display = names.length === 0 ? '' : 'none';
         names.forEach(name => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -123,11 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
         container.addEventListener('drop', (e) => {
             e.preventDefault();
             container.classList.remove('ring-2', 'ring-blue-300');
+            
             const dragging = available._dragging || selected._dragging;
             if (dragging && dragging.parentElement !== container) {
                 container.appendChild(dragging);
-                updateHiddenInputs();
             }
+
+            updateHiddenInputs();
+            available._dragging = null;
+            selected._dragging = null;
         });
     }
 
