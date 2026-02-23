@@ -44,7 +44,7 @@
             <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Available Permissions</h3>
-                    <div id="available" class="min-h-[300px] p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
+                    <div id="available" class="h-[300px] overflow-y-auto p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
                         @php
                             $selectedSet = collect($selected);
                         @endphp
@@ -67,7 +67,7 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Role Permissions</h3>
-                    <div id="selected" class="min-h-[300px] p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
+                    <div id="selected" class="h-[300px] overflow-y-auto p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
                         @forelse($permissions as $permission)
                             @if($selectedSet->contains($permission->name))
                                 <div class="perm-item flex items-center justify-between p-2 bg-white border border-gray-200 rounded cursor-move"
@@ -108,24 +108,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const available = document.getElementById('available');
     const selected = document.getElementById('selected');
     const hiddenInputs = document.getElementById('hidden-inputs');
-    const selectedEmpty = document.getElementById('selected-empty');
+    
+    function createEmptyPlaceholder() {
+        let placeholder = selected.querySelector('#selected-empty');
+        if (!placeholder) {
+            placeholder = document.createElement('div');
+            placeholder.id = 'selected-empty';
+            placeholder.className = 'text-sm text-blue-700';
+            placeholder.textContent = 'Drag permissions here to add them to the role';
+            selected.appendChild(placeholder);
+        }
+    }
 
     function updateHiddenInputs() {
         hiddenInputs.innerHTML = '';
-        const names = Array.from(selected.querySelectorAll('.perm-item')).map(el => el.dataset.name);
-        if (selectedEmpty) {
-            selectedEmpty.style.display = names.length === 0 ? '' : 'none';
-        }
-        names.forEach(name => {
+        const items = Array.from(selected.querySelectorAll('.perm-item'));
+        items.forEach(item => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'permissions[]';
-            input.value = name;
+            input.value = item.dataset.name;
             hiddenInputs.appendChild(input);
         });
+
+        // Mostrar placeholder si no hay permisos
+        if (items.length === 0) {
+            createEmptyPlaceholder();
+        } else {
+            const placeholder = selected.querySelector('#selected-empty');
+            if (placeholder) placeholder.remove();
+        }
     }
 
-    function makeDraggable(container) {
+    function enableDragAndDrop(container) {
         container.addEventListener('dragstart', (e) => {
             const target = e.target.closest('.perm-item');
             if (!target) return;
@@ -136,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.addEventListener('dragover', (e) => {
             e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
             container.classList.add('ring-2', 'ring-blue-300');
         });
 
@@ -150,22 +164,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const dragging = available._dragging || selected._dragging;
             if (dragging && dragging.parentElement !== container) {
                 container.appendChild(dragging);
-                updateHiddenInputs();
             }
+            available._dragging = null;
+            selected._dragging = null;
+            updateHiddenInputs();
+            enableDoubleClickAll();
         });
     }
 
-    makeDraggable(available);
-    makeDraggable(selected);
-
-    document.querySelectorAll('.perm-item').forEach(item => {
+    function enableDoubleClick(item) {
         item.addEventListener('dblclick', () => {
             const targetContainer = item.parentElement.id === 'available' ? selected : available;
             targetContainer.appendChild(item);
             updateHiddenInputs();
+            enableDoubleClickAll();
         });
-    });
+    }
 
+    function enableDoubleClickAll() {
+        document.querySelectorAll('.perm-item').forEach(item => {
+            // Remueve listener anterior para evitar duplicados
+            item.replaceWith(item.cloneNode(true));
+        });
+        document.querySelectorAll('.perm-item').forEach(enableDoubleClick);
+    }
+
+    enableDragAndDrop(available);
+    enableDragAndDrop(selected);
+
+    enableDoubleClickAll();
     updateHiddenInputs();
 });
 </script>
