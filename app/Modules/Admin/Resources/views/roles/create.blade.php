@@ -66,6 +66,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="p-6 border-t border-gray-200 flex items-center justify-end gap-3">
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
                     Crear rol
@@ -87,11 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateHiddenInputs() {
         hiddenInputs.innerHTML = '';
         const names = Array.from(selected.querySelectorAll('.perm-item')).map(el => el.dataset.name);
-        if (names.length === 0) {
-            selectedEmpty.style.display = '';
-        } else {
-            selectedEmpty.style.display = 'none';
-        }
+        selectedEmpty.style.display = names.length === 0 ? '' : 'none';
         names.forEach(name => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -123,11 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
         container.addEventListener('drop', (e) => {
             e.preventDefault();
             container.classList.remove('ring-2', 'ring-blue-300');
+            
             const dragging = available._dragging || selected._dragging;
             if (dragging && dragging.parentElement !== container) {
                 container.appendChild(dragging);
-                updateHiddenInputs();
             }
+
+            updateHiddenInputs();
+            available._dragging = null;
+            selected._dragging = null;
         });
     }
 
