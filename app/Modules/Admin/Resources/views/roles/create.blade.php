@@ -43,7 +43,7 @@
             <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Available Permissions</h3>
-                    <div id="available" class="min-h-[300px] p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
+                    <div id="available" class="h-[300px] overflow-y-auto p-3 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-2">
                         @foreach($permissions as $permission)
                             <div class="perm-item flex items-center justify-between p-2 bg-white border border-gray-200 rounded cursor-move"
                                  draggable="true"
@@ -61,7 +61,7 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-2">Role Permissions</h3>
-                    <div id="selected" class="min-h-[300px] p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
+                    <div id="selected" class="h-[300px] overflow-y-auto p-3 border border-blue-300 rounded-lg bg-blue-50 flex flex-col gap-2">
                         <div class="text-sm text-blue-700" id="selected-empty">Drag permissions here to add them to the role</div>
                     </div>
                 </div>
