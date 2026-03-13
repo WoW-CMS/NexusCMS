@@ -25,6 +25,18 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::put('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'update'])->middleware('permission:manage.admin.users')->name('admin.users.update');
         Route::delete('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'destroy'])->middleware('permission:manage.admin.users')->name('admin.users.destroy');
     
+        // Logs
+        Route::get('/logs', [\Modules\Admin\Http\Controllers\LogController::class, 'index'])->middleware('permission:view.logs')->name('admin.logs.index');
+
+        // Analytics
+        Route::get('/analytics', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'index'])->name('admin.analytics.index');
+
+        // Backups
+        Route::get('/backups', [\Modules\Admin\Http\Controllers\BackupController::class, 'index'])->middleware('permission:manage.backups')->name('admin.backups.index');
+        Route::post('/backups', [\Modules\Admin\Http\Controllers\BackupController::class, 'create'])->middleware('permission:manage.backups')->name('admin.backups.create');
+        Route::get('/backups/{filename}/download', [\Modules\Admin\Http\Controllers\BackupController::class, 'download'])->middleware('permission:manage.backups')->name('admin.backups.download');
+        Route::delete('/backups/{filename}', [\Modules\Admin\Http\Controllers\BackupController::class, 'destroy'])->middleware('permission:manage.backups')->name('admin.backups.destroy');
+
         // Settings
         Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->middleware('permission:manage.settings')->name('admin.settings.index');
         Route::post('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'store'])->middleware('permission:manage.settings')->name('admin.settings.store');

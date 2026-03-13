@@ -172,13 +172,13 @@
                     </a>
                     @endcan
                     @can('view.logs')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-terminal w-5"></i>
                         <span>Logs</span>
                     </a>
                     @endcan
                     @can('manage.backups')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
                         <i class="fas fa-download w-5"></i>
                         <span>Backups</span>
                     </a>
