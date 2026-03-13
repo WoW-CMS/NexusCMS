@@ -11,8 +11,8 @@ use App\Http\Controllers\Frontend\CommentController;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->name('howtoplay');
+Route::get('/', [HomeController::class, 'index'])->middleware(['track.analytics'])->name('home');
+Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->middleware(['track.analytics'])->name('howtoplay');
 
 Route::get('/test-redis', function() {
     try {
@@ -40,7 +40,7 @@ Route::middleware([])->group(function () {
     }
 });
 
-Route::prefix('news')->group(function () {
+Route::prefix('news')->middleware(['track.analytics'])->group(function () {
     Route::get('/', [NewsController::class, 'index'])->name('news');
     Route::get('/{slug}', [NewsController::class, 'show'])->name('news.show');
     Route::post('/{slug}/comment', [CommentController::class, 'store'])->name('news.comment.store');
@@ -58,7 +58,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::prefix('ucp')->middleware(['auth', 'permission:access.ucp'])->group(function () {
+Route::prefix('ucp')->middleware(['auth', 'permission:access.ucp', 'track.analytics'])->group(function () {
     Route::get('/', [UserController::class, 'show'])->name('ucp.dashboard');
     Route::get('/gameaccount', [UserController::class, 'gameAccount'])->name('ucp.gameaccount');
     Route::get('/donations', [UserController::class, 'transaction'])->name('ucp.transaction');

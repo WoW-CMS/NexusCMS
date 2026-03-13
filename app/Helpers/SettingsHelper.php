@@ -3,6 +3,18 @@
 use App\Modules\Admin\Domain\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 
+if (!function_exists('formatBytes')) {
+    function formatBytes(int $bytes, int $precision = 2): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $bytes = max($bytes, 0);
+        $pow = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
+        $pow = min($pow, count($units) - 1);
+
+        return round($bytes / (1024 ** $pow), $precision) . ' ' . $units[$pow];
+    }
+}
+
 if (!function_exists('settings')) {
     /**
      * Get a setting value or all settings.

@@ -33,7 +33,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'manage.store.products']);
         Permission::firstOrCreate(['name' => 'manage.store.categories']);
         Permission::firstOrCreate(['name' => 'view.store.transactions']);
-        
+        Permission::firstOrCreate(['name' => 'view.analytics']);
         // Permisos para GameMasters
         Permission::firstOrCreate(['name' => 'access.gm.panel']);
         Permission::firstOrCreate(['name' => 'manage.characters']);

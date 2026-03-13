@@ -17,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
-            'permission' => \App\Http\Middleware\ModulePermission::class,
+            'permission' => \App\Http\Middleware\Permission::class,
+            'track.analytics' => \App\Http\Middleware\TrackAnalytics::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
