@@ -49,13 +49,13 @@
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Main</h3>
                     @can('access.admin.panel')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 bg-blue-600 rounded-lg mb-1">
+                    <a href="{{ route('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.index') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-home w-5"></i>
                         <span>Dashboard</span>
                     </a>
                     @endcan
                     @can('access.admin.panel')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.analytics.index') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-chart-line w-5"></i>
                         <span>Analytics</span>
                     </a>
@@ -65,7 +65,7 @@
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Management</h3>
                     @can('manage.admin.users')
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-users w-5"></i>
                         <span>Users</span>
                     </a>
@@ -160,25 +160,25 @@
                 <div class="px-3 mb-4">
                     <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">System</h3>
                     @can('manage.roles')
-                    <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.roles.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-user-shield w-5"></i>
                         <span>Roles & Permissions</span>
                     </a>
                     @endcan
                     @can('manage.settings')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-cog w-5"></i>
                         <span>Settings</span>
                     </a>
                     @endcan
                     @can('view.logs')
-                    <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.logs.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-terminal w-5"></i>
                         <span>Logs</span>
                     </a>
                     @endcan
                     @can('manage.backups')
-                    <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
+                    <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.backups.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <i class="fas fa-download w-5"></i>
                         <span>Backups</span>
                     </a>
