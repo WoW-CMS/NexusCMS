@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Services\ModuleRegistryService;
+use Illuminate\Support\Facades\File;
+
 class ModuleLoader
 {
     public static function getProviders(): array
@@ -15,6 +18,20 @@ class ModuleLoader
 
         foreach (glob("$modulesPath/*", GLOB_ONLYDIR) as $moduleDir) {
             $moduleName = basename($moduleDir);
+            $configPath = $moduleDir . DIRECTORY_SEPARATOR . 'module.json';
+            $config = [];
+
+            if (File::exists($configPath)) {
+                $decoded = json_decode(File::get($configPath), true);
+                if (is_array($decoded)) {
+                    $config = $decoded;
+                }
+            }
+
+            if (!ModuleRegistryService::isModuleEnabled($moduleName, (bool) ($config['enabled'] ?? true))) {
+                continue;
+            }
+
             $namespace = "Modules\\{$moduleName}\\Providers";
             $expectedFile = "{$moduleDir}/Providers/{$moduleName}ServiceProvider.php";
             $expectedClass = "{$namespace}\\{$moduleName}ServiceProvider";

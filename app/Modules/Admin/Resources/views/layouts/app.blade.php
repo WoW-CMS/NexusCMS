@@ -3,215 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'NexusCMS') }} - @yield('title', 'AdminCP - Dashboard')</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>{{ config('app.name', 'NexusCMS') }} · @yield('title', 'Dashboard')</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('styles')
     <style>
-        /* Custom scrollbar for webkit browsers */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Sidebar scrollbar */
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        .sidebar-scroll { scrollbar-width: thin; scrollbar-color: #374151 transparent; }
+
+        /* Nav item active indicator */
+        .nav-item-active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: #3b82f6;
+            border-radius: 0 3px 3px 0;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1f2937; /* gray-800 */
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #4b5563; /* gray-600 */
-            border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background-color: #6b7280; /* gray-500 */
-        }
-        /* Firefox */
-        .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #4b5563 #1f2937;
-        }
+
+        /* Mobile overlay */
+        #sidebar-overlay { transition: opacity 0.2s ease; }
+
+        /* Sidebar slide */
+        #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 text-white flex-shrink-0 hidden md:flex flex-col">
-            <!-- Logo -->
-            <div class="h-16 flex items-center px-6 bg-gray-800 border-b border-gray-700">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold">
-                        N
-                    </div>
-                    <span class="text-lg font-bold">AdminCP</span>
-                </div>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+<div class="flex h-screen overflow-hidden">
+
+    {{-- ─── Mobile overlay ─────────────────────────────────────────────── --}}
+    <div id="sidebar-overlay"
+         class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"
+         onclick="closeSidebar()"></div>
+
+    {{-- ─── Sidebar ─────────────────────────────────────────────────────── --}}
+    <aside id="sidebar"
+           class="fixed md:relative z-30 w-64 h-full bg-[#0f1117] text-white flex flex-col flex-shrink-0
+                  -translate-x-full md:translate-x-0">
+
+        {{-- Logo / Brand --}}
+        <div class="flex items-center gap-3 px-5 h-16 border-b border-white/[0.06] shrink-0">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
             </div>
-
-            <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Main</h3>
-                    @can('access.admin.panel')
-                    <a href="{{ route('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.index') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-home w-5"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    @endcan
-                    @can('access.admin.panel')
-                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.analytics.index') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-chart-line w-5"></i>
-                        <span>Analytics</span>
-                    </a>
-                    @endcan
-                </div>
-
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Management</h3>
-                    @can('manage.admin.users')
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-users w-5"></i>
-                        <span>Users</span>
-                    </a>
-                    @endcan
-                    @can('manage.characters')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-user-shield w-5"></i>
-                        <span>Characters</span>
-                    </a>
-                    @endcan
-                    @can('manage.bans')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-ban w-5"></i>
-                        <span>Bans</span>
-                    </a>
-                    @endcan
-                    @can('manage.reports')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-exclamation-triangle w-5"></i>
-                        <span>Reports</span>
-                        <span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full">12</span>
-                    </a>
-                    @endcan
-                </div>
-
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Content</h3>
-                    @can('manage.news')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-newspaper w-5"></i>
-                        <span>News</span>
-                    </a>
-                    @endcan
-                    @can('manage.pages')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-file-alt w-5"></i>
-                        <span>Pages</span>
-                    </a>
-                    @endcan
-                    @can('manage.announcements')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-bullhorn w-5"></i>
-                        <span>Announcements</span>
-                    </a>
-                    @endcan
-                </div>
-
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Store</h3>
-                    @can('manage.store.products')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-shopping-cart w-5"></i>
-                        <span>Products</span>
-                    </a>
-                    @endcan
-                    @can('manage.store.categories')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-tags w-5"></i>
-                        <span>Categories</span>
-                    </a>
-                    @endcan
-                    @can('view.store.transactions')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-receipt w-5"></i>
-                        <span>Transactions</span>
-                    </a>
-                    @endcan
-                </div>
-
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Realms</h3>
-                    @can('manage.realms')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-server w-5"></i>
-                        <span>Realm Management</span>
-                    </a>
-                    @endcan
-                    @can('manage.realms')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-database w-5"></i>
-                        <span>Database</span>
-                    </a>
-                    @endcan
-                    @can('manage.realms')
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-800 rounded-lg mb-1 text-gray-300 hover:text-white transition">
-                        <i class="fas fa-envelope w-5"></i>
-                        <span>In-Game Mail</span>
-                    </a>
-                    @endcan
-                </div>
-
-                <div class="px-3 mb-4">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">System</h3>
-                    @can('manage.roles')
-                    <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.roles.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-user-shield w-5"></i>
-                        <span>Roles & Permissions</span>
-                    </a>
-                    @endcan
-                    @can('manage.settings')
-                    <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-cog w-5"></i>
-                        <span>Settings</span>
-                    </a>
-                    @endcan
-                    @can('view.logs')
-                    <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.logs.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-terminal w-5"></i>
-                        <span>Logs</span>
-                    </a>
-                    @endcan
-                    @can('manage.backups')
-                    <a href="{{ route('admin.backups.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition {{ request()->routeIs('admin.backups.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <i class="fas fa-download w-5"></i>
-                        <span>Backups</span>
-                    </a>
-                    @endcan
-                </div>
-            </nav>
-
-            <!-- User Info -->
-            <div class="p-4 bg-gray-800 border-t border-gray-700">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold">
-                        A
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="text-sm font-semibold truncate">{{ Auth::user()->name }}</div>
-                        <div class="text-xs text-gray-400">{{ Auth::user()->roles->pluck('name')->join(', ') }}</div>
-                    </div>
-                    <a href="" class="text-gray-400 hover:text-white">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-gray-400 hover:text-white">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </form>
-                </div>
+            <div class="leading-tight">
+                <span class="text-sm font-bold tracking-tight text-white">{{ config('app.name', 'NexusCMS') }}</span>
+                <span class="block text-[10px] font-medium text-blue-400 uppercase tracking-widest">Admin Panel</span>
             </div>
-        </aside>
-        <div class="flex-1 flex flex-col overflow-hidden">
-            @yield('content')
         </div>
+
+        {{-- Navigation --}}
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-4 px-3 space-y-6">
+
+            {{-- ── Main ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Main</p>
+                @can('access.admin.panel')
+                @php $active = request()->routeIs('admin.index'); @endphp
+                <a href="{{ route('admin.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-house-chimney w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Dashboard
+                </a>
+                @endcan
+                @can('access.admin.panel')
+                @php $active = request()->routeIs('admin.analytics.index'); @endphp
+                <a href="{{ route('admin.analytics.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-chart-line w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Analytics
+                </a>
+                @endcan
+            </div>
+
+            {{-- ── Management ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Management</p>
+                @can('manage.admin.users')
+                @php $active = request()->routeIs('admin.users.*'); @endphp
+                <a href="{{ route('admin.users.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-users w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Users
+                </a>
+                @endcan
+                @can('manage.characters')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-shield-halved w-4 text-center"></i>
+                    Characters
+                </a>
+                @endcan
+                @can('manage.bans')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-ban w-4 text-center"></i>
+                    Bans
+                </a>
+                @endcan
+                @can('manage.reports')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-flag w-4 text-center"></i>
+                    Reports
+                    <span class="ml-auto inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-red-500 text-white rounded-full">12</span>
+                </a>
+                @endcan
+            </div>
+
+            {{-- ── Content ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Content</p>
+                @can('manage.news')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-newspaper w-4 text-center"></i>
+                    News
+                </a>
+                @endcan
+                @can('manage.pages')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-file-lines w-4 text-center"></i>
+                    Pages
+                </a>
+                @endcan
+                @can('manage.announcements')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-bullhorn w-4 text-center"></i>
+                    Announcements
+                </a>
+                @endcan
+            </div>
+
+            {{-- ── Store ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Store</p>
+                @can('manage.store.products')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-bag-shopping w-4 text-center"></i>
+                    Products
+                </a>
+                @endcan
+                @can('manage.store.categories')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-tags w-4 text-center"></i>
+                    Categories
+                </a>
+                @endcan
+                @can('view.store.transactions')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-receipt w-4 text-center"></i>
+                    Transactions
+                </a>
+                @endcan
+            </div>
+
+            {{-- ── Realms ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Realms</p>
+                @can('manage.realms')
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-server w-4 text-center"></i>
+                    Realm Management
+                </a>
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-database w-4 text-center"></i>
+                    Database
+                </a>
+                <a href="#"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
+                    <i class="fas fa-envelope w-4 text-center"></i>
+                    In-Game Mail
+                </a>
+                @endcan
+            </div>
+
+            {{-- ── System ── --}}
+            <div>
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">System</p>
+                @can('manage.roles')
+                @php $active = request()->routeIs('admin.roles.*'); @endphp
+                <a href="{{ route('admin.roles.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-user-lock w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Roles & Permissions
+                </a>
+                @endcan
+                @can('manage.settings')
+                @php $active = request()->routeIs('admin.settings.*'); @endphp
+                <a href="{{ route('admin.settings.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-sliders w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Settings
+                </a>
+                @endcan
+                @can('view.logs')
+                @php $active = request()->routeIs('admin.logs.*'); @endphp
+                <a href="{{ route('admin.logs.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-terminal w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Logs
+                </a>
+                @endcan
+                @can('manage.backups')
+                @php $active = request()->routeIs('admin.backups.*'); @endphp
+                <a href="{{ route('admin.backups.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-cloud-arrow-down w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Backups
+                </a>
+                @endcan
+                @can('manage.modules')
+                @php $active = request()->routeIs('admin.modules.*'); @endphp
+                <a href="{{ route('admin.modules.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-puzzle-piece w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Modules
+                </a>
+                @endcan
+            </div>
+
+        </nav>
+
+        {{-- User footer --}}
+        <div class="shrink-0 border-t border-white/[0.06] px-4 py-3">
+            <div class="flex items-center gap-3">
+                {{-- Avatar with initials --}}
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-xs font-bold shrink-0 uppercase select-none">
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-white truncate leading-tight">{{ Auth::user()->name }}</p>
+                    <p class="text-[11px] text-gray-500 truncate leading-tight">{{ Auth::user()->roles->pluck('name')->join(', ') }}</p>
+                </div>
+                <form method="POST" action="{{ route('logout') }}" class="shrink-0">
+                    @csrf
+                    <button type="submit"
+                            title="Sign out"
+                            class="w-7 h-7 flex items-center justify-center rounded-md text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition">
+                        <i class="fas fa-arrow-right-from-bracket text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </aside>
+
+    {{-- ─── Main area ───────────────────────────────────────────────────── --}}
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+        {{-- Top bar (mobile) --}}
+        <header class="md:hidden h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-10">
+            <button onclick="openSidebar()"
+                    class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition">
+                <i class="fas fa-bars"></i>
+            </button>
+            <span class="text-sm font-semibold text-gray-800">@yield('title', 'Dashboard')</span>
+            <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white uppercase">
+                {{ substr(Auth::user()->name, 0, 1) }}
+            </div>
+        </header>
+
+        {{-- Page content --}}
+        <main class="flex-1 overflow-y-auto">
+            @yield('content')
+        </main>
+
     </div>
-    @stack('scripts')
+</div>
+
+<script>
+    function openSidebar() {
+        document.getElementById('sidebar').classList.remove('-translate-x-full');
+        document.getElementById('sidebar-overlay').classList.remove('hidden');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+        document.getElementById('sidebar-overlay').classList.add('hidden');
+    }
+</script>
+
+@stack('scripts')
 </body>
 </html>

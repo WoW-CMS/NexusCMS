@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\ModuleRegistryService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
@@ -25,7 +26,7 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
          * Check if the module is enabled.
          * If not, skip loading any resources.
          */
-        if (!($this->config['enabled'] ?? true)) {
+        if (!ModuleRegistryService::isModuleEnabled($this->moduleName, (bool) ($this->config['enabled'] ?? true))) {
             return;
         }
 

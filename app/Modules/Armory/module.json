@@ -1,6 +1,6 @@
 {
     "name": "Armorytest",
-    "enabled": true,
+    "enabled": false,
     "routes": true,
     "migrations": true,
     "views": true,

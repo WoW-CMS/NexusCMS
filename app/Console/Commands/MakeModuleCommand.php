@@ -69,6 +69,7 @@ class MakeModuleCommand extends Command
         $moduleJson = [
             'name' => $name,
             'enabled' => true,
+            'module_type' => 'third_party',
             'routes' => true,
             'migrations' => true,
             'views' => true,

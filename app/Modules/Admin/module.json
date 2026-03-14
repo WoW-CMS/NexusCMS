@@ -2,7 +2,7 @@
     "name": "Admin",
     "enabled": true,
     "routes": true,
-    "migrations": true,
+    "migrations": false,
     "views": true,
     "translations": true,
     "namespace": "Modules\\Admin"

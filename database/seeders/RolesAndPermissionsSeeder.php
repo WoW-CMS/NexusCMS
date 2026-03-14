@@ -27,6 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'manage.announcements']);
         Permission::firstOrCreate(['name' => 'view.logs']);
         Permission::firstOrCreate(['name' => 'manage.backups']);
+        Permission::firstOrCreate(['name' => 'manage.modules']);
         Permission::firstOrCreate(['name' => 'manage.realms']);
         Permission::firstOrCreate(['name' => 'manage.bans']);
         Permission::firstOrCreate(['name' => 'manage.reports']);

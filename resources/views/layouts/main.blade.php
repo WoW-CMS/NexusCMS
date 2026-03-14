@@ -23,11 +23,9 @@
                         </div>
                     </div>
                     <div class="hidden md:flex gap-6">
-                        <a href="{{ route('home') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOME</a>
-                        <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">NEWS</a>
-                        <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">HOW TO PLAY</a>
-                        <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">ARMORY</a>
-                        <a href="{{ route('donate') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">DONATE</a>
+                        @foreach(menu_items('web') as $item)
+                            <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">{{ $item['label'] ?? 'MENU' }}</a>
+                        @endforeach
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -55,11 +53,9 @@
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col gap-2">
-                    <a href="{{ route('home') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOME</a>
-                    <a href="{{ route('news') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">NEWS</a>
-                    <a href="{{ route('howtoplay') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">HOW TO PLAY</a>
-                    <a href="{{ route('armory') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">ARMORY</a>
-                    <a href="{{ route('donate') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">DONATE</a>
+                    @foreach(menu_items('web') as $item)
+                        <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">{{ $item['label'] ?? 'MENU' }}</a>
+                    @endforeach
                     @auth
                         <div class="flex flex-col gap-2 pt-2">
                             <a href="{{ route('ucp.dashboard') }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">
