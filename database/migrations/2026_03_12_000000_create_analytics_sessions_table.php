@@ -22,7 +22,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('visitor_id');
-            $table->index('country');
             $table->index('created_at');
         });
     }
