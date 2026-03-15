@@ -17,7 +17,7 @@
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Donated</p>
                     <p class="text-3xl font-bold text-white">
-                        {{ empty($transactions) ? '0.00' : number_format(array_sum(array_column($transactions, 'amount')), 2) }}
+                        {{ empty($transactions) ? '0.00' : number_format($transactions->sum('amount'), 2) }}                    
                     </p>
                 </div>
 
@@ -30,7 +30,7 @@
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Coins Earned</p>
                     <p class="text-3xl font-bold text-white">
-                        {{ empty($transactions) ? '0' : number_format(array_sum(array_column($transactions, 'dp_awarded'))) }}
+                        {{ empty($transactions) ? '0' : number_format($transactions->sum('dp_awarded')) }}
                     </p>
                 </div>
 
@@ -43,7 +43,7 @@
                     </div>
                     <p class="text-sm text-gray-400 mb-1">Total Transactions</p>
                     <p class="text-3xl font-bold text-white">
-                        {{ empty($transactions) ? '0' : count($transactions) }}
+                        {{ empty($transactions) ? '0' : $transactions->count() }}
                     </p>
                 </div>
             </div>

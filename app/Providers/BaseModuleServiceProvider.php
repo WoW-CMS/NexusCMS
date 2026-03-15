@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Services\ModuleRegistryService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
 
 abstract class BaseModuleServiceProvider extends ServiceProvider
 {
@@ -19,56 +18,34 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
             throw new \RuntimeException('Module name not defined in ' . static::class);
         }
 
-        $this->modulePath = base_path("app/Modules/{$this->moduleName}");
-        $this->loadModuleConfig();
+        $manifest = ModuleRegistryService::getModule($this->moduleName);
 
-        /**
-         * Check if the module is enabled.
-         * If not, skip loading any resources.
-         */
-        if (!ModuleRegistryService::isModuleEnabled($this->moduleName, (bool) ($this->config['enabled'] ?? true))) {
-            return;
+        if (is_array($manifest)) {
+            $this->modulePath = (string) ($manifest['path'] ?? base_path("app/Modules/{$this->moduleName}"));
+            $this->config = is_array($manifest['config'] ?? null) ? $manifest['config'] : [];
+            $this->config['namespace'] = (string) ($manifest['namespace'] ?? ($this->config['namespace'] ?? "Modules\\{$this->moduleName}"));
+            $this->config['routes'] = (bool) ($manifest['routes'] ?? ($this->config['routes'] ?? false));
+            $this->config['migrations'] = (bool) ($manifest['migrations'] ?? ($this->config['migrations'] ?? false));
+            $this->config['views'] = (bool) ($manifest['views'] ?? ($this->config['views'] ?? false));
+            $this->config['translations'] = (bool) ($manifest['translations'] ?? ($this->config['translations'] ?? false));
+        } else {
+            $this->modulePath = base_path("app/Modules/{$this->moduleName}");
         }
 
-        /**
-         * Load module routes if enabled.
-         */
         if ($this->config['routes'] ?? false) {
             $this->loadRoutes();
         }
 
-        /**
-         * Load module migrations if enabled.
-         */
         if ($this->config['migrations'] ?? false) {
             $this->loadMigrations();
         }
 
-        /**
-         * Load module views if enabled.
-         */
         if ($this->config['views'] ?? false) {
             $this->loadViews();
         }
 
-        /**
-         * Load module translations if enabled.
-         */
         if ($this->config['translations'] ?? false) {
             $this->loadTranslations();
-        }
-    }
-
-    /**
-     * Load module configuration from the module.json file.
-     * 
-     * @return void
-     */
-    private function loadModuleConfig(): void
-    {
-        $configFile = $this->modulePath . '/module.json';
-        if (File::exists($configFile)) {
-            $this->config = json_decode(File::get($configFile), true) ?? [];
         }
     }
 
@@ -80,7 +57,7 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
     private function loadRoutes(): void
     {
         $routesPath = $this->modulePath . '/Http/routes.php';
-        if (File::exists($routesPath)) {
+        if (is_file($routesPath)) {
             Route::middleware('web')
                 ->namespace(($this->config['namespace'] ?? "Modules\\{$this->moduleName}") . '\\Http\\Controllers')
                 ->group($routesPath);

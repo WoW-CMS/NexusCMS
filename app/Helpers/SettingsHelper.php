@@ -3,7 +3,6 @@
 use App\Modules\Admin\Domain\Models\Setting;
 use App\Services\ModuleRegistryService;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 if (!function_exists('formatBytes')) {
@@ -79,25 +78,14 @@ if (!function_exists('menu_module_states')) {
         }
 
         $states = [];
-        $modulesPath = base_path('app/Modules');
 
-        if (!is_dir($modulesPath)) {
-            return $states;
-        }
-
-        foreach (glob($modulesPath . '/*', GLOB_ONLYDIR) as $moduleDir) {
-            $moduleName = basename($moduleDir);
-            $configPath = $moduleDir . DIRECTORY_SEPARATOR . 'module.json';
-            $fallbackEnabled = true;
-
-            if (File::exists($configPath)) {
-                $decoded = json_decode(File::get($configPath), true);
-                if (is_array($decoded) && array_key_exists('enabled', $decoded)) {
-                    $fallbackEnabled = (bool) $decoded['enabled'];
-                }
+        foreach (ModuleRegistryService::getAllModules() as $module) {
+            $moduleName = trim((string) ($module['folder'] ?? ''));
+            if ($moduleName === '') {
+                continue;
             }
 
-            $states[$moduleName] = ModuleRegistryService::isModuleEnabled($moduleName, $fallbackEnabled);
+            $states[$moduleName] = (bool) ($module['enabled'] ?? true);
         }
 
         return $states;
