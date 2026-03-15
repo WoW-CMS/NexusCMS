@@ -3,13 +3,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Helpers\ModuleLoader;
+use App\Services\ModuleRegistryService;
 
 class ModuleServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        foreach (ModuleLoader::getProviders() as $provider) {
+        foreach (ModuleRegistryService::getEnabledProviders() as $provider) {
             $this->app->register($provider);
         }
     }

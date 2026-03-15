@@ -9,11 +9,56 @@ use Illuminate\Support\Facades\Schema;
 class ModuleRegistryService
 {
     private static ?array $stateCache = null;
+    private static ?array $manifestCache = null;
+
+    public static function getEnabledProviders(): array
+    {
+        $providers = [];
+
+        foreach (self::getEnabledModules() as $module) {
+            $provider = trim((string) ($module['provider'] ?? ''));
+            if ($provider !== '') {
+                $providers[] = $provider;
+            }
+        }
+
+        return array_values(array_unique($providers));
+    }
+
+    public static function getEnabledModules(): array
+    {
+        return array_values(array_filter(
+            self::getAllModules(),
+            static fn (array $module): bool => (bool) ($module['enabled'] ?? true)
+        ));
+    }
+
+    public static function getAllModules(): array
+    {
+        return array_values(self::loadManifest());
+    }
+
+    public static function getModule(string $module): ?array
+    {
+        $module = trim($module);
+        if ($module === '') {
+            return null;
+        }
+
+        $manifest = self::loadManifest();
+
+        return $manifest[$module] ?? null;
+    }
 
     public static function getModuleState(string $module, ?array $fallbackConfig = null): array
     {
         $module = trim($module);
         $fallbackConfig = $fallbackConfig ?? [];
+
+        $manifest = self::getModule($module);
+        if (is_array($manifest)) {
+            $fallbackConfig = array_merge($manifest, $fallbackConfig);
+        }
 
         $fallback = [
             'enabled' => (bool) ($fallbackConfig['enabled'] ?? true),
@@ -85,7 +130,7 @@ class ModuleRegistryService
             return;
         }
 
-        $discoveredModules = $discoveredModules ?? self::discoverFromFilesystem();
+        $discoveredModules = $discoveredModules ?? self::getAllModules();
 
         foreach ($discoveredModules as $module) {
             if (!is_array($module)) {
@@ -119,6 +164,56 @@ class ModuleRegistryService
     public static function flushCache(): void
     {
         self::$stateCache = null;
+        self::$manifestCache = null;
+    }
+
+    private static function loadManifest(): array
+    {
+        if (is_array(self::$manifestCache)) {
+            return self::$manifestCache;
+        }
+
+        $modulesPath = base_path('app/Modules');
+
+        if (!is_dir($modulesPath)) {
+            self::$manifestCache = [];
+
+            return self::$manifestCache;
+        }
+
+        $states = self::loadStates();
+        $manifest = [];
+
+        foreach (glob($modulesPath . '/*', GLOB_ONLYDIR) as $moduleDir) {
+            $moduleName = basename($moduleDir);
+            $config = self::readModuleConfig($moduleDir);
+            $state = $states[$moduleName] ?? [];
+            $namespace = (string) ($config['namespace'] ?? "Modules\\{$moduleName}");
+
+            $manifest[$moduleName] = [
+                'folder' => $moduleName,
+                'name' => (string) ($config['name'] ?? $moduleName),
+                'path' => $moduleDir,
+                'config_path' => $moduleDir . DIRECTORY_SEPARATOR . 'module.json',
+                'routes_path' => $moduleDir . DIRECTORY_SEPARATOR . 'Http/routes.php',
+                'migrations_path' => $moduleDir . DIRECTORY_SEPARATOR . 'Infrastructure/Database/migrations',
+                'views_path' => $moduleDir . DIRECTORY_SEPARATOR . 'Resources/views',
+                'translations_path' => $moduleDir . DIRECTORY_SEPARATOR . 'Resources/lang',
+                'namespace' => $namespace,
+                'provider' => self::resolveProviderClass($moduleName, $moduleDir, $namespace, $config),
+                'enabled' => (bool) ($state['enabled'] ?? $config['enabled'] ?? true),
+                'module_type' => self::normalizeType((string) ($state['module_type'] ?? $config['module_type'] ?? 'core')),
+                'routes' => (bool) ($config['routes'] ?? false),
+                'migrations' => (bool) ($config['migrations'] ?? false),
+                'views' => (bool) ($config['views'] ?? false),
+                'translations' => (bool) ($config['translations'] ?? false),
+                'config' => $config,
+            ];
+        }
+
+        self::$manifestCache = $manifest;
+
+        return self::$manifestCache;
     }
 
     private static function loadStates(): array
@@ -176,34 +271,49 @@ class ModuleRegistryService
 
     private static function discoverFromFilesystem(): array
     {
-        $modulesPath = base_path('app/Modules');
+        return self::getAllModules();
+    }
 
-        if (!is_dir($modulesPath)) {
+    private static function readModuleConfig(string $moduleDir): array
+    {
+        $configPath = $moduleDir . DIRECTORY_SEPARATOR . 'module.json';
+
+        if (!File::exists($configPath)) {
             return [];
         }
 
-        $modules = [];
+        $decoded = json_decode(File::get($configPath), true);
 
-        foreach (glob($modulesPath . '/*', GLOB_ONLYDIR) as $moduleDir) {
-            $moduleName = basename($moduleDir);
-            $configPath = $moduleDir . DIRECTORY_SEPARATOR . 'module.json';
-            $config = [];
+        return is_array($decoded) ? $decoded : [];
+    }
 
-            if (File::exists($configPath)) {
-                $decoded = json_decode(File::get($configPath), true);
-                if (is_array($decoded)) {
-                    $config = $decoded;
-                }
-            }
-
-            $modules[] = [
-                'folder' => $moduleName,
-                'enabled' => (bool) ($config['enabled'] ?? true),
-                'module_type' => self::normalizeType((string) ($config['module_type'] ?? 'core')),
-            ];
+    private static function resolveProviderClass(string $moduleName, string $moduleDir, string $namespace, array $config): ?string
+    {
+        $configuredProvider = trim((string) ($config['provider'] ?? ''));
+        if ($configuredProvider !== '' && class_exists($configuredProvider)) {
+            return $configuredProvider;
         }
 
-        return $modules;
+        $conventionalProvider = "{$namespace}\\Providers\\{$moduleName}ServiceProvider";
+        if (class_exists($conventionalProvider)) {
+            return $conventionalProvider;
+        }
+
+        $providersDir = $moduleDir . DIRECTORY_SEPARATOR . 'Providers';
+        if (!is_dir($providersDir)) {
+            return null;
+        }
+
+        foreach (glob($providersDir . DIRECTORY_SEPARATOR . '*ServiceProvider.php') as $providerFile) {
+            $className = pathinfo($providerFile, PATHINFO_FILENAME);
+            $fullClass = "{$namespace}\\Providers\\{$className}";
+
+            if (class_exists($fullClass)) {
+                return $fullClass;
+            }
+        }
+
+        return null;
     }
 
     private static function normalizeType(string $moduleType): string

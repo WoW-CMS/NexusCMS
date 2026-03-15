@@ -10,13 +10,6 @@ use Illuminate\Support\Facades\File;
 
 class ModuleManagerController extends Controller
 {
-    protected string $modulesPath;
-
-    public function __construct()
-    {
-        $this->modulesPath = base_path('app/Modules');
-    }
-
     public function index()
     {
         $discoveredModules = $this->discoverModules();
@@ -151,14 +144,10 @@ class ModuleManagerController extends Controller
 
     protected function discoverModules(): array
     {
-        if (!is_dir($this->modulesPath)) {
-            return [];
-        }
-
         $modules = [];
 
-        foreach (glob($this->modulesPath . '/*', GLOB_ONLYDIR) as $moduleDir) {
-            $modules[] = $this->buildModuleData(basename($moduleDir));
+        foreach (ModuleRegistryService::getAllModules() as $module) {
+            $modules[] = $this->hydrateModuleData($module);
         }
 
         return $modules;
@@ -170,52 +159,49 @@ class ModuleManagerController extends Controller
             abort(404);
         }
 
-        $modulePath = $this->modulesPath . DIRECTORY_SEPARATOR . $module;
+        ModuleRegistryService::syncDiscoveredModules();
 
-        if (!is_dir($modulePath)) {
+        $moduleData = ModuleRegistryService::getModule($module);
+        if (!is_array($moduleData)) {
             abort(404);
         }
 
-        ModuleRegistryService::syncDiscoveredModules();
-
-        return $this->buildModuleData($module);
+        return $this->hydrateModuleData($moduleData);
     }
 
     protected function buildModuleData(string $module): array
     {
-        $modulePath = $this->modulesPath . DIRECTORY_SEPARATOR . $module;
-        $configPath = $modulePath . DIRECTORY_SEPARATOR . 'module.json';
-        $migrationsPath = $modulePath . DIRECTORY_SEPARATOR . 'Infrastructure/Database/migrations';
+        $moduleData = ModuleRegistryService::getModule($module);
 
-        $config = [];
-
-        if (File::exists($configPath)) {
-            $decoded = json_decode(File::get($configPath), true);
-            if (is_array($decoded)) {
-                $config = $decoded;
-            }
+        if (!is_array($moduleData)) {
+            abort(404);
         }
 
-        $moduleState = ModuleRegistryService::getModuleState($module, [
-            'enabled' => (bool) ($config['enabled'] ?? true),
-            'module_type' => (string) ($config['module_type'] ?? 'core'),
-        ]);
+        return $this->hydrateModuleData($moduleData);
+    }
+
+    protected function hydrateModuleData(array $module): array
+    {
+        $folder = (string) ($module['folder'] ?? '');
+        $name = (string) ($module['name'] ?? $folder);
+        $config = is_array($module['config'] ?? null) ? $module['config'] : [];
+        $migrationsPath = (string) ($module['migrations_path'] ?? '');
 
         return [
-            'folder' => $module,
-            'name' => $config['name'] ?? $module,
-            'enabled' => (bool) ($moduleState['enabled'] ?? true),
-            'module_type' => (string) ($moduleState['module_type'] ?? 'core'),
-            'routes' => (bool) ($config['routes'] ?? false),
-            'migrations' => (bool) ($config['migrations'] ?? false),
-            'views' => (bool) ($config['views'] ?? false),
-            'translations' => (bool) ($config['translations'] ?? false),
-            'namespace' => $config['namespace'] ?? "Modules\\{$module}",
-            'has_migrations' => is_dir($migrationsPath),
+            'folder' => $folder,
+            'name' => $name,
+            'enabled' => (bool) ($module['enabled'] ?? true),
+            'module_type' => (string) ($module['module_type'] ?? 'core'),
+            'routes' => (bool) ($module['routes'] ?? false),
+            'migrations' => (bool) ($module['migrations'] ?? false),
+            'views' => (bool) ($module['views'] ?? false),
+            'translations' => (bool) ($module['translations'] ?? false),
+            'namespace' => (string) ($module['namespace'] ?? "Modules\\{$folder}"),
+            'has_migrations' => $migrationsPath !== '' && is_dir($migrationsPath),
             'migrations_path' => $migrationsPath,
-            'config_path' => $configPath,
+            'config_path' => (string) ($module['config_path'] ?? ''),
             'config' => $config,
-            'path' => $modulePath,
+            'path' => (string) ($module['path'] ?? ''),
         ];
     }
 
