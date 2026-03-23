@@ -204,7 +204,7 @@
                                 <div class="absolute -top-8 -right-8 w-24 h-24 bg-green-500/10 rounded-full filter blur-2xl group-hover/stat:bg-green-500/20 transition-colors duration-300"></div>
                                 <div class="relative">
                                     <div class="text-5xl font-bold text-transparent bg-gradient-to-r from-green-400 to-green-600 bg-clip-text mb-2">
-                                        {{ number_format(App\Models\Thread::count()) }}
+                                        {{ number_format(\Modules\Forum\Domain\Models\Thread::count()) }}
                                     </div>
                                     <div class="flex items-center justify-center space-x-2 text-gray-300">
                                         <i class="fas fa-comments text-green-400"></i>
@@ -223,7 +223,7 @@
                                 <div class="absolute -top-8 -right-8 w-24 h-24 bg-purple-500/10 rounded-full filter blur-2xl group-hover/stat:bg-purple-500/20 transition-colors duration-300"></div>
                                 <div class="relative">
                                     <div class="text-5xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text mb-2">
-                                        {{ number_format(App\Models\Post::count()) }}
+                                        {{ number_format(\Modules\Forum\Domain\Models\Post::count()) }}
                                     </div>
                                     <div class="flex items-center justify-center space-x-2 text-gray-300">
                                         <i class="fas fa-comment-dots text-purple-400"></i>

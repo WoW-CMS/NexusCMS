@@ -2,9 +2,9 @@
 
 namespace Modules\Forum\Services;
 
-use App\Models\Forum;
-use App\Models\Thread;
-use App\Models\Post;
+use Modules\Forum\Domain\Models\Forum;
+use Modules\Forum\Domain\Models\Post;
+use Modules\Forum\Domain\Models\Thread;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

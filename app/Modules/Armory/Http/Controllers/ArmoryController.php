@@ -5,7 +5,7 @@ namespace Modules\Armory\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 use Illuminate\Http\Request;
-use App\Services\Parser\WowheadParserService;
+use Modules\Armory\Services\WowheadParserService;
 use Modules\Armory\Services\ArmoryService;
 
 class ArmoryController extends Controller

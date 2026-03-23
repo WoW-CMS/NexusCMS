@@ -5,7 +5,6 @@ use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\Users\UserController;
 use App\Http\Controllers\Frontend\Users\AuthController;
 use App\Http\Controllers\Frontend\InstallController;
-use App\Http\Controllers\Frontend\ForumsController;
 use App\Http\Controllers\Frontend\SubscriptionController;
 use App\Http\Controllers\Frontend\CommentController;
 use Illuminate\Support\Facades\Redis;

@@ -6,7 +6,7 @@ use App\Libraries\Redis\RedisLibrary;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Modules\Armory\Services\ArmoryService;
-use App\Services\Parser\WowheadParserService;
+use Modules\Armory\Services\WowheadParserService;
 use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider

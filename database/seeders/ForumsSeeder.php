@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Forum;
-use App\Models\Thread;
-use App\Models\Post;
+use Modules\Forum\Domain\Models\Forum;
+use Modules\Forum\Domain\Models\Post;
+use Modules\Forum\Domain\Models\Thread;
 use App\Models\User;
 use Illuminate\Support\Str;
 
