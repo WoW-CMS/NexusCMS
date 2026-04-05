@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\Admin\Domain\Models\Setting;
+use Modules\Admin\Domain\Models\Setting;
 use App\Services\ModuleRegistryService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
