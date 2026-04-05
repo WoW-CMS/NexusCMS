@@ -47,6 +47,10 @@ class AdminSettingsController extends Controller
     {
         $view = $request->get('view');
 
+        if (!array_key_exists($view, $this->view)) {
+            abort(404);
+        }
+
         // Prevent storage for specific views that handle their own data or are read-only here
         if (in_array($view, ['realms'])) {
             return redirect()->route('admin.settings.index', ['view' => $view])
@@ -56,6 +60,16 @@ class AdminSettingsController extends Controller
         $data = $request->except(['_token', 'view']);
 
         foreach ($data as $key => $value) {
+            // Only allow keys matching the pattern: lowercase letters, digits, underscores and dots
+            if (!preg_match('/^[a-z][a-z0-9_.]*$/i', (string) $key)) {
+                continue;
+            }
+
+            // Limit value length to prevent oversized payloads
+            if (is_string($value)) {
+                $value = mb_substr($value, 0, 65535);
+            }
+
             Setting::updateOrCreate(
                 ['key' => $key],
                 ['value' => $value]
