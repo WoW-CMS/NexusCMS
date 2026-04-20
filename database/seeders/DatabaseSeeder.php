@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DonationPlansSeeder::class,
             RolesAndPermissionsSeeder::class,
+            ForumsSeeder::class,
         ]);
     }
 }

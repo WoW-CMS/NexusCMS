@@ -30,7 +30,11 @@ class ForumService
         return Forum::where('is_category', true)
             ->orderBy('order')
             ->with(['subforums' => function ($query) {
-                $query->orderBy('order');
+                $query->orderBy('order')
+                      ->withCount('threads')
+                      ->with(['latestThread' => function ($q) {
+                          $q->with('user')->select('id', 'title', 'slug', 'forum_id', 'user_id', 'updated_at');
+                      }]);
             }])
             ->get();
     }
@@ -44,16 +48,17 @@ class ForumService
     public function getForumWithThreads(string $slug)
     {
         $forum = Forum::where('slug', $slug)
-            ->with(['subforums' => function ($query) {
-                $query->orderBy('order');
+            ->with(['parent', 'subforums' => function ($query) {
+                $query->orderBy('order')->withCount('threads');
             }])
             ->firstOrFail();
 
         $threads = Thread::where('forum_id', $forum->id)
             ->orderBy('is_sticky', 'desc')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->withCount('posts')
             ->with(['user', 'latestPost.user'])
-            ->paginate(20);
+            ->paginate(25);
 
         return compact('forum', 'threads');
     }

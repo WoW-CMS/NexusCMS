@@ -5,6 +5,7 @@ namespace Modules\Forum\Domain\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Forum extends Model
@@ -20,33 +21,26 @@ class Forum extends Model
         'is_category',
     ];
 
-    /**
-     * Get all threads for this forum
-     */
     public function threads(): HasMany
     {
         return $this->hasMany(Thread::class);
     }
 
-    /**
-     * Get the parent forum if this is a subforum
-     */
+    public function posts(): HasManyThrough
+    {
+        return $this->hasManyThrough(Post::class, Thread::class);
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Forum::class, 'parent_id');
     }
 
-    /**
-     * Get all subforums for this forum
-     */
     public function subforums(): HasMany
     {
         return $this->hasMany(Forum::class, 'parent_id');
     }
 
-    /**
-     * Get the latest thread in this forum
-     */
     public function latestThread(): BelongsTo
     {
         return $this->belongsTo(Thread::class, 'latest_thread_id');

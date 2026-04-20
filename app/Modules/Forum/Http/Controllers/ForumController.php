@@ -14,6 +14,9 @@ class ForumController extends Controller
 
     protected array $views = [
         'index'         => 'forum::index',
+        'forum'         => 'forum::show',
+        'thread'        => 'forum::thread',
+        'create_thread' => 'forum::create-thread',
     ];
 
     public function __construct(ForumService $forumService)
@@ -21,28 +24,28 @@ class ForumController extends Controller
         $this->forumService = $forumService;
     }
 
-    public function index() : View
+    public function index(): View
     {
         $categories = $this->forumService->getCategories();
 
         return view($this->views['index'], compact('categories'));
     }
 
-    public function forum(string $slug) : View
+    public function forum(string $slug): View
     {
-        $forum = $this->forumService->getForumWithThreads($slug);
+        $data = $this->forumService->getForumWithThreads($slug);
 
-        return view($this->views['forum'], compact('forum'));
+        return view($this->views['forum'], $data);
     }
 
-    public function thread(string $forumSlug, string $threadSlug, ?string $view = null) : View
+    public function thread(string $forumSlug, string $threadSlug): View
     {
         $data = $this->forumService->getThreadWithPosts($forumSlug, $threadSlug);
 
-        return view($this->views['thread'], compact('thread'));
+        return view($this->views['thread'], $data);
     }
 
-    public function createThread(string $slug) : View
+    public function createThread(string $slug): View
     {
         $forum = Forum::where('slug', $slug)->firstOrFail();
 
@@ -51,7 +54,7 @@ class ForumController extends Controller
 
     public function storeThread(Request $request, string $slug)
     {
-        $forum = Forum::where('slug', $slug)->firstOrFail();
+        $forum = Forum::where('slug', $slug)->where('is_category', false)->firstOrFail();
 
         $validated = $request->validate([
             'title'   => 'required|min:3|max:255',
@@ -60,9 +63,25 @@ class ForumController extends Controller
 
         $threadSlug = $this->forumService->createThread($forum, $validated);
 
-        return redirect()->route('forums.thread', [
+        return redirect()->route('forum.thread', [
             'forumSlug'  => $forum->slug,
             'threadSlug' => $threadSlug,
         ])->with('success', 'Thread created successfully!');
+    }
+
+    public function storeReply(Request $request, string $forumSlug, string $threadSlug)
+    {
+        $data = $this->forumService->getThreadWithPosts($forumSlug, $threadSlug);
+
+        $validated = $request->validate([
+            'content' => 'required|min:2',
+        ]);
+
+        $this->forumService->createPost($data['thread'], $validated);
+
+        return redirect()->route('forum.thread', [
+            'forumSlug'  => $forumSlug,
+            'threadSlug' => $threadSlug,
+        ])->with('success', 'Reply posted!');
     }
 }
