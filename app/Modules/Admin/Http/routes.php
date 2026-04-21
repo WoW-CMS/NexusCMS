@@ -41,6 +41,14 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->middleware('permission:manage.settings')->name('admin.settings.index');
         Route::post('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'store'])->middleware('permission:manage.settings')->name('admin.settings.store');
 
+        // Realm Management
+        Route::get('/realms', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'index'])->middleware('permission:manage.realms')->name('admin.realms.index');
+        Route::get('/realms/create', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'create'])->middleware('permission:manage.realms')->name('admin.realms.create');
+        Route::post('/realms', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'store'])->middleware('permission:manage.realms')->name('admin.realms.store');
+        Route::get('/realms/{realm}/edit', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'edit'])->middleware('permission:manage.realms')->name('admin.realms.edit');
+        Route::put('/realms/{realm}', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'update'])->middleware('permission:manage.realms')->name('admin.realms.update');
+        Route::delete('/realms/{realm}', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'destroy'])->middleware('permission:manage.realms')->name('admin.realms.destroy');
+
         // Menus
         Route::get('/menus', [\Modules\Admin\Http\Controllers\MenuManagerController::class, 'index'])->middleware('permission:manage.settings')->name('admin.menus.index');
         Route::put('/menus', [\Modules\Admin\Http\Controllers\MenuManagerController::class, 'update'])->middleware('permission:manage.settings')->name('admin.menus.update');

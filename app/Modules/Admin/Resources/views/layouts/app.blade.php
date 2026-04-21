@@ -193,10 +193,11 @@
             <div>
                 <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Realms</p>
                 @can('manage.realms')
-                <a href="#"
+                @php $active = request()->routeIs('admin.realms.*'); @endphp
+                <a href="{{ route('admin.realms.index') }}"
                    class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
-                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
-                    <i class="fas fa-server w-4 text-center"></i>
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-server w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
                     Realm Management
                 </a>
                 <a href="#"

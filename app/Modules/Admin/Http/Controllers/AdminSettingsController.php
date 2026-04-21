@@ -14,7 +14,6 @@ class AdminSettingsController extends Controller
     protected $view = [
         'general' => 'admin::settings.general',
         'email' => 'admin::settings.email',
-        'realms' => 'admin::settings.realms',
         'payment' => 'admin::settings.payment',
         'security' => 'admin::settings.security',
         'appearance' => 'admin::settings.appearance',
@@ -49,12 +48,6 @@ class AdminSettingsController extends Controller
 
         if (!array_key_exists($view, $this->view)) {
             abort(404);
-        }
-
-        // Prevent storage for specific views that handle their own data or are read-only here
-        if (in_array($view, ['realms'])) {
-            return redirect()->route('admin.settings.index', ['view' => $view])
-                ->with('warning', 'Settings for this section cannot be saved via this form.');
         }
 
         $data = $request->except(['_token', 'view']);

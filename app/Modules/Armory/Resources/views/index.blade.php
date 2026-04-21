@@ -12,7 +12,7 @@
         </div>
 
         <!-- Advanced Search -->
-        <form action="{{ route('armory') }}" method="GET" class="search-container max-w-4xl mx-auto p-8 rounded-2xl shadow-2xl border border-gray-700">
+        <form action="{{ route('armory.index') }}" method="GET" class="search-container max-w-4xl mx-auto p-8 rounded-2xl shadow-2xl border border-gray-700">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-400 mb-2">Character Name</label>

@@ -196,9 +196,11 @@ class UserController extends Controller
                 $characters = [];
 
                 try {
-                    if (!empty($realm->characters_database)) {
+                    $charactersDatabaseConfig = $realm->character_database ?? $realm->characters_database;
+
+                    if (!empty($charactersDatabaseConfig)) {
                         $charactersDb = $this->connectToExternalDatabase(
-                            json_decode($realm->characters_database, true),
+                            json_decode($charactersDatabaseConfig, true),
                             'characters'
                         );
                         

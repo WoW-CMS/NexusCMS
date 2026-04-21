@@ -4,7 +4,7 @@ namespace Modules\Armory\Services;
 
 use Modules\Armory\Domain\Interfaces\ArmoryRepositoryInterface;
 use App\Helpers\RealmHelper;
-use App\Services\Parser\WowheadParserService;
+use Modules\Armory\Services\WowheadParserService;
 use Illuminate\Support\Collection;
 
 class ArmoryService

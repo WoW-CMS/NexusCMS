@@ -81,9 +81,9 @@
         </div>
     </div>
 
-    @include('armory::armory.partials.equipment', ['item' => $items ?? collect()])
-    @include('armory::armory.partials.achievements', ['achievements' => $achievement ?? collect()])
-    @include('armory::armory.partials.professions', ['skill' => $skill ?? collect()])
+    @include('armory::partials.equipment', ['item' => $items ?? collect()])
+    @include('armory::partials.achievements', ['achievements' => $achievement ?? collect()])
+    @include('armory::partials.professions', ['skill' => $skill ?? collect()])
 </div>
 
 <script>

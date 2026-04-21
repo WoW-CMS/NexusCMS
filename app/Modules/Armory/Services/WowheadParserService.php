@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Parser;
+namespace Modules\Armory\Services;
 
 use Illuminate\Support\Facades\Http;
 

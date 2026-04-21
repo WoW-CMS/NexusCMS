@@ -23,7 +23,7 @@
         <div class="space-y-3">
             @foreach (array_slice($slotNames, 0, 6, true) as $slot => $label)
                 @php $equip = $equippedBySlot[$slot] ?? null; @endphp
-                @include('armory.partials.equipment-slot', ['equip' => $equip, 'label' => $label])
+                @include('armory::partials.equipment-slot', ['equip' => $equip, 'label' => $label])
             @endforeach
         </div>
         <div class="character-model rounded-2xl p-8 flex items-center justify-center relative overflow-hidden border border-gray-700">
@@ -36,7 +36,7 @@
         <div class="space-y-3">
             @foreach (array_slice($slotNames, 6, 6, true) as $slot => $label)
                 @php $equip = $equippedBySlot[$slot] ?? null; @endphp
-                @include('armory::armory.partials.equipment-slot', ['equip' => $equip, 'label' => $label])
+                @include('armory::partials.equipment-slot', ['equip' => $equip, 'label' => $label])
             @endforeach
         </div>
     </div>

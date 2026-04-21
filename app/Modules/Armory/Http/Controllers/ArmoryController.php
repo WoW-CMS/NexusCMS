@@ -23,8 +23,8 @@ class ArmoryController extends Controller
      * @var array<string,string>
      */
     protected array $views = [
-        'index' => 'armory::armory.index',
-        'show'  => 'armory::armory.show',
+        'index' => 'armory::index',
+        'show'  => 'armory::show',
     ];
 
     /**
