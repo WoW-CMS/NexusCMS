@@ -27,18 +27,26 @@ if (!function_exists('settings')) {
      */
     function settings($key = null, $default = null)
     {
-        // Cache settings for performance (forever until updated)
-        $settings = Cache::rememberForever('site_settings', function () {
+        $cachedSettings = Cache::get('site_settings');
+
+        if ($cachedSettings instanceof \Illuminate\Support\Collection) {
+            $settings = $cachedSettings;
+        } elseif (is_array($cachedSettings)) {
+            $settings = collect($cachedSettings);
+        } else {
+            $settings = collect([]);
+
             try {
-                // Check if table exists to avoid errors during migration/installation
-                if (!\Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                    return collect([]);
+                // Avoid caching an empty fallback forever when DB/table is temporarily unavailable.
+                if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                    $settings = Setting::query()->pluck('value', 'key');
+                    Cache::forever('site_settings', $settings);
                 }
-                return Setting::all()->pluck('value', 'key');
-            } catch (\Exception $e) {
-                return collect([]);
+            } catch (\Throwable $e) {
+                // Return in-memory fallback; next request can try rebuilding cache again.
+                $settings = collect([]);
             }
-        });
+        }
 
         if (is_null($key)) {
             return $settings;
