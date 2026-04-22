@@ -21,6 +21,7 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::get('/users', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'index'])->middleware('permission:manage.admin.users')->name('admin.users.index');
         Route::get('/users/create', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'create'])->middleware('permission:manage.admin.users')->name('admin.users.create');
         Route::post('/users', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'store'])->middleware('permission:manage.admin.users')->name('admin.users.store');
+        Route::get('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'show'])->middleware('permission:manage.admin.users')->name('admin.users.show');
         Route::get('/users/{user}/edit', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'edit'])->middleware('permission:manage.admin.users')->name('admin.users.edit');
         Route::put('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'update'])->middleware('permission:manage.admin.users')->name('admin.users.update');
         Route::delete('/users/{user}', [\Modules\Admin\Http\Controllers\AdminUserController::class, 'destroy'])->middleware('permission:manage.admin.users')->name('admin.users.destroy');

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Modules\Donate\Domain\Models\DonationTransaction;
 use Spatie\Permission\Models\Role;
 
 class AdminUserController extends Controller
@@ -31,6 +32,25 @@ class AdminUserController extends Controller
     {
         $roles = Role::orderBy('name')->get();
         return view('admin::users.create', compact('roles'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
+    {
+        $user->load('roles');
+
+        $donationTransactions = DonationTransaction::query()
+            ->where('user_id', $user->id)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin::users.show', compact('user', 'donationTransactions'));
     }
 
     /**
