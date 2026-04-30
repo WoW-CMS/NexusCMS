@@ -10,7 +10,9 @@ class EnsureInstallerIsAvailable
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (file_exists(storage_path('installed.lock'))) {
+        $isInstalled = file_exists(storage_path('installer.lock')) || file_exists(storage_path('installed.lock'));
+
+        if ($isInstalled) {
             if ($request->routeIs('install.success') && $request->session()->has('install_completed')) {
                 return $next($request);
             }

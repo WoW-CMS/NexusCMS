@@ -78,7 +78,14 @@ class InstallController extends Controller
                 ->withErrors(['install' => 'No se pudo completar la instalación: ' . $exception->getMessage()]);
         }
 
-        file_put_contents(storage_path('installed.lock'), now());
+        $lockContent = now()->toDateTimeString();
+
+        $installerLockWritten = file_put_contents(storage_path('installer.lock'), $lockContent, LOCK_EX);
+        $legacyLockWritten = file_put_contents(storage_path('installed.lock'), $lockContent, LOCK_EX);
+
+        if ($installerLockWritten === false && $legacyLockWritten === false) {
+            throw new \RuntimeException('Unable to create installation lock file.');
+        }
 
         return redirect()
             ->route('install.success')

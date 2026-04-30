@@ -44,7 +44,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (!file_exists(storage_path('installed.lock'))) {
+        $isInstalled = file_exists(storage_path('installer.lock')) || file_exists(storage_path('installed.lock'));
+
+        if (!$isInstalled) {
             Config::set('session.driver', 'file');
             Config::set('cache.default', 'file');
             Config::set('queue.default', 'sync');

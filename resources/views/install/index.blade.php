@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -538,8 +538,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Licencia</div>
-                    <div class="step-sub">EULA y requisitos</div>
+                    <div class="step-label">License</div>
+                    <div class="step-sub">EULA &amp; requirements</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="1">
@@ -548,8 +548,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Requisitos</div>
-                    <div class="step-sub">Verificación del entorno</div>
+                    <div class="step-label">Requirements</div>
+                    <div class="step-sub">Environment check</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="2">
@@ -558,8 +558,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Aplicación</div>
-                    <div class="step-sub">Nombre, URL e idioma</div>
+                    <div class="step-label">Application</div>
+                    <div class="step-sub">Name, URL &amp; language</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="3">
@@ -568,8 +568,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Base de datos</div>
-                    <div class="step-sub">Conexión principal</div>
+                    <div class="step-label">Database</div>
+                    <div class="step-sub">Main connection</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="4">
@@ -578,8 +578,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Administrador</div>
-                    <div class="step-sub">Cuenta inicial</div>
+                    <div class="step-label">Administrator</div>
+                    <div class="step-sub">Initial account</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="5">
@@ -588,8 +588,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Primer reino</div>
-                    <div class="step-sub">Realm y consola</div>
+                    <div class="step-label">First Realm</div>
+                    <div class="step-sub">Realm &amp; console</div>
                 </div>
             </div>
             <div class="sidebar-step" data-step="6">
@@ -598,8 +598,8 @@
                     <svg class="step-check" width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <div class="step-info">
-                    <div class="step-label">Confirmación</div>
-                    <div class="step-sub">Resumen final</div>
+                    <div class="step-label">Confirmation</div>
+                    <div class="step-sub">Final summary</div>
                 </div>
             </div>
         </nav>
@@ -610,7 +610,7 @@
     {{-- Content --}}
     <div class="content">
         <div class="content-topbar">
-            <span class="topbar-breadcrumb" id="topbarBreadcrumb">Paso <strong>1</strong> de 6</span>
+            <span class="topbar-breadcrumb" id="topbarBreadcrumb">Step <strong>1</strong> of 6</span>
             <div class="topbar-progress">
                 <div class="progress-pip" data-pip="0"></div>
                 <div class="progress-pip" data-pip="1"></div>
@@ -624,13 +624,13 @@
 
         <div class="content-main">
             <div class="pane-header">
-                <h1 id="paneTitle">Licencia</h1>
-                <p id="paneDesc">Lee y acepta los términos de la GNU General Public License v3.0.</p>
+                <h1 id="paneTitle">License</h1>
+                <p id="paneDesc">Read and accept the terms of the GNU General Public License v3.0.</p>
             </div>
 
             @if($errors->any())
                 <div class="alert-error">
-                    <strong>No se pudo completar la instalación:</strong>
+                    <strong>Installation could not be completed:</strong>
                     <ul>
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -646,25 +646,25 @@
                 <div class="step-pane" data-pane="0">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Acuerdo de licencia (EULA)</h2>
+                            <h2>License Agreement (EULA)</h2>
                         </div>
                         <div class="form-section-body">
                             <div class="license-text">
-                                <p><strong>NexusCMS</strong> es un proyecto de código abierto publicado bajo la <strong>GNU General Public License v3.0</strong> (GPL-3.0). Al continuar con la instalación confirmas que has leído y aceptas los términos de esta licencia.</p>
+                                <p><strong>NexusCMS</strong> is an open-source project released under the <strong>GNU General Public License v3.0</strong> (GPL-3.0). By continuing with the installation you confirm that you have read and accept the terms of this license.</p>
 
-                                <p>El software se distribuye de forma gratuita y con plena libertad de uso. Puedes ejecutarlo para cualquier propósito, estudiar cómo funciona, adaptarlo a tus necesidades y redistribuir tanto la versión original como tus modificaciones. La única condición es que cualquier versión derivada que distribuyas públicamente debe conservar este mismo aviso de licencia y publicarse también bajo GPL-3.0, garantizando que los demás usuarios reciban las mismas libertades que tú tienes.</p>
+                                <p>The software is distributed free of charge and with full freedom of use. You may run it for any purpose, study how it works, adapt it to your needs, and redistribute both the original version and your modifications. The only condition is that any derivative version you publicly distribute must retain this same license notice and be published under GPL-3.0 as well, ensuring that other users receive the same freedoms that you have.</p>
 
-                                <p>El uso comercial está permitido sin coste adicional. Sin embargo, si decides distribuir una versión modificada de NexusCMS —ya sea de forma gratuita o de pago— estás obligado a hacer disponible el código fuente de tus cambios bajo la misma licencia. Esta condición es la base del modelo copyleft que protege el ecosistema de software libre.</p>
+                                <p>Commercial use is permitted at no additional cost. However, if you choose to distribute a modified version of NexusCMS — whether free of charge or for a fee — you are required to make the source code of your changes available under the same license. This condition is the foundation of the copyleft model that protects the free software ecosystem.</p>
 
-                                <p>NexusCMS se entrega <em>tal cual</em>, sin ninguna garantía expresa ni implícita. Los autores y contribuidores no asumen responsabilidad por daños derivados del uso del software, interrupciones de servicio, pérdida de datos ni ninguna otra consecuencia directa o indirecta. La instalación y operación del sistema son responsabilidad exclusiva del administrador que realiza el despliegue, quien debe garantizar la seguridad del servidor, la protección de los datos de los usuarios y el cumplimiento de la normativa aplicable, incluyendo el Reglamento General de Protección de Datos (GDPR) u otras leyes de privacidad vigentes en su jurisdicción.</p>
+                                <p>NexusCMS is delivered <em>as is</em>, without any express or implied warranty. The authors and contributors assume no responsibility for damages arising from the use of the software, service interruptions, data loss, or any other direct or indirect consequence. Installation and operation of the system are the sole responsibility of the administrator performing the deployment, who must ensure server security, user data protection, and compliance with applicable regulations, including the General Data Protection Regulation (GDPR) or other privacy laws in force in their jurisdiction.</p>
 
-                                <p>Las contribuciones enviadas al repositorio oficial del proyecto —a través de pull requests, issues u otros medios— se considerarán licenciadas bajo GPL-3.0 salvo acuerdo escrito distinto. La comunidad de NexusCMS valora y agradece cada aportación, sea código, documentación, traducciones o informes de error.</p>
+                                <p>Contributions submitted to the official project repository — via pull requests, issues, or other means — will be considered licensed under GPL-3.0 unless a different written agreement exists. The NexusCMS community values and appreciates every contribution, whether code, documentation, translations, or bug reports.</p>
 
-                                <p>El texto íntegro de la GNU General Public License v3.0 está disponible en <em>https://www.gnu.org/licenses/gpl-3.0.html</em> y en el archivo <code>LICENSE</code> incluido en el repositorio del proyecto.</p>
+                                <p>The full text of the GNU General Public License v3.0 is available at <em>https://www.gnu.org/licenses/gpl-3.0.html</em> and in the <code>LICENSE</code> file included in the project repository.</p>
                             </div>
                             <div class="checkbox-field" style="margin-top:14px;">
                                 <input type="checkbox" id="agree_eula" name="agree_eula" value="1" {{ old('agree_eula') ? 'checked' : '' }} required>
-                                <label for="agree_eula">He leído y acepto el acuerdo de licencia (EULA) para continuar con la instalación.</label>
+                                <label for="agree_eula">I have read and accept the license agreement (EULA) to proceed with the installation.</label>
                             </div>
                         </div>
                     </div>
@@ -675,27 +675,27 @@
                 <div class="step-pane" data-pane="1">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Requisitos del sistema</h2>
+                            <h2>System Requirements</h2>
                             @if($allRequirementsPassed)
-                                <span class="section-badge">Todo en orden</span>
+                                <span class="section-badge">All good</span>
                             @else
-                                <span class="section-badge" style="background:#fff2f2;color:#991b1b;border-color:#fca5a5;">Hay fallos</span>
+                                <span class="section-badge" style="background:#fff2f2;color:#991b1b;border-color:#fca5a5;">Issues found</span>
                             @endif
                         </div>
                         <div class="form-section-body" style="padding:0;">
                             <table class="req-table">
                                 <thead>
                                     <tr>
-                                        <th>Requisito</th>
-                                        <th>Estado</th>
-                                        <th>Valor actual</th>
+                                        <th>Requirement</th>
+                                        <th>Status</th>
+                                        <th>Current value</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($requirements as $req)
                                         <tr>
                                             <td>{{ $req['label'] }}</td>
-                                            <td><span class="req-status {{ $req['ok'] ? 'ok' : 'err' }}">{!! $req['ok'] ? '&#10003; OK' : '&#10007; Fallo' !!}</span></td>
+                                            <td><span class="req-status {{ $req['ok'] ? 'ok' : 'err' }}">{!! $req['ok'] ? '&#10003; OK' : '&#10007; Fail' !!}</span></td>
                                             <td class="req-value">{{ $req['current'] }}</td>
                                         </tr>
                                     @endforeach
@@ -709,28 +709,28 @@
                 <div class="step-pane" data-pane="1">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Configuración general</h2>
+                            <h2>General configuration</h2>
                         </div>
                         <div class="form-section-body">
                             <div class="field-row">
                                 <div class="field f-half">
-                                    <label for="app_name">Nombre de la aplicación</label>
+                                    <label for="app_name">Application name</label>
                                     <input type="text" id="app_name" name="app_name" value="{{ old('app_name', 'NexusCMS') }}" required>
                                 </div>
                                 <div class="field f-half">
-                                    <label for="app_url">URL base</label>
+                                    <label for="app_url">Base URL</label>
                                     <input type="url" id="app_url" name="app_url" value="{{ old('app_url', url('/')) }}" required>
-                                    <span class="field-hint">Ej: https://misite.com &mdash; sin barra al final.</span>
+                                    <span class="field-hint">E.g.: https://mysite.com &mdash; no trailing slash.</span>
                                 </div>
                             </div>
                             <div class="field-row">
                                 <div class="field f-third">
-                                    <label for="locale">Idioma predeterminado</label>
+                                    <label for="locale">Default language</label>
                                     <select id="locale" name="locale">
-                                        <option value="es" {{ old('locale', 'es') === 'es' ? 'selected' : '' }}>Español</option>
+                                        <option value="es" {{ old('locale', 'es') === 'es' ? 'selected' : '' }}>Spanish</option>
                                         <option value="en" {{ old('locale') === 'en' ? 'selected' : '' }}>English</option>
-                                        <option value="fr" {{ old('locale') === 'fr' ? 'selected' : '' }}>Français</option>
-                                        <option value="de" {{ old('locale') === 'de' ? 'selected' : '' }}>Deutsch</option>
+                                        <option value="fr" {{ old('locale') === 'fr' ? 'selected' : '' }}>French</option>
+                                        <option value="de" {{ old('locale') === 'de' ? 'selected' : '' }}>German</option>
                                     </select>
                                 </div>
                             </div>
@@ -742,7 +742,7 @@
                 <div class="step-pane" data-pane="2">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Base de datos de NexusCMS</h2>
+                            <h2>NexusCMS Database</h2>
                         </div>
                         <div class="form-section-body">
                             <div class="field-row">
@@ -751,27 +751,27 @@
                                     <input type="text" id="db_host" name="db_host" value="{{ old('db_host', '127.0.0.1') }}" required>
                                 </div>
                                 <div class="field f-one">
-                                    <label for="db_port">Puerto</label>
+                                    <label for="db_port">Port</label>
                                     <input type="number" id="db_port" name="db_port" min="1" max="65535" value="{{ old('db_port', 3306) }}" required>
                                 </div>
                             </div>
                             <div class="field-row">
                                 <div class="field f-third">
-                                    <label for="db_name">Nombre de la base de datos</label>
+                                    <label for="db_name">Database name</label>
                                     <input type="text" id="db_name" name="db_name" value="{{ old('db_name') }}" required>
                                 </div>
                                 <div class="field f-third">
-                                    <label for="db_username">Usuario</label>
+                                    <label for="db_username">Username</label>
                                     <input type="text" id="db_username" name="db_username" value="{{ old('db_username') }}" required>
                                 </div>
                                 <div class="field f-third">
-                                    <label for="db_password">Contraseña</label>
+                                    <label for="db_password">Password</label>
                                     <input type="password" id="db_password" name="db_password" value="{{ old('db_password') }}">
                                 </div>
                             </div>
                             <div class="db-test-row">
-                                <button type="button" class="btn btn-ghost" id="testConnection">Probar conexión</button>
-                                <span id="dbFeedback" class="db-feedback pending">Sin verificar</span>
+                                <button type="button" class="btn btn-ghost" id="testConnection">Test connection</button>
+                                <span id="dbFeedback" class="db-feedback pending">Not verified</span>
                             </div>
                         </div>
                     </div>
@@ -781,12 +781,12 @@
                 <div class="step-pane" data-pane="3">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Cuenta administradora</h2>
+                            <h2>Administrator account</h2>
                         </div>
                         <div class="form-section-body">
                             <div class="field-row">
                                 <div class="field f-half">
-                                    <label for="admin_name">Nombre</label>
+                                    <label for="admin_name">Name</label>
                                     <input type="text" id="admin_name" name="admin_name" value="{{ old('admin_name') }}" required>
                                 </div>
                                 <div class="field f-half">
@@ -796,12 +796,12 @@
                             </div>
                             <div class="field-row">
                                 <div class="field f-half">
-                                    <label for="admin_password">Contraseña</label>
+                                    <label for="admin_password">Password</label>
                                     <input type="password" id="admin_password" name="admin_password" required>
-                                    <span class="field-hint">Mínimo 8 caracteres.</span>
+                                    <span class="field-hint">Minimum 8 characters.</span>
                                 </div>
                                 <div class="field f-half">
-                                    <label for="admin_password_confirmation">Confirmar contraseña</label>
+                                    <label for="admin_password_confirmation">Confirm password</label>
                                     <input type="password" id="admin_password_confirmation" name="admin_password_confirmation" required>
                                 </div>
                             </div>
@@ -813,12 +813,12 @@
                 <div class="step-pane" data-pane="4">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Configuración del realm</h2>
+                            <h2>Realm configuration</h2>
                         </div>
                         <div class="form-section-body">
                             <div class="field-row">
                                 <div class="field f-third">
-                                    <label for="realm_name">Nombre del reino</label>
+                                    <label for="realm_name">Realm name</label>
                                     <input type="text" id="realm_name" name="realm_name" value="{{ old('realm_name', 'Realm #1') }}" required>
                                 </div>
                                 <div class="field f-third">
@@ -826,13 +826,13 @@
                                     <input type="text" id="realm_hostname" name="realm_hostname" value="{{ old('realm_hostname', '127.0.0.1') }}" required>
                                 </div>
                                 <div class="field f-one">
-                                    <label for="realm_port">Puerto</label>
+                                    <label for="realm_port">Port</label>
                                     <input type="number" id="realm_port" name="realm_port" min="1" max="65535" value="{{ old('realm_port', 8085) }}" required>
                                 </div>
                             </div>
                             <div class="field-row">
                                 <div class="field f-third">
-                                    <label for="realm_expansion">Expansión</label>
+                                    <label for="realm_expansion">Expansion</label>
                                     <select id="realm_expansion" name="realm_expansion" required>
                                         @foreach($expansions as $expansionId => $expansionName)
                                             <option value="{{ $expansionId }}" {{ (int) old('realm_expansion', $defaultExpansion) === (int) $expansionId ? 'selected' : '' }}>{{ $expansionName }}</option>
@@ -840,7 +840,7 @@
                                     </select>
                                 </div>
                                 <div class="field f-third">
-                                    <label for="realm_emulator">Emulador</label>
+                                    <label for="realm_emulator">Emulator</label>
                                     <select id="realm_emulator" name="realm_emulator" required>
                                         @foreach($emulators as $emulatorValue => $emulatorLabel)
                                             <option value="{{ $emulatorValue }}" {{ old('realm_emulator', $defaultEmulator) === $emulatorValue ? 'selected' : '' }}>{{ $emulatorLabel }}</option>
@@ -848,7 +848,7 @@
                                     </select>
                                 </div>
                                 <div class="field f-third">
-                                    <label for="realm_console_urn">URN de consola</label>
+                                    <label for="realm_console_urn">Console URN</label>
                                     <select id="realm_console_urn" name="realm_console_urn" required>
                                         @foreach($emulatorUrns as $emulatorValue => $urnValue)
                                             <option value="{{ $urnValue }}" {{ old('realm_console_urn') === $urnValue ? 'selected' : '' }}>{{ $emulators[$emulatorValue] ?? $emulatorValue }} ({{ $urnValue }})</option>
@@ -858,14 +858,14 @@
                             </div>
                             <div class="checkbox-field" style="margin-top:8px;">
                                 <input type="checkbox" id="realm_bnet" name="realm_bnet" value="1" {{ old('realm_bnet') ? 'checked' : '' }}>
-                                <label for="realm_bnet">Habilitar autenticación Battle.net para este reino</label>
+                                <label for="realm_bnet">Enable Battle.net authentication for this realm</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Consola remota</h2>
+                            <h2>Remote console</h2>
                             <span class="section-badge optional">SOAP / RA</span>
                         </div>
                         <div class="form-section-body">
@@ -875,17 +875,17 @@
                                     <input type="text" id="realm_console_hostname" name="realm_console_hostname" value="{{ old('realm_console_hostname', '127.0.0.1') }}" required>
                                 </div>
                                 <div class="field f-one">
-                                    <label for="realm_console_port">Puerto</label>
+                                    <label for="realm_console_port">Port</label>
                                     <input type="number" id="realm_console_port" name="realm_console_port" min="1" max="65535" value="{{ old('realm_console_port', 3443) }}">
                                 </div>
                             </div>
                             <div class="field-row">
                                 <div class="field f-half">
-                                    <label for="realm_console_username">Usuario</label>
+                                    <label for="realm_console_username">Username</label>
                                     <input type="text" id="realm_console_username" name="realm_console_username" value="{{ old('realm_console_username') }}" required>
                                 </div>
                                 <div class="field f-half">
-                                    <label for="realm_console_password">Contraseña</label>
+                                    <label for="realm_console_password">Password</label>
                                     <input type="password" id="realm_console_password" name="realm_console_password" value="{{ old('realm_console_password') }}" required>
                                 </div>
                             </div>
@@ -912,21 +912,21 @@
                                         <input type="text" id="{{ $key }}_host" name="{{ $key }}[host]" value="{{ old($key . '.host', '127.0.0.1') }}" required>
                                     </div>
                                     <div class="field f-one">
-                                        <label for="{{ $key }}_port">Puerto</label>
+                                        <label for="{{ $key }}_port">Port</label>
                                         <input type="number" id="{{ $key }}_port" name="{{ $key }}[port]" min="1" max="65535" value="{{ old($key . '.port', 3306) }}">
                                     </div>
                                 </div>
                                 <div class="field-row">
                                     <div class="field f-third">
-                                        <label for="{{ $key }}_database">Base de datos</label>
+                                        <label for="{{ $key }}_database">Database</label>
                                         <input type="text" id="{{ $key }}_database" name="{{ $key }}[database]" value="{{ old($key . '.database') }}" required>
                                     </div>
                                     <div class="field f-third">
-                                        <label for="{{ $key }}_username">Usuario</label>
+                                        <label for="{{ $key }}_username">Username</label>
                                         <input type="text" id="{{ $key }}_username" name="{{ $key }}[username]" value="{{ old($key . '.username') }}" required>
                                     </div>
                                     <div class="field f-third">
-                                        <label for="{{ $key }}_password">Contraseña</label>
+                                        <label for="{{ $key }}_password">Password</label>
                                         <input type="password" id="{{ $key }}_password" name="{{ $key }}[password]" value="{{ old($key . '.password') }}" required>
                                     </div>
                                     <div class="field f-half">
@@ -947,20 +947,20 @@
                 <div class="step-pane" data-pane="5">
                     <div class="form-section">
                         <div class="form-section-head">
-                            <h2>Resumen de la instalación</h2>
+                            <h2>Installation summary</h2>
                         </div>
                         <div class="form-section-body">
                             <ul class="checklist">
-                                <li>Se escribirá el archivo <code>.env</code> con la configuración de entorno.</li>
-                                <li>Se ejecutarán las migraciones de base de datos y los seeders iniciales.</li>
-                                <li>Se creará la cuenta administradora con el rol Admin.</li>
-                                <li>Se registrará el primer reino con sus bases de datos.</li>
-                                <li>Se generará la clave de aplicación y se optimizarán las cachés.</li>
-                                <li>Se creará el archivo <code>storage/installed.lock</code> para bloquear el asistente.</li>
+                                <li>The <code>.env</code> file will be written with the environment configuration.</li>
+                                <li>Database migrations and initial seeders will be executed.</li>
+                                <li>The administrator account will be created with the Admin role.</li>
+                                <li>The first realm will be registered with its databases.</li>
+                                <li>The application key will be generated and caches will be optimized.</li>
+                                <li>The <code>storage/installed.lock</code> file will be created to lock the wizard.</li>
                             </ul>
                             <div class="checkbox-field" style="margin-top:18px; padding-top:16px; border-top:1px solid #edf0f5;">
                                 <input type="checkbox" id="confirm_apply" required>
-                                <label for="confirm_apply">Confirmo que los datos introducidos son correctos y quiero iniciar la instalación.</label>
+                                <label for="confirm_apply">I confirm that the entered data is correct and I want to start the installation.</label>
                             </div>
                         </div>
                     </div>
@@ -971,11 +971,11 @@
 
         <div class="content-footer">
             <div class="footer-left">
-                <button type="button" class="btn btn-ghost" id="prevBtn">&#8592; Anterior</button>
+                <button type="button" class="btn btn-ghost" id="prevBtn">&#8592; Previous</button>
             </div>
             <div class="footer-right">
-                <button type="button" class="btn btn-primary" id="nextBtn">Siguiente &#8594;</button>
-                <button type="submit" form="installerForm" class="btn btn-success" id="installBtn">Instalar NexusCMS</button>
+                <button type="button" class="btn btn-primary" id="nextBtn">Next &#8594;</button>
+                <button type="submit" form="installerForm" class="btn btn-success" id="installBtn">Install NexusCMS</button>
             </div>
         </div>
     </div>
@@ -986,13 +986,13 @@
     const requirementsPassed = @json($allRequirementsPassed);
 
     const stepMeta = [
-        { title: 'Licencia',                        desc: 'Lee y acepta los términos de la GNU General Public License v3.0.' },
-        { title: 'Requisitos del sistema',          desc: 'Verifica que el entorno cumpla los requisitos mínimos para instalar NexusCMS.' },
-        { title: 'Configuración de la aplicación', desc: 'Nombre público, URL base e idioma predeterminado del CMS.' },
-        { title: 'Base de datos principal',         desc: 'Conexión que usará Laravel para las migraciones y datos del CMS.' },
-        { title: 'Cuenta administradora',           desc: 'Credenciales del primer usuario con permisos de administración.' },
-        { title: 'Primer reino',                    desc: 'Datos del realm, consola remota y conexiones Auth / Characters / World.' },
-        { title: 'Confirmación final',              desc: 'Revisa el resumen y ejecuta la instalación.' },
+        { title: 'License',              desc: 'Read and accept the terms of the GNU General Public License v3.0.' },
+        { title: 'System requirements',  desc: 'Verify that the environment meets the minimum requirements to install NexusCMS.' },
+        { title: 'App configuration',    desc: 'Public name, base URL and default language of the CMS.' },
+        { title: 'Main database',        desc: 'Connection that Laravel will use for migrations and CMS data.' },
+        { title: 'Administrator account',desc: 'Credentials for the first user with administration permissions.' },
+        { title: 'First realm',          desc: 'Realm data, remote console and Auth / Characters / World connections.' },
+        { title: 'Final confirmation',   desc: 'Review the summary and run the installation.' },
     ];
 
     const sidebarSteps = Array.from(document.querySelectorAll('.sidebar-step'));
@@ -1031,7 +1031,7 @@
         const meta = stepMeta[currentStep];
         paneTitle.textContent = meta.title;
         paneDesc.textContent  = meta.desc;
-        breadcrumb.innerHTML  = 'Paso <strong>' + (currentStep + 1) + '</strong> de ' + panes.length;
+        breadcrumb.innerHTML  = 'Step <strong>' + (currentStep + 1) + '</strong> of ' + panes.length;
 
         prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
         const isLast = currentStep === panes.length - 1;
@@ -1044,7 +1044,7 @@
         if (!pane) return true;
 
         if (currentStep === 1 && !requirementsPassed) {
-            alert('No puedes continuar hasta resolver los requisitos del sistema marcados como Fallo.');
+            alert('You cannot proceed until the system requirements marked as Fail are resolved.');
             return false;
         }
 
@@ -1053,14 +1053,14 @@
             if (field.type === 'checkbox') {
                 if (!field.checked) {
                     field.focus();
-                    alert('Debes marcar el checkbox obligatorio de este paso para continuar.');
+                    alert('You must check the required checkbox on this step to continue.');
                     return false;
                 }
                 continue;
             }
             if (!field.value.trim()) {
                 field.focus();
-                alert('Completa todos los campos obligatorios antes de continuar.');
+                alert('Please fill in all required fields before continuing.');
                 return false;
             }
         }
@@ -1069,11 +1069,11 @@
             const pass = document.getElementById('admin_password').value;
             const conf = document.getElementById('admin_password_confirmation').value;
             if (pass.length < 8) {
-                alert('La contraseña debe tener al menos 8 caracteres.');
+                alert('Password must be at least 8 characters long.');
                 return false;
             }
             if (pass !== conf) {
-                alert('Las contraseñas no coinciden.');
+                alert('Passwords do not match.');
                 return false;
             }
         }
@@ -1081,7 +1081,7 @@
         if (currentStep === panes.length - 1) {
             const chk = document.getElementById('confirm_apply');
             if (chk && !chk.checked) {
-                alert('Debes marcar la casilla de confirmación para ejecutar la instalación.');
+                alert('You must check the confirmation checkbox to run the installation.');
                 return false;
             }
         }
@@ -1117,10 +1117,10 @@
                 body,
             });
             const data = await res.json();
-            dbFeedback.textContent = data.message || (data.success ? 'Conexión exitosa' : 'Error de conexión');
+            dbFeedback.textContent = data.message || (data.success ? 'Connection successful' : 'Connection error');
             dbFeedback.className   = 'db-feedback ' + (data.success ? 'ok' : 'err');
         } catch {
-            dbFeedback.textContent = 'No se pudo contactar con el servidor.';
+            dbFeedback.textContent = 'Could not reach the server.';
             dbFeedback.className   = 'db-feedback err';
         }
     });
@@ -1139,7 +1139,7 @@
             return;
         }
         installBtn.disabled    = true;
-        installBtn.textContent = 'Instalando\u2026';
+        installBtn.textContent = 'Installing\u2026';
     });
 
     updateWizard();
