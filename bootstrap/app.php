@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\CheckRole::class,
             'permission' => \App\Http\Middleware\Permission::class,
             'track.analytics' => \App\Http\Middleware\TrackAnalytics::class,
+            'install.available' => \App\Http\Middleware\EnsureInstallerIsAvailable::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

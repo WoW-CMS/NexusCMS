@@ -12,13 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->middleware(['track.analytics'])->name('home');
 Route::get('/howtoplay', [HomeController::class, 'howToPlay'])->middleware(['track.analytics'])->name('howtoplay');
 
-Route::middleware([])->group(function () {
-    if (!file_exists(storage_path('installed.lock'))) {
-        Route::get('/install', [InstallController::class, 'index'])->name('install.index');
-        Route::get('/install/success', [InstallController::class, 'success'])->name('install.success');
-        Route::post('/install', [InstallController::class, 'install'])->name('install.run');
-        Route::post('/install/test-db', [InstallController::class, 'testDb'])->name('install.testDb');
-    }
+Route::middleware(['install.available'])->group(function () {
+    Route::get('/install', [InstallController::class, 'index'])->name('install.index');
+    Route::get('/install/success', [InstallController::class, 'success'])->name('install.success');
+    Route::post('/install', [InstallController::class, 'install'])->name('install.run');
+    Route::post('/install/test-db', [InstallController::class, 'testDb'])->name('install.testDb');
 });
 
 Route::prefix('news')->middleware(['track.analytics'])->group(function () {

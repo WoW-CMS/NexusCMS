@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Realm;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
-use Spatie\Permission\Contracts\Role;
 
 class InstallService
 {
@@ -22,6 +22,7 @@ class InstallService
 
         Artisan::call('migrate:fresh', ['--seed' => true]);
         $this->createAdminAccount($options);
+        $this->createInitialRealm($options);
         Artisan::call('storage:link');
         Artisan::call('key:generate');
         Artisan::call('config:cache');
@@ -38,13 +39,36 @@ class InstallService
         $adminEmail = $options['admin_email'];
         $adminPassword = $options['admin_password'];
 
-        $user = User::create([
-            'name'  => $adminName,
+        $user = User::query()->firstOrCreate([
             'email' => $adminEmail,
+        ], [
+            'name'  => $adminName,
             'password' => bcrypt($adminPassword),
         ]);
 
         $user->assignRole('Admin');
+    }
+
+    protected function createInitialRealm(array $options): void
+    {
+        Realm::query()->firstOrCreate(
+            ['name' => $options['realm_name']],
+            [
+                'hostname' => $options['realm_hostname'],
+                'port' => $options['realm_port'],
+                'expansion' => $options['realm_expansion'],
+                'emulator' => $options['realm_emulator'],
+                'bnet' => (bool) ($options['realm_bnet'] ?? false),
+                'auth_database' => json_encode($this->buildDatabaseConfig($options['realm_auth'])),
+                'character_database' => json_encode($this->buildDatabaseConfig($options['realm_characters'])),
+                'world_database' => json_encode($this->buildDatabaseConfig($options['realm_world'])),
+                'console_hostname' => $options['realm_console_hostname'],
+                'console_port' => $options['realm_console_port'] ?? null,
+                'console_username' => $options['realm_console_username'],
+                'console_password' => $options['realm_console_password'],
+                'console_urn' => $options['realm_console_urn'],
+            ]
+        );
     }
 
     protected function configureEnvironment(array $options)
@@ -84,6 +108,23 @@ class InstallService
         }
 
         $this->updateEnv($envConfig);
+    }
+
+    protected function buildDatabaseConfig(array $config): array
+    {
+        return [
+            'driver' => 'mysql',
+            'host' => $config['host'],
+            'port' => $config['port'] ?? 3306,
+            'database' => $config['database'],
+            'username' => $config['username'],
+            'password' => $config['password'],
+            'charset' => $config['charset'] ?? 'utf8mb4',
+            'collation' => $config['collation'] ?? 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ];
     }
 
     protected function updateEnv(array $data)

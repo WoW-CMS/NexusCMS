@@ -7,6 +7,7 @@ use Modules\Forum\Domain\Models\Forum;
 use Modules\Forum\Domain\Models\Post;
 use Modules\Forum\Domain\Models\Thread;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ForumsSeeder extends Seeder
@@ -98,10 +99,15 @@ class ForumsSeeder extends Seeder
             'order' => 2,
         ]);
 
-        // Get admin user or create one if not exists
-        $admin = User::role('Admin')->first();
+        // Resolve an author user for sample content.
+        $admin = User::role('Admin')->first() ?? User::query()->first();
+
         if (!$admin) {
-            $admin = User::first();
+            $admin = User::query()->create([
+                'name' => 'System Seeder',
+                'email' => 'system-seeder@nexuscms.local',
+                'password' => Hash::make(Str::random(32)),
+            ]);
         }
 
         // Create sample threads and posts
