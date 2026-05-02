@@ -47,20 +47,6 @@
             <div class="lg:col-span-2 space-y-6">
 
                 @if($isMultilingual && count($activeLocales) > 1)
-                {{-- Excerpt (non-translated) --}}
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-6 border-b border-gray-200">
-                        <h2 class="text-base font-bold text-gray-800">Excerpt</h2>
-                        <p class="text-xs text-gray-500 mt-0.5">Short summary shown in news listings. Optional.</p>
-                    </div>
-                    <div class="p-6">
-                        <textarea name="excerpt"
-                                  id="ck-excerpt-main"
-                                  rows="4"
-                                  class="news-ck-excerpt w-full">{{ old('excerpt', $news->excerpt) }}</textarea>
-                    </div>
-                </div>
-
                 {{-- Multilingual tabs --}}
                 <div class="bg-white rounded-lg shadow">
                     <div class="border-b border-gray-200 px-4">
@@ -102,6 +88,16 @@
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                    {{ $locale === $defaultLocale ? 'required' : '' }}
                                    placeholder="Article title in {{ $localeNames[$locale] ?? $locale }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Excerpt <span class="font-mono text-xs text-gray-400">[{{ $locale }}]</span>
+                            </label>
+                            <p class="text-xs text-gray-500 mb-2">Short summary shown in news listings. Optional.</p>
+                            <textarea name="excerpt_translations[{{ $locale }}]"
+                                      id="ck-excerpt-{{ $locale }}"
+                                      rows="4"
+                                      class="news-ck-excerpt w-full">{{ old("excerpt_translations.{$locale}", $news->excerpt_translations[$locale] ?? '') }}</textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
