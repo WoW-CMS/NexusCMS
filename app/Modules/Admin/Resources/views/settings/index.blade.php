@@ -34,35 +34,4 @@
 
     </main>
 </div>
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('settings-form');
-        const saveBtn = document.getElementById('save-settings-btn');
-        
-        if (!form || !saveBtn) return;
-
-        function checkFormValidity() {
-            const inputs = form.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]), select, textarea');
-            let isValid = true;
-
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                }
-            });
-
-            saveBtn.disabled = !isValid;
-        }
-
-        // Check initially
-        checkFormValidity();
-
-        // Listen for changes
-        form.addEventListener('input', checkFormValidity);
-        form.addEventListener('change', checkFormValidity);
-    });
-</script>
-@endpush
 @endsection

@@ -54,6 +54,23 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::get('/menus', [\Modules\Admin\Http\Controllers\MenuManagerController::class, 'index'])->middleware('permission:manage.settings')->name('admin.menus.index');
         Route::put('/menus', [\Modules\Admin\Http\Controllers\MenuManagerController::class, 'update'])->middleware('permission:manage.settings')->name('admin.menus.update');
 
+        // News
+        Route::get('/news', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'index'])->middleware('permission:manage.news')->name('admin.news.index');
+        Route::get('/news/create', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'create'])->middleware('permission:manage.news')->name('admin.news.create');
+        Route::post('/news', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'store'])->middleware('permission:manage.news')->name('admin.news.store');
+        Route::get('/news/{news}/edit', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'edit'])->middleware('permission:manage.news')->name('admin.news.edit');
+        Route::put('/news/{news}', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'update'])->middleware('permission:manage.news')->name('admin.news.update');
+        Route::delete('/news/{news}', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'destroy'])->middleware('permission:manage.news')->name('admin.news.destroy');
+        Route::patch('/news/{id}/restore', [\Modules\Admin\Http\Controllers\AdminNewsController::class, 'restore'])->middleware('permission:manage.news')->name('admin.news.restore');
+
+        // News Categories
+        Route::get('/news/categories', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'index'])->middleware('permission:manage.news')->name('admin.news.categories.index');
+        Route::get('/news/categories/create', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'create'])->middleware('permission:manage.news')->name('admin.news.categories.create');
+        Route::post('/news/categories', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'store'])->middleware('permission:manage.news')->name('admin.news.categories.store');
+        Route::get('/news/categories/{newsCategory}/edit', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'edit'])->middleware('permission:manage.news')->name('admin.news.categories.edit');
+        Route::put('/news/categories/{newsCategory}', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'update'])->middleware('permission:manage.news')->name('admin.news.categories.update');
+        Route::delete('/news/categories/{newsCategory}', [\Modules\Admin\Http\Controllers\AdminNewsCategoryController::class, 'destroy'])->middleware('permission:manage.news')->name('admin.news.categories.destroy');
+
         // Modules
         Route::get('/modules', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'index'])->middleware('permission:manage.modules')->name('admin.modules.index');
         Route::get('/modules/{module}/edit', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'edit'])->middleware('permission:manage.modules')->name('admin.modules.edit');

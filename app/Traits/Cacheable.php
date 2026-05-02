@@ -70,7 +70,7 @@ trait Cacheable
     {
         $query = $query ?: static::query();
         $perPage = $perPage ?: request()->get('per_page', 15);
-        $cacheKey = $this->getListCacheKey($perPage, $query->toSql());
+        $cacheKey = $this->getListCacheKey($perPage, $query->toSql(), $query->getBindings());
         $driver = $this->logDriver();
 
         if (Cache::has($cacheKey)) {
@@ -132,15 +132,19 @@ trait Cacheable
     }
 
     /**
-     * Get cache key for list
+     * Get cache key for list — includes bindings and a model-level version counter
+     * so that any save/delete on the model busts all cached list pages at once.
      */
-    protected function getListCacheKey($perPage, $query): string
+    protected function getListCacheKey($perPage, $query, array $bindings = []): string
     {
+        $version = \Illuminate\Support\Facades\Cache::get($this->getCacheTag() . '.list.version', 1);
+
         return sprintf(
-            '%s.list.%s.%s.%s',
+            '%s.list.v%s.%s.%s.%s',
             $this->getCacheTag(),
+            $version,
             $perPage,
-            md5($query),
+            md5($query . json_encode($bindings)),
             request()->page ?? 1
         );
     }

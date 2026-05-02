@@ -3,9 +3,9 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\LocalizationService;
 use Modules\Admin\Domain\Models\Setting;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Cache;
 
 class AdminSettingsController extends Controller
@@ -71,6 +71,7 @@ class AdminSettingsController extends Controller
 
         // Clear settings cache
         Cache::forget('site_settings');
+        LocalizationService::clearCache();
 
         return redirect()->route('admin.settings.index', ['view' => $view])
             ->with('success', 'Settings updated successfully.');

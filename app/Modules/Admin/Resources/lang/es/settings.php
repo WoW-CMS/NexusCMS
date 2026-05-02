@@ -37,6 +37,16 @@ return [
             'label' => 'Formato de hora',
             'help'  => 'Formato de visualización para las horas.',
         ],
+        'multilingual' => [
+            'section_title'       => 'Contenido multiidioma',
+            'section_description' => 'Activa y configura el soporte multiidioma para noticias y contenido.',
+            'enabled_label'       => 'Activar soporte multiidioma',
+            'enabled_help'        => 'Cuando está activado, los editores pueden introducir traducciones para cada idioma configurado.',
+            'locales_label'       => 'Idiomas disponibles',
+            'locales_help'        => 'Idiomas disponibles en el editor de contenido. El idioma predeterminado siempre se incluye.',
+            'add_locale'          => 'Añadir código de idioma (ej. fr)',
+            'locale_placeholder'  => 'ej. fr, de, pt',
+        ],
     ],
 
     'advanced' => [

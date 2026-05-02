@@ -6,89 +6,115 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Helpers\GeneralHelper;
 use App\Models\NewsCategory;
+use App\Services\LocalizationService;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
 /**
- * Frontend Home Controller for handling main website pages
+ * Frontend News Controller – supports optional multilingual content.
  */
 class NewsController extends Controller
 {
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $model = 'news';
-
-    /**
-     * Is paginated
-     *
-     * @var boolean
-     */
-    protected $isPaginated = true;
-
-    /**
-     * Per page
-     *
-     * @var int
-     */
     protected $perPage = 5;
 
-    /**
-     * Default view for the controller
-     *
-     * @var array<string,string>
-     */
     protected $views = [
         'index' => 'news.index',
-        'show' => 'news.show',
+        'show'  => 'news.show',
     ];
 
     /**
      * Display a listing of published news articles with optional category filtering.
-     *
-     * @param Request $request
-     * @return View
      */
     public function index(Request $request): View
     {
+        $locale   = $this->resolveLocale($request);
         $category = $request->get('category', 'all');
+
         $query = News::where('is_published', true)->orderBy('created_at', 'desc');
-        if ($category != 'all') {
+        if ($category !== 'all') {
             $query->where('category_id', $category);
         }
-        $items = (new News)->getCachedList($query, $this->perPage);
-        $recentNews = (new News)->recentNews();
-        $category = (new NewsCategory)->getAllCategoriesWithCount();
 
-        $items->each(function ($item) {
-            $item->reading_time = GeneralHelper::readingTime($item->content);
+        $items      = (new News)->getCachedList($query, $this->perPage);
+        $recentNews = (new News)->recentNews();
+        $category   = (new NewsCategory)->getAllCategoriesWithCount();
+
+        $items->each(function ($item) use ($locale) {
+            $item->display_title   = $item->translatedTitle($locale);
+            $item->display_content = $item->translatedContent($locale);
+            $item->display_excerpt = $item->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($item->display_content), 220);
+            $item->reading_time    = GeneralHelper::readingTime($item->display_content);
         });
 
-        return view($this->views['index'], ['data' => $items, 'recentNews' => $recentNews, 'category' => $category]);
+        $recentNews->each(function ($item) use ($locale) {
+            $item->display_title = $item->translatedTitle($locale);
+        });
+
+        return view($this->views['index'], [
+            'data'          => $items,
+            'recentNews'    => $recentNews,
+            'category'      => $category,
+            'activeLocale'  => $locale,
+            'activeLocales' => LocalizationService::getActiveLocales(),
+            'isMultilingual'=> LocalizationService::isMultilingualEnabled(),
+        ]);
     }
 
     /**
      * Display a single news article by slug.
-     *
-     * @param string $slug
-     * @param string|null $view
-     * @return View
      */
-    public function show(string $slug, ?string $view = null): View
+    public function show(Request $request, string $slug): View
     {
-        $item = (new News)->getCachedByField('slug', $slug);
+        $locale = $this->resolveLocale($request);
+        $item   = (new News)->getCachedByField('slug', $slug);
+
         if (!$item) abort(404);
 
-        $item->load(['comments' => function ($query) {
+        $item->load(['author', 'comments' => function ($query) {
             $query->where('is_active', true)
                 ->with('user')
                 ->orderBy('created_at', 'desc');
         }]);
 
-        $item->reading_time = GeneralHelper::readingTime($item->content);
+        $item->display_title   = $item->translatedTitle($locale);
+        $item->display_content = $item->translatedContent($locale);
+        $item->display_excerpt = $item->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($item->display_content), 300);
+        $item->reading_time    = GeneralHelper::readingTime($item->display_content);
 
-        return view($this->views['show'], ['item' => $item]);
+        return view($this->views['show'], [
+            'item'          => $item,
+            'activeLocale'  => $locale,
+            'activeLocales' => LocalizationService::getActiveLocales(),
+            'isMultilingual'=> LocalizationService::isMultilingualEnabled(),
+        ]);
+    }
+
+    /**
+     * Resolve locale from: query param → session → default locale.
+     * Persists chosen locale in session.
+     */
+    private function resolveLocale(Request $request): string
+    {
+        $available     = LocalizationService::getActiveLocales();
+        $defaultLocale = LocalizationService::getDefaultLocale();
+
+        if (!LocalizationService::isMultilingualEnabled()) {
+            return $defaultLocale;
+        }
+
+        // Accept locale switch via ?lang=xx
+        if ($request->has('lang') && in_array($request->input('lang'), $available)) {
+            $locale = $request->input('lang');
+            session(['news_locale' => $locale]);
+            return $locale;
+        }
+
+        $sessionLocale = session('news_locale');
+        if ($sessionLocale && in_array($sessionLocale, $available)) {
+            return $sessionLocale;
+        }
+
+        return $defaultLocale;
     }
 }
+

@@ -96,53 +96,75 @@
                 </div>
 
                 @if(!empty($data['featuredNews']))
-                <div id="features" class="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50">
-                    <div class="relative">
+                <a href="{{ route('news.show', $data['featuredNews']->slug) }}"
+                   class="group block bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300">
+                    <div class="relative overflow-hidden">
                         @if(!empty($data['featuredNews']->image))
-                        <img src="{{ asset('storage/images/' . $data['featuredNews']->image) }}" alt="{{ $data['featuredNews']->title }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="{{ asset('storage/images/' . $data['featuredNews']->image) }}"
+                             alt="{{ $data['featuredNews']->title }}"
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                        @else
+                        <div class="w-full h-40 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                            </svg>
+                        </div>
                         @endif
-
-                        @if(!empty($data['featuredNews']->image))
-                        <div class="absolute top-4 left-10">
+                        <div class="absolute top-4 left-4">
                             <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Featured</span>
                         </div>
-                        @else
-                        <div class="mb-2">
-                            <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                                Featured
-                            </span>
-                        </div>    
-                        @endif                   
                     </div>
                     <div class="p-6 space-y-3">
-                        <div class="text-sm text-slate-400">{{ $data['featuredNews']->published_at ? $data['featuredNews']->published_at->format('F d, Y') : 'Draft' }}</div>
+                        <div class="flex items-center gap-3 text-sm text-slate-400">
+                            <span>{{ $data['featuredNews']->published_at ? $data['featuredNews']->published_at->format('F d, Y') : 'Draft' }}</span>
+                            @if($data['featuredNews']->category)
+                                <span>•</span>
+                                <span class="text-blue-400">{{ $data['featuredNews']->category->name }}</span>
+                            @endif
+                        </div>
                         <h3 class="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-200">{{ $data['featuredNews']->title }}</h3>
-                        <p class="text-slate-300 leading-relaxed">{{ Str::limit($data['featuredNews']->content, 200) }}</p>
-                        <a href="{{ route('news.show', $data['featuredNews']->slug) }}" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2 group/btn mt-2">
-                            Read More 
-                            <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <p class="text-slate-300 leading-relaxed">{{ Str::limit(strip_tags($data['featuredNews']->excerpt ?? $data['featuredNews']->content), 180) }}</p>
+                        <span class="text-blue-400 group-hover:text-blue-300 font-medium inline-flex items-center gap-2 mt-2">
+                            Read More
+                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
-                        </a>
+                        </span>
                     </div>
-                </div>
+                </a>
                 @endif
 
                 <div class="grid md:grid-cols-2 gap-6">
                     @forelse($data['news'] as $item)
-                    <div class="bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
-                        <div class="text-xs text-slate-400 mb-2">{{ $item->published_at->format('F d, Y') }}</div>
-                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">{{ $item->title }}</h4>
-                        <p class="text-slate-400 text-sm">{{ Str::limit($item->content, 100) }}</p>
-                        <a href="{{ route('news.show', $item->slug) }}" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center gap-2 group/btn mt-2">
-                            Read More 
-                            <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
+                    <a href="{{ route('news.show', $item->slug) }}"
+                       class="group flex flex-col bg-slate-800/30 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700/50 hover:border-blue-500/30 transition-all duration-300">
+                        <div class="overflow-hidden">
+                            @if(!empty($item->image))
+                            <img src="{{ asset('storage/images/' . $item->image) }}"
+                                 alt="{{ $item->title }}"
+                                 class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500">
+                            @else
+                            <div class="w-full h-40 bg-gradient-to-br from-slate-700/50 to-slate-800/50 flex items-center justify-center">
+                                <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                </svg>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 space-y-2">
+                            <div class="text-xs text-slate-400">{{ ($item->published_at ?? $item->created_at)->format('F d, Y') }}</div>
+                            <h4 class="text-base font-bold text-white group-hover:text-blue-400 transition-colors flex-1">{{ $item->title }}</h4>
+                            <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">{{ Str::limit(strip_tags($item->excerpt ?? $item->content), 90) }}</p>
+                            <span class="text-blue-400 group-hover:text-blue-300 font-medium inline-flex items-center gap-1 text-sm pt-1">
+                                Read More
+                                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
                     @empty
-                    <div class="col-span-full bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-700/50 hover:border-slate-600 cursor-pointer">
+                    <div class="col-span-full bg-slate-800/30 rounded-xl p-6 border border-slate-700/50 text-center">
                         <p class="text-slate-400 text-sm">No news available.</p>
                     </div>
                     @endforelse

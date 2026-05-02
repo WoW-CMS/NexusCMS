@@ -93,6 +93,11 @@ class InstallController extends Controller
             ->with('install_success_message', 'Instalacion completada correctamente.');
     }
 
+    /**
+     * Get the system requirements for the installation.
+     *
+     * @return array
+     */
     private function systemRequirements(): array
     {
         $phpMin = '8.2.0';

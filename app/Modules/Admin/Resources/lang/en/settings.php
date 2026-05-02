@@ -37,6 +37,16 @@ return [
             'label' => 'Time Format',
             'help'  => 'Display format for times.',
         ],
+        'multilingual' => [
+            'section_title'       => 'Multilingual Content',
+            'section_description' => 'Enable and configure multilingual support for news and content.',
+            'enabled_label'       => 'Enable Multilingual Support',
+            'enabled_help'        => 'When enabled, content editors can enter translations for each configured language.',
+            'locales_label'       => 'Available Languages',
+            'locales_help'        => 'Languages available in the content editor. The default locale is always included.',
+            'add_locale'          => 'Add language code (e.g. fr)',
+            'locale_placeholder'  => 'e.g. fr, de, pt',
+        ],
     ],
 
     'advanced' => [
