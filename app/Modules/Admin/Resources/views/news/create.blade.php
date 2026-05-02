@@ -103,22 +103,8 @@
                     </div>
                     @endforeach
                 </div>
-
                 @else
                 {{-- Single language mode --}}
-
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-6 border-b border-gray-200">
-                        <h2 class="text-base font-bold text-gray-800">Excerpt</h2>
-                        <p class="text-xs text-gray-500 mt-0.5">Short summary shown in news listings. Optional.</p>
-                    </div>
-                    <div class="p-6">
-                        <textarea name="excerpt"
-                                  id="ck-excerpt-main"
-                                  rows="4"
-                                  class="news-ck-excerpt w-full">{{ old('excerpt') }}</textarea>
-                    </div>
-                </div>
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-6 border-b border-gray-200">
                         <h2 class="text-lg font-bold text-gray-800">Content</h2>
