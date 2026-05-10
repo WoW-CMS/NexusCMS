@@ -24,11 +24,6 @@
         </div>
     </div>
 
-    <!-- Realm Selector -->
-    @extends('layouts.main')
-
-    @section('title', 'Store')
-
     @section('content')
         <div class="max-w-7xl mx-auto pt-24 pb-14 px-4 sm:px-6 lg:px-8">
             <div class="mb-8 bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8">
