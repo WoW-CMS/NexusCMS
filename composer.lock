@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b336f73b62082a66e2b07c931571e0f2",
+    "content-hash": "9fbb1cd1ea041d3f404fc90d747bfcec",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6415,16 +6415,16 @@
         },
         {
             "name": "wowcrypto/wowcrypto",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WoW-CMS/WowCrypto.git",
-                "reference": "4e6a03c396357b7f411508f3fcd53f6f30416bb5"
+                "url": "git@github.com:WoW-CMS/WowCrypto.git",
+                "reference": "05489e3d9dc70e9979b86b6cdf70d3d5b7ffc1a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WoW-CMS/WowCrypto/zipball/4e6a03c396357b7f411508f3fcd53f6f30416bb5",
-                "reference": "4e6a03c396357b7f411508f3fcd53f6f30416bb5",
+                "url": "https://api.github.com/repos/WoW-CMS/WowCrypto/zipball/05489e3d9dc70e9979b86b6cdf70d3d5b7ffc1a0",
+                "reference": "05489e3d9dc70e9979b86b6cdf70d3d5b7ffc1a0",
                 "shasum": ""
             },
             "require": {
@@ -6450,11 +6450,7 @@
                 "MIT"
             ],
             "description": "Biblioteca de encriptación para World of Warcraft con soporte para múltiples métodos de hash",
-            "support": {
-                "source": "https://github.com/WoW-CMS/WowCrypto/tree/1.2.0",
-                "issues": "https://github.com/WoW-CMS/WowCrypto/issues"
-            },
-            "time": "2025-06-02T19:04:14+00:00"
+            "time": "2026-05-05T21:45:37+00:00"
         }
     ],
     "packages-dev": [
@@ -8905,7 +8901,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": "^8.4"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"

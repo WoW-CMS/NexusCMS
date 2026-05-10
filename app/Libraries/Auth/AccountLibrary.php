@@ -61,11 +61,13 @@ class AccountLibrary
 
             if ($isBnet) {
                 // Create Battle.net account
-                return $this->soapCreator->createAccountBnet($email, $password);
+                $this->soapCreator->account()->createBnet($email, $password);
+                return true;
             }
 
             // Create non-Battle.net account
-            return $this->soapCreator->createAccount($username, $password, $email);
+            $this->soapCreator->account()->create($username, $password, $email);
+            return true;
         } catch (\Exception $e) {
             throw new \Exception('Account creation failed: ' . $e->getMessage());
         }

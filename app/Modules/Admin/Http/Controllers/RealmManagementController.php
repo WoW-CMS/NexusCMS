@@ -6,6 +6,7 @@ use App\Enums\Emulator;
 use App\Enums\WoWConstants;
 use App\Http\Controllers\Controller;
 use App\Models\Realm;
+use GameCrypto\SoapAccountCreator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -67,7 +68,7 @@ class RealmManagementController extends Controller
 
         return redirect()
             ->route('admin.realms.index')
-            ->with('success', 'Realm actualizado correctamente.');
+            ->with('success', 'Realm updated successfully.');
     }
 
     /**
@@ -79,7 +80,46 @@ class RealmManagementController extends Controller
 
         return redirect()
             ->route('admin.realms.index')
-            ->with('success', 'Realm eliminado correctamente.');
+            ->with('success', 'Realm deleted successfully.');
+    }
+
+    /**
+     * Run a SOAP server info test for the selected realm.
+     */
+    public function soapTest(Realm $realm)
+    {
+        try {
+            $soap = new SoapAccountCreator(
+                (string) $realm->console_hostname,
+                (int) ($realm->console_port ?? 0),
+                (string) $realm->console_username,
+                (string) $realm->console_password,
+                (string) $realm->console_urn,
+                false
+            );
+
+            $response = $soap->server()->info();
+
+            return redirect()
+                ->route('admin.realms.index')
+                ->with('success', 'SOAP test executed successfully for ' . $realm->name . '.')
+                ->with('soap_test_log', [
+                    'realm' => $realm->name,
+                    'timestamp' => now()->format('Y-m-d H:i:s'),
+                    'command' => 'server info',
+                    'response' => trim((string) $response),
+                ]);
+        } catch (\Throwable $exception) {
+            return redirect()
+                ->route('admin.realms.index')
+                ->with('error', 'SOAP test failed for ' . $realm->name . ': ' . $exception->getMessage())
+                ->with('soap_test_log', [
+                    'realm' => $realm->name,
+                    'timestamp' => now()->format('Y-m-d H:i:s'),
+                    'command' => 'server info',
+                    'response' => 'ERROR: ' . $exception->getMessage(),
+                ]);
+        }
     }
 
     /**
