@@ -20,7 +20,7 @@ class AdminController extends Controller
         $latestRelease = $this->apiService->latestRelease();
         $checkVersion = $this->apiService->checkVersion('wow-cms', 'nexuscms', config('app.version'));
 
-        $outdated = $checkVersion['outdated'];
+        $outdated = $checkVersion['outdated'] ?? false;
 
         return view('admin::index', compact('latestRelease', 'checkVersion', 'outdated'));  
     }

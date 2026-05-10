@@ -248,7 +248,17 @@
                     <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold shadow-sm">v{{ config('app.version') }}</span>
                 </div>
                 <div class="p-6">
-                    @if($outdated)
+                    @if(empty($checkVersion))
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-500 rounded-xl flex items-center justify-center shadow-md">
+                            <i class="fas fa-plug text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-base text-gray-800 font-semibold mb-1">Could not connect to the update server</p>
+                            <p class="text-sm text-gray-500">Version information is unavailable. Please check your internet connection and try again later.</p>
+                        </div>
+                    </div>
+                    @elseif($outdated)
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
                             <i class="fas fa-rocket text-white text-xl"></i>
