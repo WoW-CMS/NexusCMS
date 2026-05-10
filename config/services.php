@@ -36,6 +36,7 @@ return [
     ],
 
     'nexus_api' => [
+        'url' => env('NEXUS_API_URL', 'https://api.wow-cms.com/api/github'),
         'key' => env('NEXUS_API_KEY'),
         'header' => env('NEXUS_API_KEY_HEADER', 'X-API-Key'),
     ],

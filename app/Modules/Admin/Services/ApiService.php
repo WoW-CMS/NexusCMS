@@ -2,16 +2,18 @@
 
 namespace Modules\Admin\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class ApiService
 {
-    protected string $baseUrl = 'http://wowcms-apiwowcms-rtpsnl-03dd1f-188-245-113-32.traefik.me/api/github';
+    protected string $baseUrl;
     protected ?string $apiKey;
     protected string $apiKeyHeader;
 
     public function __construct()
     {
+        $this->baseUrl = rtrim(config('services.nexus_api.url', 'https://api.wow-cms.com/api/github'), '/');
         $this->apiKey = config('services.nexus_api.key');
         $this->apiKeyHeader = config('services.nexus_api.header', 'X-API-Key');
     }
@@ -27,7 +29,11 @@ class ApiService
 
     public function latestRelease(): array
     {
-        $response = $this->http()->get($this->baseUrl . '/wow-cms/nexuscms/latest');
+        try {
+            $response = $this->http()->get($this->baseUrl . '/wow-cms/nexuscms/latest');
+        } catch (ConnectionException) {
+            return [];
+        }
 
         if (!$response->ok()) {
             return [];
@@ -40,9 +46,13 @@ class ApiService
 
     public function checkVersion(string $owner, string $repo, string $current): array
     {
-        $response = $this->http()->get("{$this->baseUrl}/{$owner}/{$repo}/check-version", [
-            'current' => $current,
-        ]);
+        try {
+            $response = $this->http()->get("{$this->baseUrl}/{$owner}/{$repo}/check-version", [
+                'current' => $current,
+            ]);
+        } catch (ConnectionException) {
+            return [];
+        }
 
         if (!$response->ok()) {
             return [];
