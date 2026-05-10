@@ -48,6 +48,7 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::post('/realms', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'store'])->middleware('permission:manage.realms')->name('admin.realms.store');
         Route::get('/realms/{realm}/edit', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'edit'])->middleware('permission:manage.realms')->name('admin.realms.edit');
         Route::put('/realms/{realm}', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'update'])->middleware('permission:manage.realms')->name('admin.realms.update');
+        Route::post('/realms/{realm}/soap-test', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'soapTest'])->middleware('permission:manage.realms')->name('admin.realms.soap-test');
         Route::delete('/realms/{realm}', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'destroy'])->middleware('permission:manage.realms')->name('admin.realms.destroy');
 
         // Menus

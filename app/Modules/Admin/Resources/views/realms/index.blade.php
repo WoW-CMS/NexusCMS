@@ -24,6 +24,29 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg text-red-800 text-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('soap_test_log'))
+            @php
+                $soapLog = session('soap_test_log');
+            @endphp
+            <div class="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden">
+                <div class="px-6 py-3 border-b border-slate-700 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-slate-100">SOAP Server Info Log</h3>
+                    <span class="text-xs text-slate-400">{{ $soapLog['timestamp'] ?? '' }}</span>
+                </div>
+                <div class="px-6 py-4 space-y-2 text-xs">
+                    <div class="text-slate-300"><span class="font-semibold text-slate-100">Realm:</span> {{ $soapLog['realm'] ?? '-' }}</div>
+                    <div class="text-slate-300"><span class="font-semibold text-slate-100">Command:</span> {{ $soapLog['command'] ?? '-' }}</div>
+                    <pre class="mt-2 p-3 rounded bg-black/60 border border-slate-800 text-emerald-300 whitespace-pre-wrap">{{ $soapLog['response'] ?? '-' }}</pre>
+                </div>
+            </div>
+        @endif
+
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h2 class="text-base font-semibold text-gray-900">Realms registrados</h2>
@@ -62,6 +85,13 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
+                                        <form action="{{ route('admin.realms.soap-test', $realm->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 text-xs font-medium">
+                                                <i class="fas fa-terminal"></i>
+                                                SOAP Test
+                                            </button>
+                                        </form>
                                         <a href="{{ route('admin.realms.edit', $realm->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 text-xs font-medium">
                                             <i class="fas fa-pen"></i>
                                             Editar
