@@ -4,5 +4,12 @@
     "routes": true,
     "migrations": true,
     "views": true,
-    "namespace": "Modules\\Forum"
+    "namespace": "Modules\\Forum",
+    "admin_crud": "custom",
+    "admin_menu": {
+        "label": "Forum",
+        "icon": "fas fa-comments",
+        "route": "admin.forum.index",
+        "order": 30
+    }
 }

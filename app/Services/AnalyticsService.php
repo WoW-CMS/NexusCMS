@@ -174,18 +174,20 @@ class AnalyticsService
             return [];
         }
 
-        // Parse device types from user agent
+        // Parse device types from user agent without loading all sessions in memory.
         $devices = [];
 
-        // This is simplified - for production use a proper device detection library
-        $sessions = AnalyticsSession::where('created_at', '>=', $startDate)
+        AnalyticsSession::query()
+            ->where('created_at', '>=', $startDate)
             ->where('is_bot', false)
-            ->get();
-
-        foreach ($sessions as $session) {
-            $device = $this->detectDevice($session->user_agent);
-            $devices[$device] = ($devices[$device] ?? 0) + 1;
-        }
+            ->select(['id', 'user_agent'])
+            ->orderBy('id')
+            ->chunkById(1000, function ($sessions) use (&$devices): void {
+                foreach ($sessions as $session) {
+                    $device = $this->detectDevice((string) $session->user_agent);
+                    $devices[$device] = ($devices[$device] ?? 0) + 1;
+                }
+            });
 
         return collect($devices)
             ->map(function ($count, $device) use ($total) {
@@ -195,6 +197,7 @@ class AnalyticsService
                     'percentage' => round(($count / $total) * 100, 2),
                 ];
             })
+                ->filter(fn ($row) => $row['count'] > 0)
             ->toArray();
     }
 

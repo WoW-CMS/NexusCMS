@@ -27,8 +27,43 @@ class RedisLibrary
     public function __construct(string $prefix = '')
     {
         $this->prefix = $prefix;
-        // Leer flag desde .env (por petición explícita). Si no existe, por defecto deshabilitado.
-        $this->enabled = filter_var(env('REDIS_ENABLED', false), FILTER_VALIDATE_BOOL);
+        // Read flag from config (safe with config:cache in production).
+        $this->enabled = (bool) config('nexus.redis_enabled', false);
+    }
+
+    /**
+     * Encode mixed payloads so objects/collections survive round trips.
+     */
+    private function encodeValue(mixed $value): string
+    {
+        return base64_encode(serialize($value));
+    }
+
+    /**
+     * Decode payloads with backward compatibility for older JSON/string values.
+     */
+    private function decodeValue(?string $value): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $decoded = base64_decode($value, true);
+        if ($decoded !== false) {
+            $unserialized = @unserialize($decoded, ['allowed_classes' => true]);
+
+            if ($unserialized !== false || $decoded === serialize(false)) {
+                return $unserialized;
+            }
+        }
+
+        $json = json_decode($value, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $json;
+        }
+
+        return $value;
     }
 
     /**
@@ -54,6 +89,7 @@ class RedisLibrary
     public function set(string $key, mixed $value, int $ttl = 0): bool
     {
         $key = $this->key($key);
+        $payload = $this->encodeValue($value);
 
         if (!$this->enabled) {
             if ($ttl > 0) {
@@ -66,9 +102,10 @@ class RedisLibrary
 
         try {
             if ($ttl > 0) {
-                return Redis::set($key, $ttl, json_encode($value));
+                return (bool) Redis::setex($key, $ttl, $payload);
             }
-            return Redis::set($key, json_encode($value));
+
+            return (bool) Redis::set($key, $payload);
         } catch (\Throwable $e) {
             if ($ttl > 0) {
                 Cache::put($key, $value, now()->addSeconds($ttl));
@@ -95,7 +132,7 @@ class RedisLibrary
 
         try {
             $value = Redis::get($key);
-            return $value ? json_decode($value, true) : null;
+            return $this->decodeValue($value);
         } catch (\Throwable $e) {
             return Cache::get($key, null);
         }

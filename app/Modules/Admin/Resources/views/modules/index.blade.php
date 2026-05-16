@@ -144,7 +144,7 @@
 
                                             <form method="POST" action="{{ route('admin.modules.migrate', $module['folder']) }}">
                                                 @csrf
-                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 {{ !$module['has_migrations'] ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !$module['has_migrations'] ? 'disabled' : '' }}>
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 {{ !$module['has_migrations'] ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !$module['has_migrations'] ? 'disabled' : '' }} title="{{ !$module['has_migrations'] ? 'No migration files found for this module' : 'Run pending migrations' }}">
                                                     <i class="fas fa-database mr-1"></i>Migrate
                                                 </button>
                                             </form>
@@ -159,6 +159,14 @@
                                                 <input type="hidden" name="confirmation" value="">
                                                 <button type="submit" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-red-50 text-red-700 hover:bg-red-100 {{ $module['folder'] === 'Admin' ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $module['folder'] === 'Admin' ? 'disabled' : '' }}>
                                                     <i class="fas fa-trash mr-1"></i>Delete
+                                                </button>
+                                            </form>
+
+                                            <form method="POST" action="{{ route('admin.modules.uninstall', $module['folder']) }}" onsubmit="return confirm('This will remove the DB record for \'{{ $module['folder'] }}\' but keep the code. Continue?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-orange-50 text-orange-700 hover:bg-orange-100">
+                                                    <i class="fas fa-unlink mr-1"></i>Uninstall
                                                 </button>
                                             </form>
                                             @endif

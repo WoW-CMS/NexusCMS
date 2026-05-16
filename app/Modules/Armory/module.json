@@ -4,5 +4,12 @@
     "routes": true,
     "migrations": true,
     "views": true,
-    "namespace": "Modules\\Armory"
+    "namespace": "Modules\\Armory",
+    "admin_crud": "custom",
+    "admin_menu": {
+        "label": "Armory",
+        "icon": "fas fa-shield-alt",
+        "route": "admin.armory.index",
+        "order": 35
+    }
 }

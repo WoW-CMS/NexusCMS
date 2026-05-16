@@ -48,11 +48,10 @@ return [
     /**
      * Donation plans configuration.
      * 
-     * @var array|callable
+     * @var array|null
      * 
-     * Development note: Set to null to load from database.
-     * 
-     * @example 'plans' => fn() => DonationPlan::active()->orderBy('sort_order')->get(),
+     * Development note: Plans are loaded from database at runtime.
+     * This config is not meant to be cached; query database directly in services.
      */
-    'plans' => fn() => DonationPlan::active()->orderBy('sort_order')->get(),
+    'plans' => null,
 ];

@@ -1,0 +1,86 @@
+{
+    "title": "Store Products",
+    "model": "Modules\\Store\\Domain\\Models\\StoreProduct",
+    "list": {
+        "searchable": true,
+        "search_columns": ["name", "key", "type"],
+        "order_by": "sort_order",
+        "order_dir": "asc",
+        "columns": [
+            { "field": "sort_order", "label": "#" },
+            { "field": "name",       "label": "Product" },
+            { "field": "key",        "label": "Key" },
+            { "field": "cost",       "label": "Cost (DP)" },
+            { "field": "active",     "label": "Active", "format": "boolean" }
+        ]
+    },
+    "form": {
+        "sections": [
+            {
+                "title": "Product Info",
+                "fields": [
+                    {
+                        "name": "name",
+                        "label": "Name",
+                        "type": "text",
+                        "required": true,
+                        "placeholder": "e.g. Character Rename"
+                    },
+                    {
+                        "name": "key",
+                        "label": "Key",
+                        "type": "text",
+                        "required": true,
+                        "placeholder": "e.g. rename",
+                        "help": "Unique slug used for SOAP commands."
+                    },
+                    {
+                        "name": "description",
+                        "label": "Description",
+                        "type": "textarea",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "title": "Pricing & Settings",
+                "fields": [
+                    {
+                        "name": "cost",
+                        "label": "Cost (DP)",
+                        "type": "number",
+                        "required": true,
+                        "min": 0
+                    },
+                    {
+                        "name": "type",
+                        "label": "SOAP Type",
+                        "type": "text",
+                        "required": false,
+                        "placeholder": "e.g. character_rename",
+                        "help": "SOAP command type to execute on purchase."
+                    },
+                    {
+                        "name": "sort_order",
+                        "label": "Sort Order",
+                        "type": "number",
+                        "required": false,
+                        "min": 0
+                    },
+                    {
+                        "name": "requires_character",
+                        "label": "Requires Character",
+                        "type": "checkbox",
+                        "help": "If checked, the player must select a character during purchase."
+                    },
+                    {
+                        "name": "active",
+                        "label": "Active",
+                        "type": "checkbox",
+                        "help": "Inactive products are hidden in the store."
+                    }
+                ]
+            }
+        ]
+    }
+}

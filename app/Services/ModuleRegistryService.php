@@ -3,13 +3,37 @@
 namespace App\Services;
 
 use App\Models\ManagedModule;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 class ModuleRegistryService
 {
+    private const ADMIN_MENU_CACHE_KEY = 'module_registry.admin_menu_items';
+    private const ADMIN_MENU_CACHE_TTL = 300;
+
     private static ?array $stateCache = null;
     private static ?array $manifestCache = null;
+
+    public static function getAdminMenuItems(): array
+    {
+        return Cache::remember(self::ADMIN_MENU_CACHE_KEY, self::ADMIN_MENU_CACHE_TTL, static function (): array {
+            $items = [];
+
+            foreach (self::getEnabledModules() as $module) {
+                $menu = $module['admin_menu'] ?? null;
+                if (!is_array($menu) || empty($menu)) {
+                    continue;
+                }
+
+                $items[] = array_merge($menu, ['module' => $module['folder']]);
+            }
+
+            usort($items, static fn (array $a, array $b): int => ($a['order'] ?? 0) <=> ($b['order'] ?? 0));
+
+            return $items;
+        });
+    }
 
     public static function getEnabledProviders(): array
     {
@@ -165,6 +189,7 @@ class ModuleRegistryService
     {
         self::$stateCache = null;
         self::$manifestCache = null;
+        Cache::forget(self::ADMIN_MENU_CACHE_KEY);
     }
 
     private static function loadManifest(): array
@@ -207,6 +232,8 @@ class ModuleRegistryService
                 'migrations' => (bool) ($config['migrations'] ?? false),
                 'views' => (bool) ($config['views'] ?? false),
                 'translations' => (bool) ($config['translations'] ?? false),
+                'admin_crud' => (string) ($config['admin_crud'] ?? ''),
+                'admin_menu' => is_array($config['admin_menu'] ?? null) ? $config['admin_menu'] : null,
                 'config' => $config,
             ];
         }

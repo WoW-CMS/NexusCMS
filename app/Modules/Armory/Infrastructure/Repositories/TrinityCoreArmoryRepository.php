@@ -72,16 +72,19 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
     }
 
     /**
-     * Get all characters from characters database
+     * Get all characters from characters database with pagination
      *
-     * @return Collection Collection of all characters or empty collection if connection failed
+     * @return Collection Collection of characters or empty collection if connection failed
      */
     public function getAllCharacters()
     {
         $conn = $this->getCharacters();
         if (!$conn) return collect();
 
-        return $conn->table('characters')->get();
+        return $conn->table('characters')
+            ->select(['guid', 'name', 'race', 'class', 'level', 'gender', 'account'])
+            ->limit(500)
+            ->get();
     }
 
     /**
@@ -95,7 +98,8 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
         $conn = $this->getCharacters();
         if (!$conn) return collect();
 
-        $query = $conn->table('characters');
+        $query = $conn->table('characters')
+            ->select(['guid', 'name', 'race', 'class', 'level', 'gender']);
 
         if ($q) {
             $query->where('name', 'like', "%{$q}%");
@@ -116,7 +120,9 @@ class TrinityCoreArmoryRepository implements ArmoryRepositoryInterface
             $query->where('level', '>=', $minLevel);
         }
         
-        return $query->orderByDesc('level')->get();
+        return $query->orderByDesc('level')
+            ->limit(100)
+            ->get();
     }
 
     /**

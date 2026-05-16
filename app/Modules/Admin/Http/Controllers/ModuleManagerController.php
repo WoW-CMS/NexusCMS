@@ -34,37 +34,50 @@ class ModuleManagerController extends Controller
         $moduleData = $this->getModuleDataOrFail($module);
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
-            'namespace' => ['required', 'string', 'max:255'],
+            'name'        => ['required', 'string', 'max:100'],
             'module_type' => ['required', 'string', 'in:core,third_party'],
-            'enabled' => ['nullable', 'boolean'],
-            'routes' => ['nullable', 'boolean'],
-            'migrations' => ['nullable', 'boolean'],
-            'views' => ['nullable', 'boolean'],
-            'translations' => ['nullable', 'boolean'],
         ]);
-
-        $config = $moduleData['config'];
-        $config['name'] = $validated['name'];
-        $config['namespace'] = $validated['namespace'];
-        $config['enabled'] = $request->boolean('enabled');
-        $config['module_type'] = $validated['module_type'];
-        $config['routes'] = $request->boolean('routes');
-        $config['migrations'] = $request->boolean('migrations');
-        $config['views'] = $request->boolean('views');
-        $config['translations'] = $request->boolean('translations');
 
         ModuleRegistryService::upsertState(
             $moduleData['folder'],
-            $request->boolean('enabled'),
+            (bool) $moduleData['enabled'],
             $validated['module_type']
         );
+
+        $config = $moduleData['config'];
+        $config['name'] = $validated['name'];
+        $config['module_type'] = $validated['module_type'];
 
         $this->saveConfig($moduleData, $config);
 
         return redirect()
             ->route('admin.modules.edit', $moduleData['folder'])
-            ->with('success', "Module '{$moduleData['folder']}' configuration updated successfully.");
+            ->with('success', "Module '{$moduleData['folder']}' updated successfully.");
+    }
+
+    public function uninstall(string $module)
+    {
+        $moduleData = $this->getModuleDataOrFail($module);
+
+        if ($moduleData['folder'] === 'Admin') {
+            return redirect()
+                ->route('admin.modules.index')
+                ->with('error', 'The Admin module cannot be uninstalled.');
+        }
+
+        // Delete the DB record so the module loses its overridden state.
+        // syncDiscoveredModules() will recreate it with defaults from module.json,
+        // so we immediately re-register it as disabled to give visible feedback.
+        ModuleRegistryService::deleteState($moduleData['folder']);
+        ModuleRegistryService::upsertState(
+            $moduleData['folder'],
+            false,
+            (string) $moduleData['module_type']
+        );
+
+        return redirect()
+            ->route('admin.modules.index')
+            ->with('success', "Module '{$moduleData['folder']}' uninstalled — state reset and disabled. The code files were not removed.");
     }
 
     public function toggle(string $module)
@@ -162,17 +175,6 @@ class ModuleManagerController extends Controller
         ModuleRegistryService::syncDiscoveredModules();
 
         $moduleData = ModuleRegistryService::getModule($module);
-        if (!is_array($moduleData)) {
-            abort(404);
-        }
-
-        return $this->hydrateModuleData($moduleData);
-    }
-
-    protected function buildModuleData(string $module): array
-    {
-        $moduleData = ModuleRegistryService::getModule($module);
-
         if (!is_array($moduleData)) {
             abort(404);
         }

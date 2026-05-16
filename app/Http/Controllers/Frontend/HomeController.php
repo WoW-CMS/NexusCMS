@@ -55,23 +55,28 @@ class HomeController extends Controller
         $perPage = $request->get('per_page', $this->perPage);
         $page = (int) ($request->get('page', 1));
 
-        $cacheKey = "news:list:perpage:{$perPage}:page:{$page}";
-        $featuredKey = 'home_featured';
+        // Single cache key for consistent home payload
+        $cacheKey = "home:news:page={$page}:perpage={$perPage}";
+        $cached = $redis->get($cacheKey);
 
-        $news = $redis->get($cacheKey);
-        $featuredNews = $redis->get($featuredKey);
-
-        if (!$news || !$featuredNews) {
+        if ($cached && is_array($cached) && isset($cached['news'], $cached['featured'])) {
+            $news = $cached['news'];
+            $featuredNews = $cached['featured'];
+        } else {
             $allNews = \App\Models\News::query()
+                ->where('is_published', true)
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
 
             $featuredNews = $allNews->shift();
             $news = $allNews;
 
-            $redis->set($cacheKey, $news, 60);
-            $redis->set($featuredKey, $featuredNews, 60);
-        }   
+            // Cache the unified payload
+            $redis->set($cacheKey, [
+                'news' => $news,
+                'featured' => $featuredNews,
+            ], 60);
+        }
     
         $data = [
             'realms' => $realms,

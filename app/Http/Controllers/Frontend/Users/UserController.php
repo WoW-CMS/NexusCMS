@@ -83,14 +83,14 @@ class UserController extends Controller
     {
         $user = $this->auth->guard()->user();
 
+        if (!$user) {
+            throw new UserNotFoundException('User not found', 404);
+        }
+
         $transactions = DonationTransaction::where('user_id', $user->id)->get();
 
         if ($transactions->isEmpty()) {
             $transactions = [];
-        }
-
-        if (!$user) {
-            throw new UserNotFoundException('User not found', 404);
         }
 
         return view($this->views['transaction'], compact('user', 'transactions'));
@@ -126,11 +126,12 @@ class UserController extends Controller
     public function manage()
     {
         $user = $this->auth->guard()->user();
-        $linkedAccount = AccountLinked::where('user_id', $user->id)->first();
 
         if (!$user) {
             throw new UserNotFoundException('User not found', 404);
         }
+
+        $linkedAccount = AccountLinked::where('user_id', $user->id)->first();
 
         return view($this->views['manage'], [
             'user' => $user,
@@ -157,7 +158,7 @@ class UserController extends Controller
         return view($this->views['gameAccount'], [
             'user'          => $user,
             'gameAccounts'  => $gameAccounts,
-            'realm'         => Realm::all(),
+            'realm'         => Realm::query()->select(['id', 'name'])->get(),
         ]);
     }
 
@@ -169,13 +170,22 @@ class UserController extends Controller
      */
     private function getUserGameAccounts($user)
     {
-        $gameLinked = AccountLinked::where('user_id', $user->id)->get();
+        $gameLinked = AccountLinked::query()
+            ->with('realm')
+            ->where('user_id', $user->id)
+            ->get();
         $account = [];
         $connectionErrors = false;
 
         foreach ($gameLinked as $game) {
             try {
-                $realm = Realm::findOrFail($game->realm_id);
+                $realm = $game->realm;
+
+                if (!$realm) {
+                    $connectionErrors = true;
+                    continue;
+                }
+
                 $external = $this->connectToExternalDatabase(
                     json_decode($realm->auth_database, true)
                 );

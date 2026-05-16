@@ -79,4 +79,5 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::patch('/modules/{module}/toggle', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'toggle'])->middleware('permission:manage.modules')->name('admin.modules.toggle');
         Route::post('/modules/{module}/migrate', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'migrate'])->middleware('permission:manage.modules')->name('admin.modules.migrate');
         Route::delete('/modules/{module}', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'destroy'])->middleware('permission:manage.modules')->name('admin.modules.destroy');
+        Route::delete('/modules/{module}/uninstall', [\Modules\Admin\Http\Controllers\ModuleManagerController::class, 'uninstall'])->middleware('permission:manage.modules')->name('admin.modules.uninstall');
     });

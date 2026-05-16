@@ -19,7 +19,9 @@ trait Cacheable
     protected function logDriver()
     {
         $driver = config('cache.default');
-        Log::debug("[Cacheable] Using cache driver: {$driver}");
+        if (app()->environment('local')) {
+            Log::debug("[Cacheable] Using cache driver: {$driver}");
+        }
         return $driver;
     }
 
@@ -32,11 +34,15 @@ trait Cacheable
         $driver = $this->logDriver();
 
         if (Cache::has($cacheKey)) {
-            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            }
             return Cache::get($cacheKey);
         }
 
-        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        if (app()->environment('local')) {
+            Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        }
         $data = static::query()->find($id);
         Cache::put($cacheKey, $data, $this->cacheTTL * 60);
 
@@ -52,11 +58,15 @@ trait Cacheable
         $driver = $this->logDriver();
 
         if (Cache::has($cacheKey)) {
-            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            }
             return Cache::get($cacheKey);
         }
 
-        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        if (app()->environment('local')) {
+            Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching from DB");
+        }
         $data = static::query()->where($field, $value)->first();
         Cache::put($cacheKey, $data, $this->cacheTTL * 60);
 
@@ -74,11 +84,15 @@ trait Cacheable
         $driver = $this->logDriver();
 
         if (Cache::has($cacheKey)) {
-            Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] HIT ({$driver}) key={$cacheKey}");
+            }
             return Cache::get($cacheKey);
         }
 
-        Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching list from DB");
+        if (app()->environment('local')) {
+            Log::debug("[Cacheable] MISS ({$driver}) key={$cacheKey} → fetching list from DB");
+        }
         $data = $query->paginate($perPage);
         Cache::put($cacheKey, $data, $this->cacheTTL * 60);
 
@@ -91,19 +105,25 @@ trait Cacheable
     public function clearCache()
     {
         $driver = config('cache.default');
-        Log::debug("[Cacheable] clearCache() for model=" . static::class . " id=" . ($this->id ?? 'null') . " driver={$driver}");
+        if (app()->environment('local')) {
+            Log::debug("[Cacheable] clearCache() for model=" . static::class . " id=" . ($this->id ?? 'null') . " driver={$driver}");
+        }
 
         if ($this->id) {
             $key = $this->getCacheKey($this->id);
             Cache::forget($key);
-            Log::debug("[Cacheable] Cleared cache key={$key}");
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] Cleared cache key={$key}");
+            }
         }
 
         $store = Cache::getStore();
         if (method_exists($store, 'tags')) {
             $tag = $this->getCacheTag();
             Cache::tags($tag)->flush();
-            Log::debug("[Cacheable] Flushed cache tag={$tag}");
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] Flushed cache tag={$tag}");
+            }
         }
     }
 
@@ -113,12 +133,16 @@ trait Cacheable
     protected static function bootCacheable()
     {
         static::saved(function ($model) {
-            Log::debug("[Cacheable] bootCacheable() saved() triggered for " . static::class);
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] bootCacheable() saved() triggered for " . static::class);
+            }
             $model->clearCache();
         });
 
         static::deleted(function ($model) {
-            Log::debug("[Cacheable] bootCacheable() deleted() triggered for " . static::class);
+            if (app()->environment('local')) {
+                Log::debug("[Cacheable] bootCacheable() deleted() triggered for " . static::class);
+            }
             $model->clearCache();
         });
     }

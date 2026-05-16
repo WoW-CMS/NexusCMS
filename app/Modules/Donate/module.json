@@ -4,5 +4,13 @@
     "routes": true,
     "migrations": true,
     "views": true,
-    "namespace": "Modules\\Donate"
+    "namespace": "Modules\\Donate",
+    "module_type": "core",
+    "admin_crud": "custom",
+    "admin_menu": {
+        "label": "Donations",
+        "icon": "fas fa-donate",
+        "route": "admin.donate.plans.index",
+        "order": 20
+    }
 }

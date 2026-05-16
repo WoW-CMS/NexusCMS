@@ -2,7 +2,9 @@
 
 namespace Modules\Donate\Domain\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DonationTransaction extends Model
 {
@@ -24,5 +26,10 @@ class DonationTransaction extends Model
         'dp_awarded' => 'integer',
         'meta' => 'array',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 

@@ -4,5 +4,13 @@
     "routes": true,
     "migrations": true,
     "views": true,
-    "namespace": "Modules\\Store"
+    "translations": false,
+    "namespace": "Modules\\Store",
+    "admin_crud": "json",
+    "admin_menu": {
+        "label": "Store",
+        "icon": "fas fa-shopping-cart",
+        "route": "admin.store.crud.index",
+        "order": 25
+    }
 }

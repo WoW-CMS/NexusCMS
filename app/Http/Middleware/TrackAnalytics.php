@@ -4,9 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use App\Models\AnalyticsSession;
-use App\Models\AnalyticsPageView;
+use App\Jobs\TrackAnalyticsPageView;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackAnalytics
@@ -16,13 +14,18 @@ class TrackAnalytics
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $shouldTrack = $this->shouldTrack($request);
+        $isNew = false;
+
+        if ($shouldTrack) {
+            [$visitorId, $isNew] = $this->getOrCreateVisitorId($request);
+            $request->attributes->set('analytics.track', true);
+            $request->attributes->set('analytics.visitor_id', $visitorId);
+        }
+
         $response = $next($request);
 
-        // Don't track admin panel, API, or debug bar requests
-        if ($this->shouldTrack($request)) {
-            [$visitorId, $isNew] = $this->getOrCreateVisitorId($request);
-            $this->trackPageView($request, $visitorId);
-
+        if ($shouldTrack && $isNew) {
             if ($isNew) {
                 $response->headers->setCookie(
                     cookie('analytics_visitor_id', $visitorId, 60 * 24 * 365, '/', null, false, true)
@@ -31,6 +34,22 @@ class TrackAnalytics
         }
 
         return $response;
+    }
+
+    /**
+     * Persist analytics after the response has been sent.
+     */
+    public function terminate(Request $request, Response $response): void
+    {
+        if (!$request->attributes->get('analytics.track', false)) {
+            return;
+        }
+
+        $visitorId = $request->attributes->get('analytics.visitor_id');
+
+        if (is_string($visitorId) && $visitorId !== '') {
+            $this->trackPageView($request, $visitorId);
+        }
     }
 
     /**
@@ -62,39 +81,21 @@ class TrackAnalytics
     }
 
     /**
-     * Track a page view
+     * Track a page view via queued job.
      */
     protected function trackPageView(Request $request, string $visitorId): void
     {
         try {
-            // visitorId is passed in from handle()
-
-            // Get or create session
-            $session = AnalyticsSession::firstOrCreate(
-                ['visitor_id' => $visitorId],
-                [
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
-                    'is_bot' => $this->isBot($request->userAgent()),
-                ]
+            TrackAnalyticsPageView::dispatch(
+                visitorId: $visitorId,
+                ipAddress: (string) $request->ip(),
+                userAgent: (string) $request->userAgent(),
+                pagePath: $request->path(),
+                pageTitle: $this->getPageTitle($request),
+                referrer: $request->headers->get('referer'),
             );
-
-            // Increment page views count
-            $session->increment('page_views');
-            $session->touch('updated_at');
-
-            // Create page view record
-            AnalyticsPageView::create([
-                'session_id' => $session->id,
-                'page_url' => $request->path(),
-                'page_title' => $this->getPageTitle($request),
-                'referrer' => $request->headers->get('referer'),
-                'time_on_page' => 0, // Will be updated on next page view
-                'bounced' => false,
-            ]);
         } catch (\Exception $e) {
-            // Silently fail - analytics tracking shouldn't break the app
-            \Log::debug('Analytics tracking failed: ' . $e->getMessage());
+            \Log::debug('Analytics dispatch failed: ' . $e->getMessage());
         }
     }
 

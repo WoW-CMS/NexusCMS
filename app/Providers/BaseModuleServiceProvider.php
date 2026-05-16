@@ -28,6 +28,7 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
             $this->config['migrations'] = (bool) ($manifest['migrations'] ?? ($this->config['migrations'] ?? false));
             $this->config['views'] = (bool) ($manifest['views'] ?? ($this->config['views'] ?? false));
             $this->config['translations'] = (bool) ($manifest['translations'] ?? ($this->config['translations'] ?? false));
+            $this->config['admin_crud'] = (string) ($manifest['admin_crud'] ?? ($this->config['admin_crud'] ?? ''));
         } else {
             $this->modulePath = base_path("app/Modules/{$this->moduleName}");
         }
@@ -46,6 +47,13 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
 
         if ($this->config['translations'] ?? false) {
             $this->loadTranslations();
+        }
+
+        $adminCrud = (string) ($this->config['admin_crud'] ?? '');
+
+        if ($adminCrud === 'custom') {
+            $this->loadAdminRoutes();
+            $this->loadAdminViews();
         }
     }
 
@@ -104,6 +112,33 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
                 $path,
                 strtolower($this->moduleName)
             );
+        }
+    }
+
+    /**
+     * Load admin routes from the module's Admin/routes.php file (Modo B).
+     * 
+     * @return void
+     */
+    private function loadAdminRoutes(): void
+    {
+        $path = $this->modulePath . '/Admin/routes.php';
+        if (is_file($path)) {
+            Route::middleware(['web', 'auth'])
+                ->group($path);
+        }
+    }
+
+    /**
+     * Register admin views namespace from the module's Admin/views directory (Modo B).
+     * 
+     * @return void
+     */
+    private function loadAdminViews(): void
+    {
+        $path = $this->modulePath . '/Admin/views';
+        if (is_dir($path)) {
+            $this->loadViewsFrom($path, strtolower($this->moduleName) . '-admin');
         }
     }
 }

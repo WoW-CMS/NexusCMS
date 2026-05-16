@@ -45,39 +45,11 @@
                 </div>
 
                 <div>
-                    <label for="namespace" class="block text-sm font-medium text-gray-700 mb-1">Namespace</label>
-                    <input type="text" id="namespace" name="namespace" value="{{ old('namespace', $module['namespace']) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" required>
-                </div>
-
-                <div>
                     <label for="module_type" class="block text-sm font-medium text-gray-700 mb-1">Module Type</label>
                     <select id="module_type" name="module_type" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" required>
                         <option value="core" {{ old('module_type', $module['module_type']) === 'core' ? 'selected' : '' }}>Core</option>
                         <option value="third_party" {{ old('module_type', $module['module_type']) === 'third_party' ? 'selected' : '' }}>Third Party</option>
                     </select>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" name="enabled" value="1" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" {{ old('enabled', $module['enabled']) ? 'checked' : '' }}>
-                        Enabled
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" name="routes" value="1" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" {{ old('routes', $module['routes']) ? 'checked' : '' }}>
-                        Load Routes
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" name="migrations" value="1" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" {{ old('migrations', $module['migrations']) ? 'checked' : '' }}>
-                        Load Migrations
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-gray-700">
-                        <input type="checkbox" name="views" value="1" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" {{ old('views', $module['views']) ? 'checked' : '' }}>
-                        Load Views
-                    </label>
-                    <label class="flex items-center gap-2 text-sm text-gray-700 md:col-span-2">
-                        <input type="checkbox" name="translations" value="1" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" {{ old('translations', $module['translations']) ? 'checked' : '' }}>
-                        Load Translations
-                    </label>
                 </div>
 
                 <div class="pt-2">
@@ -100,8 +72,19 @@
                     <dd class="text-gray-800 break-all">{{ $module['config_path'] }}</dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500">Migrations path</dt>
-                    <dd class="text-gray-800 break-all">{{ $module['migrations_path'] }}</dd>
+                    <dt class="text-gray-500">Namespace</dt>
+                    <dd class="text-gray-800 font-medium break-all">{{ $module['namespace'] }}</dd>
+                </div>
+                <div>
+                    <dt class="text-gray-500">Capabilities</dt>
+                    <dd class="mt-1">
+                        <div class="flex flex-wrap gap-1">
+                            <span class="px-2 py-0.5 rounded text-xs {{ $module['routes'] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400' }}">Routes</span>
+                            <span class="px-2 py-0.5 rounded text-xs {{ $module['migrations'] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400' }}">Migrations</span>
+                            <span class="px-2 py-0.5 rounded text-xs {{ $module['views'] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400' }}">Views</span>
+                            <span class="px-2 py-0.5 rounded text-xs {{ $module['translations'] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400' }}">Translations</span>
+                        </div>
+                    </dd>
                 </div>
             </dl>
         </div>

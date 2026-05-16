@@ -1,12 +1,19 @@
 {
     "name": "Example",
-    "description": "Módulo de ejemplo",
+    "description": "M\u00f3dulo de ejemplo",
     "version": "1.0.0",
     "author": "WoW-CMS",
     "author_url": "https://wow-cms.com",
-    "enabled": true,
+    "enabled": false,
     "routes": true,
     "migrations": false,
     "views": false,
-    "namespace": "Modules\\Example"
+    "namespace": "Modules\\Example",
+    "admin_crud": "custom",
+    "admin_menu": {
+        "label": "Example",
+        "icon": "fas fa-flask",
+        "route": "admin.example.index",
+        "order": 99
+    }
 }

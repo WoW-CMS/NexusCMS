@@ -14,7 +14,11 @@ class DonateController extends Controller
     public function index(GatewayManager $gateways)
     {
         $available = array_map(fn($g) => ['id' => $g->id(), 'name' => $g->displayName()], $gateways->all());
-        $plans = DonationPlan::where('active', true)->orderBy('sort_order')->get();
+        $plans = DonationPlan::query()
+            ->where('active', true)
+            ->select(['id', 'name', 'amount', 'dp_total', 'sort_order'])
+            ->orderBy('sort_order')
+            ->get();
         
         return view('donate::home', ['gateways' => $available, 'plans' => $plans]); 
     }

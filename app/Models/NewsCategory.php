@@ -35,6 +35,10 @@ class NewsCategory extends Model
 
     public function getAllCategoriesWithCount()
     {
-        return self::withCount('news')->get();
+        return self::query()
+            ->where('is_active', true)
+            ->withCount('news')
+            ->orderBy('order')
+            ->get();
     }
 }

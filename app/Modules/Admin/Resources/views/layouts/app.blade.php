@@ -160,35 +160,41 @@
                 </a>
                 @endcan
             </div>
-
-            {{-- ── Store ── --}}
+            
+            {{-- ── Modules (dynamic) ── --}}
+            @if(!empty($adminMenuItems))
             <div>
-                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Store</p>
-                @can('manage.store.products')
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
-                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
-                    <i class="fas fa-bag-shopping w-4 text-center"></i>
-                    Products
-                </a>
-                @endcan
-                @can('manage.store.categories')
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
-                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
-                    <i class="fas fa-tags w-4 text-center"></i>
-                    Categories
-                </a>
-                @endcan
-                @can('view.store.transactions')
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
-                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
-                    <i class="fas fa-receipt w-4 text-center"></i>
-                    Transactions
-                </a>
-                @endcan
+                <p class="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-500 select-none">Modules</p>
+                @foreach($adminMenuItems as $menuItem)
+                    @php
+                        $routeName  = $menuItem['route'] ?? null;
+                        $permission = $menuItem['permission'] ?? null;
+                        $label      = $menuItem['label'] ?? $menuItem['module'];
+                        $icon       = $menuItem['icon'] ?? 'fas fa-puzzle-piece';
+                        $active     = $routeName ? request()->routeIs(\Illuminate\Support\Str::beforeLast($routeName, '.') . '.*') : false;
+                    @endphp
+                    @if($routeName && Route::has($routeName))
+                        @if($permission)
+                            @can($permission)
+                            <a href="{{ route($routeName) }}"
+                               class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                                      {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                                <i class="{{ $icon }} w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                                {{ $label }}
+                            </a>
+                            @endcan
+                        @else
+                            <a href="{{ route($routeName) }}"
+                               class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                                      {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                                <i class="{{ $icon }} w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                                {{ $label }}
+                            </a>
+                        @endif
+                    @endif
+                @endforeach
             </div>
+            @endif
 
             {{-- ── Realms ── --}}
             <div>
@@ -200,12 +206,6 @@
                           {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
                     <i class="fas fa-server w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
                     Realm Management
-                </a>
-                <a href="#"
-                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
-                          text-gray-400 hover:bg-white/[0.05] hover:text-gray-200">
-                    <i class="fas fa-database w-4 text-center"></i>
-                    Database
                 </a>
                 <a href="#"
                    class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
@@ -265,7 +265,6 @@
                 </a>
                 @endcan
             </div>
-
         </nav>
 
         {{-- User footer --}}
