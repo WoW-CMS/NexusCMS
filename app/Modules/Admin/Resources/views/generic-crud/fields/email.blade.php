@@ -4,14 +4,16 @@
         {{ $field['label'] ?? $field['name'] }}
         @if($field['required'] ?? false) <span class="text-red-500 ml-0.5">*</span> @endif
     </label>
-    <textarea id="{{ $field['name'] }}"
-              name="{{ $field['name'] }}"
-              rows="{{ $field['rows'] ?? 4 }}"
-              placeholder="{{ $field['placeholder'] ?? '' }}"
-              class="w-full rounded-lg border text-sm px-3 py-2 resize-y
-                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition
-                     @error($field['name']) border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
-              {{ ($field['required'] ?? false) ? 'required' : '' }}>{{ $value }}</textarea>
+    <input type="email"
+           id="{{ $field['name'] }}"
+           name="{{ $field['name'] }}"
+           value="{{ $value }}"
+           placeholder="{{ $field['placeholder'] ?? '' }}"
+           @if(!empty($field['max'])) maxlength="{{ $field['max'] }}" @endif
+           class="w-full rounded-lg border text-sm px-3 py-2
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition
+                  @error($field['name']) border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
+           {{ ($field['required'] ?? false) ? 'required' : '' }}>
     @if(!empty($field['hint']))
         <p class="mt-1.5 text-xs text-gray-400">{{ $field['hint'] }}</p>
     @endif

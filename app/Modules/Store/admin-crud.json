@@ -2,14 +2,13 @@
     "title": "Store Products",
     "model": "Modules\\Store\\Domain\\Models\\StoreProduct",
     "list": {
-        "searchable": true,
-        "search_columns": ["name", "key", "type"],
+        "searchable": ["name", "key", "type"],
         "order_by": "sort_order",
         "order_dir": "asc",
         "columns": [
             { "field": "sort_order", "label": "#" },
             { "field": "name",       "label": "Product" },
-            { "field": "key",        "label": "Key" },
+            { "field": "type",       "label": "Type" },
             { "field": "cost",       "label": "Cost (DP)" },
             { "field": "active",     "label": "Active", "format": "boolean" }
         ]
@@ -32,7 +31,7 @@
                         "type": "text",
                         "required": true,
                         "placeholder": "e.g. rename",
-                        "help": "Unique slug used for SOAP commands."
+                        "hint": "Unique slug used for SOAP commands."
                     },
                     {
                         "name": "description",
@@ -55,10 +54,19 @@
                     {
                         "name": "type",
                         "label": "SOAP Type",
-                        "type": "text",
+                        "type": "enum",
                         "required": false,
-                        "placeholder": "e.g. character_rename",
-                        "help": "SOAP command type to execute on purchase."
+                        "hint": "SOAP command type to execute on purchase.",
+                        "options": [
+                            { "value": "character_rename", "label": "Character Rename" },
+                            { "value": "character_customize", "label": "Character Customize" },
+                            { "value": "character_race_change", "label": "Race Change" },
+                            { "value": "character_class_change", "label": "Class Change" },
+                            { "value": "level_boost", "label": "Level Boost" },
+                            { "value": "gold", "label": "Gold" },
+                            { "value": "item", "label": "Item" },
+                            { "value": "custom", "label": "Custom" }
+                        ]
                     },
                     {
                         "name": "sort_order",
@@ -70,14 +78,14 @@
                     {
                         "name": "requires_character",
                         "label": "Requires Character",
-                        "type": "checkbox",
-                        "help": "If checked, the player must select a character during purchase."
+                        "type": "toggle",
+                        "hint": "If checked, the player must select a character during purchase."
                     },
                     {
                         "name": "active",
                         "label": "Active",
-                        "type": "checkbox",
-                        "help": "Inactive products are hidden in the store."
+                        "type": "toggle",
+                        "hint": "Inactive products are hidden in the store."
                     }
                 ]
             }

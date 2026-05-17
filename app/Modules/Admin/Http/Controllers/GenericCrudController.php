@@ -60,32 +60,54 @@ class GenericCrudController extends Controller
             ->with('success', 'Record created successfully.');
     }
 
-    public function edit(string $module, int|string $id)
+    public function edit(int|string $id, string $module)
     {
         $config = $this->getCrudConfigOrFail($module);
-        $record = ModuleCrudService::find($config, $id);
-        $base   = $this->crudRouteBase($module);
+
+        try {
+            $record = ModuleCrudService::find($config, $id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return redirect()
+                ->route($this->crudRouteBase($module) . 'index')
+                ->with('error', "Record #{$id} was not found.");
+        }
+
+        $base = $this->crudRouteBase($module);
 
         return view('admin::generic-crud.edit', compact('config', 'record', 'module', 'base'));
     }
 
-    public function update(Request $request, string $module, int|string $id)
+    public function update(Request $request, int|string $id, string $module)
     {
         $config = $this->getCrudConfigOrFail($module);
-        $data   = $request->validate(ModuleCrudService::buildValidationRules($config, isUpdate: true));
 
+        try {
+            ModuleCrudService::find($config, $id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return redirect()
+                ->route($this->crudRouteBase($module) . 'index')
+                ->with('error', "Record #{$id} was not found.");
+        }
+
+        $data = $request->validate(ModuleCrudService::buildValidationRules($config, isUpdate: true));
         ModuleCrudService::update($config, $id, $data);
 
         return redirect()
-            ->route($this->crudRouteBase($module) . 'index')
+            ->route($this->crudRouteBase($module) . 'edit', ['id' => $id])
             ->with('success', 'Record updated successfully.');
     }
 
-    public function destroy(string $module, int|string $id)
+    public function destroy(int|string $id, string $module)
     {
         $config = $this->getCrudConfigOrFail($module);
 
-        ModuleCrudService::destroy($config, $id);
+        try {
+            ModuleCrudService::destroy($config, $id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return redirect()
+                ->route($this->crudRouteBase($module) . 'index')
+                ->with('error', "Record #{$id} was not found.");
+        }
 
         return redirect()
             ->route($this->crudRouteBase($module) . 'index')

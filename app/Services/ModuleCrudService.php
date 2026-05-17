@@ -86,13 +86,26 @@ class ModuleCrudService
         $model = self::resolveModel($config);
         $query = $model->newQuery();
 
-        $searchable = $config['list']['searchable'] ?? [];
-        if ($search !== null && $search !== '' && count($searchable) > 0) {
-            $query->where(function ($q) use ($search, $searchable) {
-                foreach ($searchable as $column) {
+        // Support both formats:
+        //   "searchable": ["col1", "col2"]       — array of columns
+        //   "searchable": true, "search_columns": ["col1", "col2"]  — legacy boolean + separate key
+        $searchableCfg = $config['list']['searchable'] ?? [];
+        $searchColumns = is_array($searchableCfg)
+            ? $searchableCfg
+            : (is_array($config['list']['search_columns'] ?? null) ? $config['list']['search_columns'] : []);
+
+        if ($search !== null && $search !== '' && count($searchColumns) > 0) {
+            $query->where(function ($q) use ($search, $searchColumns) {
+                foreach ($searchColumns as $column) {
                     $q->orWhere($column, 'like', '%' . $search . '%');
                 }
             });
+        }
+
+        $orderBy  = (string) ($config['list']['order_by'] ?? '');
+        $orderDir = strtolower((string) ($config['list']['order_dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
+        if ($orderBy !== '') {
+            $query->orderBy($orderBy, $orderDir);
         }
 
         $perPage = (int) ($config['list']['per_page'] ?? 15);
@@ -168,21 +181,50 @@ class ModuleCrudService
         self::$cache = [];
     }
 
+    private static function enumRules(array $field): array
+    {
+        $options = $field['options'] ?? [];
+        $values = array_map(
+            fn($opt) => is_array($opt) ? (string) ($opt['value'] ?? '') : (string) $opt,
+            $options
+        );
+
+        if (empty($values)) {
+            return ['string'];
+        }
+
+        return ['string', 'in:' . implode(',', $values)];
+    }
+
     private static function typeRules(array $field, bool $isUpdate): array
     {
-        return match ($field['type'] ?? 'text') {
-            'text', 'slug'        => ['string', 'max:255'],
-            'textarea', 'richtext'=> ['string'],
-            'number'              => ['numeric'],
-            'toggle'              => ['boolean'],
-            'date'                => ['date'],
-            'datetime'            => ['date'],
-            'email'               => ['email', 'max:255'],
-            'image'               => $isUpdate ? ['nullable', 'image', 'max:2048'] : ['image', 'max:2048'],
-            'file'                => $isUpdate ? ['nullable', 'file', 'max:10240'] : ['file', 'max:10240'],
-            'select'              => [],
-            'relation'            => ['integer'],
-            default               => [],
+        $rules = match ($field['type'] ?? 'text') {
+            'text', 'slug'         => ['string', 'max:' . (int) ($field['max'] ?? 255)],
+            'textarea', 'richtext' => ['string'],
+            'number'               => ['numeric'],
+            'toggle', 'checkbox'   => ['boolean'],
+            'date'                 => ['date'],
+            'datetime'             => ['date'],
+            'email'                => ['email', 'max:' . (int) ($field['max'] ?? 255)],
+            'url'                  => ['url',   'max:' . (int) ($field['max'] ?? 255)],
+            'image'                => $isUpdate ? ['nullable', 'image', 'max:2048'] : ['image', 'max:2048'],
+            'file'                 => $isUpdate ? ['nullable', 'file',  'max:10240'] : ['file', 'max:10240'],
+            'select'               => [],
+            'relation'             => ['integer'],
+            'enum'                 => self::enumRules($field),
+            default                => [],
         };
+
+        // Append min/max constraints from config for numeric types
+        if (in_array($field['type'] ?? '', ['number', 'text', 'textarea', 'email', 'url', 'slug'], true)) {
+            if (isset($field['min']) && is_numeric($field['min'])) {
+                $rules[] = ($field['type'] === 'number') ? 'min:' . $field['min'] : 'min:' . (int) $field['min'];
+            }
+            if (isset($field['max']) && is_numeric($field['max']) && ($field['type'] === 'number')) {
+                $rules[] = 'max:' . $field['max'];
+            }
+        }
+
+        return $rules;
     }
 }

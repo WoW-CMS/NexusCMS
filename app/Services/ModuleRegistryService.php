@@ -3,36 +3,30 @@
 namespace App\Services;
 
 use App\Models\ManagedModule;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 class ModuleRegistryService
 {
-    private const ADMIN_MENU_CACHE_KEY = 'module_registry.admin_menu_items';
-    private const ADMIN_MENU_CACHE_TTL = 300;
-
     private static ?array $stateCache = null;
     private static ?array $manifestCache = null;
 
     public static function getAdminMenuItems(): array
     {
-        return Cache::remember(self::ADMIN_MENU_CACHE_KEY, self::ADMIN_MENU_CACHE_TTL, static function (): array {
-            $items = [];
+        $items = [];
 
-            foreach (self::getEnabledModules() as $module) {
-                $menu = $module['admin_menu'] ?? null;
-                if (!is_array($menu) || empty($menu)) {
-                    continue;
-                }
-
-                $items[] = array_merge($menu, ['module' => $module['folder']]);
+        foreach (self::getEnabledModules() as $module) {
+            $menu = $module['admin_menu'] ?? null;
+            if (!is_array($menu) || empty($menu)) {
+                continue;
             }
 
-            usort($items, static fn (array $a, array $b): int => ($a['order'] ?? 0) <=> ($b['order'] ?? 0));
+            $items[] = array_merge($menu, ['module' => $module['folder']]);
+        }
 
-            return $items;
-        });
+        usort($items, static fn (array $a, array $b): int => ($a['order'] ?? 0) <=> ($b['order'] ?? 0));
+
+        return $items;
     }
 
     public static function getEnabledProviders(): array
@@ -71,7 +65,19 @@ class ModuleRegistryService
 
         $manifest = self::loadManifest();
 
-        return $manifest[$module] ?? null;
+        // Exact match first
+        if (isset($manifest[$module])) {
+            return $manifest[$module];
+        }
+
+        // Case-insensitive fallback (e.g. "store" → "Store")
+        foreach ($manifest as $key => $value) {
+            if (strcasecmp($key, $module) === 0) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     public static function getModuleState(string $module, ?array $fallbackConfig = null): array
@@ -189,7 +195,6 @@ class ModuleRegistryService
     {
         self::$stateCache = null;
         self::$manifestCache = null;
-        Cache::forget(self::ADMIN_MENU_CACHE_KEY);
     }
 
     private static function loadManifest(): array

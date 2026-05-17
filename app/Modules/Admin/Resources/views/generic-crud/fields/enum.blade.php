@@ -1,4 +1,16 @@
-@php $value = old($field['name'], $record?->{$field['name']} ?? ($field['default'] ?? '')); @endphp
+@php
+    $value = old($field['name'], $record?->{$field['name']} ?? ($field['default'] ?? ''));
+    $options = $field['options'] ?? [];
+    // Support both flat arrays ["val1","val2"] and label/value pairs [{"value":"v","label":"L"}]
+    $normalized = [];
+    foreach ($options as $opt) {
+        if (is_array($opt)) {
+            $normalized[] = $opt;
+        } else {
+            $normalized[] = ['value' => $opt, 'label' => $opt];
+        }
+    }
+@endphp
 <div>
     <label for="{{ $field['name'] }}" class="block text-sm font-medium text-gray-700 mb-1.5">
         {{ $field['label'] ?? $field['name'] }}
@@ -11,14 +23,10 @@
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition
                        @error($field['name']) border-red-400 bg-red-50 @else border-gray-300 bg-white @enderror"
                 {{ ($field['required'] ?? false) ? 'required' : '' }}>
-            <option value="">— Select —</option>
-            @php
-                $options = $field['options'] ?? [];
-                if (!empty($field['relation'])) {
-                    $options = \App\Services\ModuleCrudService::resolveRelationOptions($field['relation']);
-                }
-            @endphp
-            @foreach($options as $option)
+            @if(!($field['required'] ?? false))
+                <option value="">— Select —</option>
+            @endif
+            @foreach($normalized as $option)
                 <option value="{{ $option['value'] }}"
                         {{ (string) $value === (string) $option['value'] ? 'selected' : '' }}>
                     {{ $option['label'] }}
