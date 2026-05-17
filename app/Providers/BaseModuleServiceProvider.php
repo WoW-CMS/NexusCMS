@@ -87,31 +87,29 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
 
     /**
      * Load views from the module's resources/views directory.
-     * 
-     * @return void
+     * Supports both "views" and "Views" for case-sensitive filesystems.
      */
     private function loadViews(): void
     {
-        $path = $this->modulePath . '/Resources/views';
-        if (is_dir($path)) {
-            $this->loadViewsFrom($path, strtolower($this->moduleName));
+        foreach ([$this->modulePath . '/Resources/views', $this->modulePath . '/Resources/Views'] as $path) {
+            if (is_dir($path)) {
+                $this->loadViewsFrom($path, strtolower($this->moduleName));
+                return;
+            }
         }
     }
 
     /**
      * Load translations from the module's lang directory.
-     * 
-     * @return void
+     * Supports both "lang" and "Lang" for case-sensitive filesystems.
      */
     private function loadTranslations(): void
     {
-        $path = $this->modulePath . '/Resources/lang';
-
-        if (is_dir($path)) {
-            $this->loadTranslationsFrom(
-                $path,
-                strtolower($this->moduleName)
-            );
+        foreach ([$this->modulePath . '/Resources/lang', $this->modulePath . '/Resources/Lang'] as $path) {
+            if (is_dir($path)) {
+                $this->loadTranslationsFrom($path, strtolower($this->moduleName));
+                return;
+            }
         }
     }
 
@@ -130,15 +128,22 @@ abstract class BaseModuleServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register admin views namespace from the module's Admin/views directory (Modo B).
-     * 
-     * @return void
+     * Register admin views namespace from the module's Admin/Views directory (Modo B).
+     * Supports both "Views" (uppercase) and "views" (lowercase) to handle
+     * case-sensitive filesystems in production (Linux).
      */
     private function loadAdminViews(): void
     {
-        $path = $this->modulePath . '/Admin/views';
-        if (is_dir($path)) {
-            $this->loadViewsFrom($path, strtolower($this->moduleName) . '-admin');
+        $candidates = [
+            $this->modulePath . '/Admin/Views',
+            $this->modulePath . '/Admin/views',
+        ];
+
+        foreach ($candidates as $path) {
+            if (is_dir($path)) {
+                $this->loadViewsFrom($path, strtolower($this->moduleName) . '-admin');
+                return;
+            }
         }
     }
 }
