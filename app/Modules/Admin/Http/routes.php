@@ -42,6 +42,10 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->middleware('permission:manage.settings')->name('admin.settings.index');
         Route::post('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'store'])->middleware('permission:manage.settings')->name('admin.settings.store');
 
+        // Advanced actions
+        Route::post('/settings/advanced/seeder', [\Modules\Admin\Http\Controllers\AdminAdvancedController::class, 'runSeeder'])->middleware('permission:manage.settings')->name('admin.settings.advanced.seeder');
+        Route::post('/settings/advanced/cache', [\Modules\Admin\Http\Controllers\AdminAdvancedController::class, 'clearCache'])->middleware('permission:manage.settings')->name('admin.settings.advanced.cache');
+
         // Realm Management
         Route::get('/realms', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'index'])->middleware('permission:manage.realms')->name('admin.realms.index');
         Route::get('/realms/create', [\Modules\Admin\Http\Controllers\RealmManagementController::class, 'create'])->middleware('permission:manage.realms')->name('admin.realms.create');

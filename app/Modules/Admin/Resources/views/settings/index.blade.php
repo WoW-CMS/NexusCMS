@@ -10,9 +10,11 @@
             <h1 class="text-2xl font-bold text-gray-800">System Settings</h1>
         </div>
         <div class="flex items-center gap-3">
+            @if(request('view', 'general') !== 'advanced')
             <button id="save-settings-btn" form="settings-form" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                 <i class="fas fa-save"></i> Save All Changes
             </button>
+            @endif
         </div>
     </header>
     <main class="flex-1 flex overflow-hidden bg-gray-50">
@@ -25,11 +27,25 @@
                     <p>{{ session('success') }}</p>
                 </div>
             @endif
+            @if(session('advanced_success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p class="font-bold"><i class="fas fa-check-circle mr-1"></i> Done!</p>
+                    <p>{{ session('advanced_success') }}</p>
+                </div>
+            @endif
+            @if(session('advanced_error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                    <p class="font-bold"><i class="fas fa-exclamation-circle mr-1"></i> Error</p>
+                    <p>{{ session('advanced_error') }}</p>
+                </div>
+            @endif
             <form id="settings-form" action="{{ route('admin.settings.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="view" value="{{ request('view', 'general') }}">
                 @yield('settings_content')
             </form>
+
+            @stack('after_settings_form')
         </div>
 
     </main>
