@@ -352,18 +352,21 @@ class UpdateService
     private function applyViaGit(string $tag, array &$log): void
     {
         // Build the GitHub remote URL from configured owner/repo
-        $token    = $this->githubToken;
-        $repoUrl  = $token
+        $token   = $this->githubToken;
+        $repoUrl = $token
             ? "https://{$token}@github.com/{$this->owner}/{$this->repo}.git"
             : "https://github.com/{$this->owner}/{$this->repo}.git";
 
-        // Use a dedicated remote (nexus-update) so we don't disturb the existing origin
-        $this->run('git remote remove nexus-update 2>/dev/null || true', $log);
+        // Silently remove the temporary remote if it already exists (ignore errors)
+        $this->runSilent('git remote remove nexus-update', $log);
+
         $this->run("git remote add nexus-update {$repoUrl}", $log);
         $this->run('git stash', $log);
         $this->run('git fetch nexus-update --tags --force', $log);
         $this->run("git checkout tags/{$tag}", $log);
-        $this->run('git remote remove nexus-update', $log);
+
+        // Clean up the temporary remote (ignore errors)
+        $this->runSilent('git remote remove nexus-update', $log);
     }
 
     // ─── ZIP Strategy ────────────────────────────────────────────────────────
@@ -485,6 +488,16 @@ class UpdateService
             throw new \RuntimeException(
                 "Command failed (exit {$code}): {$command}\n" . implode("\n", array_filter($output))
             );
+        }
+    }
+
+    // Same as run() but never throws — failures are logged as warnings only
+    private function runSilent(string $command, array &$log): void
+    {
+        try {
+            $this->run($command, $log);
+        } catch (\RuntimeException) {
+            // Intentionally ignored
         }
     }
 
