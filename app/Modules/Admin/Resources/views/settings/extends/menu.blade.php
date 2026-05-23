@@ -14,9 +14,9 @@
                     'seo' => ['icon' => 'search', 'label' => __('admin::settings.menu.seo')],  
                     'api' => ['icon' => 'code', 'label' => __('admin::settings.menu.api')],
                     'maintenance' => ['icon' => 'tools', 'label' => __('admin::settings.menu.maintenance')],        
-                    'maintenance' => ['icon' => 'tools', 'label' => __('admin::settings.menu.maintenance')],        
                     'localization' => ['icon' => 'language', 'label' => __('admin::settings.menu.localization')],
                     'advanced' => ['icon' => 'cogs', 'label' => __('admin::settings.menu.advanced')],
+                    'updates'  => ['icon' => 'cloud-arrow-up', 'label' => 'Updates'],
                 ];
             @endphp
 

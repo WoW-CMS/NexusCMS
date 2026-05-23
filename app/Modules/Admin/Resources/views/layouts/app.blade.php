@@ -229,6 +229,15 @@
                 </a>
                 @endcan
                 @can('manage.settings')
+                @php $active = request()->routeIs('admin.updates.*'); @endphp
+                <a href="{{ route('admin.updates.index') }}"
+                   class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5
+                          {{ $active ? 'nav-item-active bg-white/[0.08] text-white' : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-200' }}">
+                    <i class="fas fa-cloud-arrow-up w-4 text-center {{ $active ? 'text-blue-400' : '' }}"></i>
+                    Updates
+                </a>
+                @endcan
+                @can('manage.settings')
                 @php $active = request()->routeIs('admin.settings.*'); @endphp
                 <a href="{{ route('admin.settings.index') }}"
                    class="relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 mb-0.5

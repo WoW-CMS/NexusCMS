@@ -38,6 +38,10 @@ Route::middleware(['auth', 'permission:access.admin.panel', 'web'])
         Route::get('/backups/{filename}/download', [\Modules\Admin\Http\Controllers\BackupController::class, 'download'])->middleware('permission:manage.backups')->name('admin.backups.download');
         Route::delete('/backups/{filename}', [\Modules\Admin\Http\Controllers\BackupController::class, 'destroy'])->middleware('permission:manage.backups')->name('admin.backups.destroy');
 
+        // Updates
+        Route::get('/updates', [\Modules\Admin\Http\Controllers\UpdateController::class, 'index'])->middleware('permission:manage.settings')->name('admin.updates.index');
+        Route::post('/updates/apply', [\Modules\Admin\Http\Controllers\UpdateController::class, 'apply'])->middleware('permission:manage.settings')->name('admin.updates.apply');
+
         // Settings
         Route::get('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'index'])->middleware('permission:manage.settings')->name('admin.settings.index');
         Route::post('/settings', [\Modules\Admin\Http\Controllers\AdminSettingsController::class, 'store'])->middleware('permission:manage.settings')->name('admin.settings.store');

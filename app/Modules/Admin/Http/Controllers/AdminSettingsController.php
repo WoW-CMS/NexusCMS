@@ -22,6 +22,7 @@ class AdminSettingsController extends Controller
         'maintenance' => 'admin::settings.maintenance',
         'localization' => 'admin::settings.localization',
         'advanced' => 'admin::settings.advanced',
+        'updates'  => 'admin::settings.updates',
     ];
 
     /**
@@ -65,7 +66,7 @@ class AdminSettingsController extends Controller
 
             Setting::updateOrCreate(
                 ['key' => $key],
-                ['value' => $value]
+                ['value' => $value ?? '']
             );
         }
 
