@@ -351,10 +351,19 @@ class UpdateService
 
     private function applyViaGit(string $tag, array &$log): void
     {
-        // Stash any local uncommitted changes to avoid conflicts
+        // Build the GitHub remote URL from configured owner/repo
+        $token    = $this->githubToken;
+        $repoUrl  = $token
+            ? "https://{$token}@github.com/{$this->owner}/{$this->repo}.git"
+            : "https://github.com/{$this->owner}/{$this->repo}.git";
+
+        // Use a dedicated remote (nexus-update) so we don't disturb the existing origin
+        $this->run('git remote remove nexus-update 2>/dev/null || true', $log);
+        $this->run("git remote add nexus-update {$repoUrl}", $log);
         $this->run('git stash', $log);
-        $this->run('git fetch --tags --force', $log);
+        $this->run('git fetch nexus-update --tags --force', $log);
         $this->run("git checkout tags/{$tag}", $log);
+        $this->run('git remote remove nexus-update', $log);
     }
 
     // ─── ZIP Strategy ────────────────────────────────────────────────────────
