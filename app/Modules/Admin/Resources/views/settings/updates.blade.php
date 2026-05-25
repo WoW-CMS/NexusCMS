@@ -15,16 +15,16 @@
         <div class="p-6 grid sm:grid-cols-2 gap-6">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Repository Owner</label>
-                <input type="text" name="update.repo_owner"
-                    value="{{ old('update.repo_owner', $settings->get('update.repo_owner', 'wow-cms')) }}"
+                <input type="text" name="update_repo_owner"
+                    value="{{ old('update_repo_owner', $settings->get('update_repo_owner', 'wow-cms')) }}"
                     placeholder="e.g. wow-cms"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <p class="text-xs text-gray-400 mt-1">GitHub username or organisation.</p>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Repository Name</label>
-                <input type="text" name="update.repo_name"
-                    value="{{ old('update.repo_name', $settings->get('update.repo_name', 'nexuscms')) }}"
+                <input type="text" name="update_repo_name"
+                    value="{{ old('update_repo_name', $settings->get('update_repo_name', 'nexuscms')) }}"
                     placeholder="e.g. nexuscms"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <p class="text-xs text-gray-400 mt-1">Exact repository name (case-sensitive).</p>
@@ -34,8 +34,8 @@
                     GitHub Token
                     <span class="text-xs font-normal text-gray-400 ml-1">(optional)</span>
                 </label>
-                <input type="password" name="update.github_token"
-                    value="{{ old('update.github_token', $settings->get('update.github_token', '')) }}"
+                <input type="password" name="update_github_token"
+                    value="{{ old('update_github_token', $settings->get('update_github_token', '')) }}"
                     placeholder="ghp_xxxxxxxxxxxx"
                     autocomplete="new-password"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono">
@@ -62,7 +62,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Release Channel</label>
                 <div class="grid sm:grid-cols-3 gap-3">
                     @php
-                        $currentChannel = $settings->get('update.channel', 'stable');
+                        $currentChannel = $settings->get('update_channel', 'any');
                         $channels = [
                             'stable' => ['label' => 'Stable', 'desc' => 'Only full releases', 'icon' => 'fa-shield-check', 'color' => 'green'],
                             'beta'   => ['label' => 'Beta',   'desc' => 'Includes pre-releases', 'icon' => 'fa-flask', 'color' => 'orange'],
@@ -71,7 +71,7 @@
                     @endphp
                     @foreach($channels as $val => $ch)
                     <label class="relative cursor-pointer">
-                        <input type="radio" name="update.channel" value="{{ $val }}"
+                        <input type="radio" name="update_channel" value="{{ $val }}"
                             {{ $currentChannel === $val ? 'checked' : '' }}
                             class="sr-only peer">
                         <div class="border-2 rounded-xl p-4 transition
@@ -98,9 +98,9 @@
                         <p class="text-xs text-gray-400 mt-0.5">Enable or disable the update checker and apply button.</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer shrink-0">
-                        <input type="hidden" name="update.enabled" value="0">
-                        <input type="checkbox" name="update.enabled" value="1"
-                            {{ $settings->get('update.enabled', '1') == '1' ? 'checked' : '' }}
+                        <input type="hidden" name="update_enabled" value="0">
+                        <input type="checkbox" name="update_enabled" value="1"
+                            {{ $settings->get('update_enabled', '1') == '1' ? 'checked' : '' }}
                             class="sr-only peer">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer
                                     peer-checked:after:translate-x-full peer-checked:after:border-white
@@ -117,9 +117,9 @@
                         <p class="text-xs text-gray-400 mt-0.5">Put the site in maintenance mode while applying an update.</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer shrink-0">
-                        <input type="hidden" name="update.maintenance_mode" value="0">
-                        <input type="checkbox" name="update.maintenance_mode" value="1"
-                            {{ $settings->get('update.maintenance_mode', '1') == '1' ? 'checked' : '' }}
+                        <input type="hidden" name="update_maintenance_mode" value="0">
+                        <input type="checkbox" name="update_maintenance_mode" value="1"
+                            {{ $settings->get('update_maintenance_mode', '1') == '1' ? 'checked' : '' }}
                             class="sr-only peer">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer
                                     peer-checked:after:translate-x-full peer-checked:after:border-white

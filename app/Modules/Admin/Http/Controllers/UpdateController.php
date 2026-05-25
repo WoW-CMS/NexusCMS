@@ -30,7 +30,7 @@ class UpdateController extends Controller
 
     public function apply(Request $request)
     {
-        if (!settings('update.enabled', config('update.enabled', true))) {
+        if (!settings('update_enabled', config('update.enabled', true))) {
             return response()->json(['success' => false, 'error' => 'The auto-update system is disabled.'], 403);
         }
 

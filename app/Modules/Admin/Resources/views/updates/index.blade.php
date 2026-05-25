@@ -26,7 +26,7 @@
     {{-- Main Content --}}
     <main class="flex-1 overflow-y-auto bg-gray-50 p-6 space-y-6">
 
-        @if(!settings('update.enabled', config('update.enabled', true)))
+        @if(!settings('update_enabled', config('update.enabled', true)))
         <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 flex items-start gap-4">
             <i class="fas fa-ban text-yellow-500 text-xl mt-0.5"></i>
             <div>
@@ -43,7 +43,7 @@
                 <p class="font-semibold text-gray-800">Could not reach GitHub</p>
                 <p class="text-sm text-gray-500 mt-1">
                     Unable to fetch release information. Check your internet connection, verify the repository
-                    (<code>{{ settings('update.repo_owner', config('update.repository.owner')) }}/{{ settings('update.repo_name', config('update.repository.name')) }}</code>),
+                    (<code>{{ settings('update_repo_owner', config('update.repository.owner')) }}/{{ settings('update_repo_name', config('update.repository.name')) }}</code>),
                     or add a <code>GITHUB_TOKEN</code> if the repository is private.
                 </p>
             </div>
@@ -95,10 +95,13 @@
                 <div class="flex items-center gap-2 text-sm text-gray-600">
                     <i class="fas fa-{{ $method === 'git' ? 'code-branch' : 'file-zipper' }} {{ $method === 'git' ? 'text-green-500' : 'text-orange-500' }}"></i>
                     Update method: <strong>{{ strtoupper($method) }}</strong>
-                    @php $allOk = collect($checks)->every(fn($c) => $c['ok']) @endphp
-                    <span class="ml-3 flex items-center gap-1 {{ $allOk ? 'text-green-600' : 'text-red-600' }}">
-                        <i class="fas fa-{{ $allOk ? 'circle-check' : 'circle-exclamation' }} text-xs"></i>
-                        {{ $allOk ? 'Pre-flight OK' : 'Pre-flight issues detected' }}
+                    @php
+                        $allOk = collect($checks)->every(fn($c) => $c['ok'] || !($c['required'] ?? true));
+                        $hasWarnings = collect($checks)->contains(fn($c) => !$c['ok'] && !($c['required'] ?? true));
+                    @endphp
+                    <span class="ml-3 flex items-center gap-1 {{ $allOk ? ($hasWarnings ? 'text-yellow-600' : 'text-green-600') : 'text-red-600' }}">
+                        <i class="fas fa-{{ $allOk ? ($hasWarnings ? 'triangle-exclamation' : 'circle-check') : 'circle-exclamation' }} text-xs"></i>
+                        {{ $allOk ? ($hasWarnings ? 'Pre-flight warnings' : 'Pre-flight OK') : 'Pre-flight issues detected' }}
                     </span>
                 </div>
                 <button onclick="openUpdateModal('{{ $latest['tag_name'] }}')"
@@ -153,12 +156,38 @@
             <div id="preflight" class="hidden border-t border-gray-100">
                 <div class="p-6 grid sm:grid-cols-2 gap-3">
                     @foreach($checks as $check)
-                    <div class="flex items-start gap-3 p-3 rounded-lg {{ $check['ok'] ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100' }}">
-                        <i class="fas fa-{{ $check['ok'] ? 'circle-check text-green-500' : 'circle-xmark text-red-500' }} mt-0.5 shrink-0"></i>
+                    @php
+                        $required = $check['required'] ?? true;
+                        $ok = $check['ok'];
+                        if ($ok) {
+                            $bgClass = 'bg-green-50 border border-green-100';
+                            $icon = 'circle-check text-green-500';
+                            $textClass = 'text-green-800';
+                            $detailClass = 'text-green-600';
+                            $extraNote = null;
+                        } elseif (!$required) {
+                            $bgClass = 'bg-yellow-50 border border-yellow-100';
+                            $icon = 'triangle-exclamation text-yellow-500';
+                            $textClass = 'text-yellow-800';
+                            $detailClass = 'text-yellow-600';
+                            $extraNote = 'Warning only — won\'t block the update';
+                        } else {
+                            $bgClass = 'bg-red-50 border border-red-100';
+                            $icon = 'circle-xmark text-red-500';
+                            $textClass = 'text-red-800';
+                            $detailClass = 'text-red-600';
+                            $extraNote = null;
+                        }
+                    @endphp
+                    <div class="flex items-start gap-3 p-3 rounded-lg {{ $bgClass }}">
+                        <i class="fas fa-{{ $icon }} mt-0.5 shrink-0"></i>
                         <div class="min-w-0">
-                            <p class="text-sm font-medium {{ $check['ok'] ? 'text-green-800' : 'text-red-800' }}">{{ $check['name'] }}</p>
+                            <p class="text-sm font-medium {{ $textClass }}">{{ $check['name'] }}</p>
                             @if($check['detail'] ?? '')
-                            <p class="text-xs {{ $check['ok'] ? 'text-green-600' : 'text-red-600' }} mt-0.5 truncate" title="{{ $check['detail'] }}">{{ $check['detail'] }}</p>
+                            <p class="text-xs {{ $detailClass }} mt-0.5 truncate" title="{{ $check['detail'] }}">{{ $check['detail'] }}</p>
+                            @endif
+                            @if($extraNote)
+                            <p class="text-xs text-yellow-600 mt-0.5">{{ $extraNote }}</p>
                             @endif
                         </div>
                     </div>

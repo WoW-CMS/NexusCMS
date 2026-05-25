@@ -16,10 +16,10 @@ class UpdateService
 
     public function __construct()
     {
-        $this->owner        = settings('update.repo_owner', config('update.repository.owner', 'wow-cms'));
-        $this->repo         = settings('update.repo_name',  config('update.repository.name', 'nexuscms'));
-        $this->githubToken  = settings('update.github_token', config('update.github_token'));
-        $this->channel      = settings('update.channel',    config('update.channel', 'stable'));
+        $this->owner        = settings('update_repo_owner', config('update.repository.owner', 'wow-cms'));
+        $this->repo         = settings('update_repo_name',  config('update.repository.name', 'nexuscms'));
+        $this->githubToken  = settings('update_github_token', config('update.github_token'));
+        $this->channel      = settings('update_channel',    config('update.channel', 'any'));
     }
 
     // ─── HTTP Client ─────────────────────────────────────────────────────────
@@ -185,18 +185,22 @@ class UpdateService
 
     public function preflight(): array
     {
-        $method  = $this->detectMethod();
-        $checks  = [];
+        $method = $this->detectMethod();
+        $checks = [];
 
+        // Write permission on base path: required for zip, warning-only for git
+        // (git runs as www-data via exec but ACLs may differ from PHP file_put_contents)
+        $baseWritable = $this->probeWrite(base_path());
         $checks[] = $this->check(
             'Write permission — base path',
-            is_writable(base_path()),
-            base_path()
+            $baseWritable,
+            base_path(),
+            required: $method !== 'git'
         );
 
         $checks[] = $this->check(
             'Write permission — storage',
-            is_writable(storage_path()),
+            $this->probeWrite(storage_path()),
             storage_path()
         );
 
@@ -233,9 +237,28 @@ class UpdateService
         return $checks;
     }
 
-    private function check(string $name, bool $ok, string $detail = ''): array
+    private function check(string $name, bool $ok, string $detail = '', bool $required = true): array
     {
-        return compact('name', 'ok', 'detail');
+        return compact('name', 'ok', 'detail', 'required');
+    }
+
+    private function probeWrite(string $path): bool
+    {
+        if (!is_dir($path)) {
+            return false;
+        }
+        $probe = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR
+            . '.nexus_write_test_' . getmypid();
+        try {
+            $result = @file_put_contents($probe, '1');
+            if ($result !== false) {
+                @unlink($probe);
+                return true;
+            }
+            return false;
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     // ─── Update Method Detection ─────────────────────────────────────────────
@@ -271,7 +294,7 @@ class UpdateService
 
         try {
             // 1 ─ Maintenance mode
-            if (settings('update.maintenance_mode', config('update.maintenance_mode', true))) {
+            if (settings('update_maintenance_mode', config('update.maintenance_mode', true))) {
                 $this->run(PHP_BINARY . ' artisan down --retry=60', $log);
                 $inMaintenance = true;
             }

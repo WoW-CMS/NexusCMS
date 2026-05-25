@@ -3,25 +3,18 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Admin\Services\ApiService;
+use Modules\Admin\Services\UpdateService;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    protected ApiService $apiService;
-
-    public function __construct(ApiService $apiService)
-    {
-        $this->apiService = $apiService;
-    }
+    public function __construct(protected UpdateService $updateService) {}
 
     public function index(Request $request)
     {
-        $latestRelease = $this->apiService->latestRelease();
-        $checkVersion = $this->apiService->checkVersion('wow-cms', 'nexuscms', config('app.version'));
+        $latestRelease = $this->updateService->getLatestRelease();
+        $outdated      = $this->updateService->isOutdated($latestRelease);
 
-        $outdated = $checkVersion['outdated'] ?? false;
-
-        return view('admin::index', compact('latestRelease', 'checkVersion', 'outdated'));  
+        return view('admin::index', compact('latestRelease', 'outdated'));
     }
 }

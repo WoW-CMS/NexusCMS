@@ -248,14 +248,14 @@
                     <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold shadow-sm">v{{ config('app.version') }}</span>
                 </div>
                 <div class="p-6">
-                    @if(empty($checkVersion))
+                    @if($latestRelease === null)
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-500 rounded-xl flex items-center justify-center shadow-md">
                             <i class="fas fa-plug text-white text-xl"></i>
                         </div>
                         <div class="flex-1">
                             <p class="text-base text-gray-800 font-semibold mb-1">Could not connect to the update server</p>
-                            <p class="text-sm text-gray-500">Version information is unavailable. Please check your internet connection and try again later.</p>
+                            <p class="text-sm text-gray-500">Version information is unavailable. Check your internet connection or verify the repository and GitHub token in <a href="{{ route('admin.settings.index') }}#updates" class="text-blue-600 hover:underline">Settings → Updates</a>.</p>
                         </div>
                     </div>
                     @elseif($outdated)
@@ -264,25 +264,27 @@
                             <i class="fas fa-rocket text-white text-xl"></i>
                         </div>
                         <div class="flex-1">
-                            <p class="text-base text-gray-800 font-semibold mb-1">NexusCMS v{{ $latestRelease['tag_name'] ?? 'N/A' }} is now available</p>
-                            <p class="text-sm text-gray-600 mb-3">{{ $latestRelease['body'] ?? 'N/A' }}</p>
+                            <p class="text-base text-gray-800 font-semibold mb-1">NexusCMS {{ $latestRelease['tag_name'] }} is now available</p>
+                            <p class="text-sm text-gray-600 mb-3">{{ Str::limit($latestRelease['body'] ?? '', 120) }}</p>
                             <div class="flex items-center gap-3">
-                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
+                                <a href="{{ route('admin.updates.index') }}" class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition shadow-sm">
+                                    <i class="fas fa-cloud-arrow-up text-xs"></i> Update now
+                                </a>
+                                <a href="{{ $latestRelease['html_url'] }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
                             </div>
                         </div>
                     </div>
                     @else
                     <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                            <i class="fas fa-rocket text-white text-xl"></i>
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-md">
+                            <i class="fas fa-circle-check text-white text-xl"></i>
                         </div>
                         <div class="flex-1">
-                            <p class="text-base text-gray-800 font-semibold mb-1">You are using the latest version</p>
-                            <p class="text-sm text-gray-600">Version {{ $latestRelease['tag_name'] ?? 'N/A' }}</p>
-                            <p class="text-sm text-gray-600">Released on {{ $latestRelease['published_at'] ?? 'N/A' }}</p>
-                            <div class="flex items-center gap-3">
-                                <a href="https://github.com/WoW-CMS/NexusCMS/releases/tag/{{ $latestRelease['tag_name'] ?? 'N/A' }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
-                                <span class="text-gray-300">•</span>
+                            <p class="text-base text-gray-800 font-semibold mb-1">You are up to date</p>
+                            <p class="text-sm text-gray-600">Version {{ $latestRelease['tag_name'] }} —
+                                released {{ \Carbon\Carbon::parse($latestRelease['published_at'])->diffForHumans() }}</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <a href="{{ $latestRelease['html_url'] }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
                             </div>
                         </div>
                     </div>
