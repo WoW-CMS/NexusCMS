@@ -188,16 +188,18 @@ class UpdateService
         $method = $this->detectMethod();
         $checks = [];
 
-        // Write permission on base path: required for zip, warning-only for git
-        // (git runs as www-data via exec but ACLs may differ from PHP file_put_contents)
-        $baseWritable = $this->probeWrite(base_path());
+        // For git-based updates, PHP itself does NOT write to base_path —
+        // the git binary (running via exec) handles all file operations.
+        // So this is a warning only, never a blocker.
         $checks[] = $this->check(
             'Write permission — base path',
-            $baseWritable,
+            $this->probeWrite(base_path()),
             base_path(),
             required: $method !== 'git'
         );
 
+        // storage/ is needed for cache, compiled views, migrations etc.
+        // For zip: required. For git: artisan still needs it → required.
         $checks[] = $this->check(
             'Write permission — storage',
             $this->probeWrite(storage_path()),
