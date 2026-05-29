@@ -7,9 +7,11 @@ use App\Models\Comment;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Store a newly created comment.
      *
@@ -37,19 +39,12 @@ class CommentController extends Controller
 
     /**
      * Remove the specified comment.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        $comment = Comment::findOrFail($id);
-        
-        if (Auth::id() == $comment->user_id || (Auth::user() && Auth::user()->hasRole('Admin'))) {
-            $comment->delete();
-            return redirect()->back()->with('success', 'Comment deleted successfully!');
-        }
-        
-        return redirect()->back()->with('error', 'You are not authorized to delete this comment.');
+        $this->authorize('delete', $comment);
+
+        $comment->delete();
+        return redirect()->back()->with('success', 'Comment deleted successfully!');
     }
 }

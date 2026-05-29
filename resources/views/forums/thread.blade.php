@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="flex-grow md:pl-8 text-white max-w-none">
-                        {!! $post->content !!}
+                        {{ $post->content }}
                     </div>
                 </div>
             </div>

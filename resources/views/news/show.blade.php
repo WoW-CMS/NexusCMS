@@ -136,7 +136,7 @@
                     prose-code:text-blue-300 prose-code:bg-slate-800/60 prose-code:rounded prose-code:px-1
                     prose-pre:bg-slate-800/80 prose-pre:border prose-pre:border-slate-700
                     prose-img:rounded-xl prose-img:shadow-2xl">
-                    {!! $item->display_content !!}
+                    {{ $item->display_content }}
                 </article>
 
                 {{-- Share mobile --}}
@@ -225,7 +225,7 @@
                                     <span class="text-xs text-slate-500 ml-auto">{{ $comment->created_at->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <div class="text-slate-300 text-sm leading-relaxed">
-                                    {!! $comment->comment !!}
+                                    {{ $comment->comment }}
                                 </div>
                             </div>
                         </div>

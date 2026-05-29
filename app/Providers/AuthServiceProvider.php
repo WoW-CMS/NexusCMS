@@ -13,6 +13,7 @@ use App\Models\Module;
 use App\Models\Log;
 use App\Models\Realm;
 use App\Models\AnalyticsSession;
+use App\Models\Comment;
 use App\Policies\PermissionPolicy;
 use App\Policies\NewsPolicy;
 use App\Policies\NewsCategoryPolicy;
@@ -45,6 +46,7 @@ class AuthServiceProvider extends ServiceProvider
         Log::class             => LogPolicy::class,
         Realm::class           => RealmPolicy::class,
         AnalyticsSession::class => AnalyticsPolicy::class,
+        Comment::class          => CommentPolicy::class,
     ];
 
     /**

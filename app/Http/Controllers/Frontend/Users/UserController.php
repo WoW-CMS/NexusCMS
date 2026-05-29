@@ -293,7 +293,7 @@ class UserController extends Controller
         // Generate password using WoWCrypto
         $username = strtoupper($request->username);
         $email    = strtoupper($request->email);
-        $password = strtoupper($request->password);
+        $password = $request->password;
 
         try {
             // Obtain realm configuration

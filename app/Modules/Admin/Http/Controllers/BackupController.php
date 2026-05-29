@@ -74,12 +74,6 @@ class BackupController extends Controller
                 $zip->addFile($dumpFile, 'database.sql');
             }
 
-            // Add .env
-            $envPath = base_path('.env');
-            if (File::exists($envPath)) {
-                $zip->addFile($envPath, '.env');
-            }
-
             // Add config files
             $this->addDirectoryToZip($zip, config_path(), 'config');
 

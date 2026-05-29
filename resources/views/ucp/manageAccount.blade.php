@@ -251,17 +251,17 @@
                                     <form class="space-y-4">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Contraseña Actual</label>
-                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Nueva Contraseña</label>
-                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-300 mb-2">Confirmar Nueva Contraseña</label>
-                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <input type="password" class="w-full px-3 py-2 bg-gray-800/70 border border-gray-600 rounded text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
                                         </div>
-                                        <button type="submit" class="px-6 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-500 transition-colors">
+                                        <button type="submit" class="px-6 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-500 transition-colors" disabled title="Funcionalidad pendiente de implementar">
                                             <i class="fas fa-save mr-2"></i>Cambiar Contraseña
                                         </button>
                                     </form>
