@@ -357,7 +357,7 @@ class UpdateService
                 }
             }
 
-            $log[] = '✘ ERROR: ' . $e->getMessage();
+            $log[] = '✘ ERROR: ' . $this->sanitizeCommand($e->getMessage());
 
             UpdateLog::create([
                 'from_version' => $fromVersion,
@@ -490,6 +490,19 @@ class UpdateService
 
     // ─── Shell Execution ─────────────────────────────────────────────────────
 
+    /**
+     * Sanitize a command string by masking any embedded GitHub token.
+     */
+    private function sanitizeCommand(string $command): string
+    {
+        // Match: https://{token}@github.com/... or any token=xxx patterns
+        return preg_replace_callback(
+            '/(https?:\/\/)([a-zA-Z0-9_-]+)(@github\.com)/',
+            fn(array $m) => $m[1] . '****' . $m[3],
+            $command
+        );
+    }
+
     private function run(string $command, array &$log): void
     {
         $base = base_path();
@@ -502,7 +515,7 @@ class UpdateService
         $code   = 0;
         exec($wrapped, $output, $code);
 
-        $log[] = '$ ' . $command;
+        $log[] = '$ ' . $this->sanitizeCommand($command);
         foreach ($output as $line) {
             if (trim($line) !== '') {
                 $log[] = '  ' . $line;
@@ -511,7 +524,7 @@ class UpdateService
 
         if ($code !== 0) {
             throw new \RuntimeException(
-                "Command failed (exit {$code}): {$command}\n" . implode("\n", array_filter($output))
+                "Command failed (exit {$code}): " . $this->sanitizeCommand($command) . "\n" . implode("\n", array_filter($output))
             );
         }
     }

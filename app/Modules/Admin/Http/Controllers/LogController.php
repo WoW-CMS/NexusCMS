@@ -5,11 +5,17 @@ namespace Modules\Admin\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Log;
 
 class LogController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Log::class);
+
         $logPath = storage_path('logs');
         $logFiles = collect(File::glob($logPath . '/laravel*.log'))
             ->map(fn($file) => basename($file))

@@ -9,16 +9,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Modules\Donate\Domain\Models\DonationTransaction;
 use Spatie\Permission\Models\Role;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminUserController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
-     * 
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::orderBy('name')->paginate(15);
         return view('admin::users.index', compact('users'));
     }
@@ -30,6 +33,8 @@ class AdminUserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', User::class);
+
         $roles = Role::orderBy('name')->get();
         return view('admin::users.create', compact('roles'));
     }
@@ -42,6 +47,8 @@ class AdminUserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         $user->load('roles');
 
         $donationTransactions = DonationTransaction::query()
@@ -61,6 +68,8 @@ class AdminUserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:users,name'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -97,6 +106,8 @@ class AdminUserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
+
         $roles = Role::orderBy('name')->get();
         $assigned = $user->roles()->pluck('name')->toArray();
         return view('admin::users.edit', compact('user', 'roles', 'assigned'));
@@ -111,6 +122,8 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', Rule::unique('users', 'name')->ignore($user->id)],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
@@ -151,12 +164,11 @@ class AdminUserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (!$user->hasRole('Admin')) {
-            $user->delete();
-            return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
-        }
+        $this->authorize('delete', $user);
 
-        return redirect()->route('admin.users.index')->with('error', 'The user is an administrator and cannot be deleted');
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
     }
 }
 

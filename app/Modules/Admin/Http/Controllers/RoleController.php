@@ -6,14 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the roles.
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::query()->withCount('permissions')->orderBy('name')->get();
         return view('admin::roles.index', compact('roles'));
     }
@@ -23,6 +28,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Role::class);
+
         $permissions = Permission::query()->orderBy('name')->get();
         return view('admin::roles.create', compact('permissions'));
     }
@@ -32,6 +39,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:roles,name'],
             'permissions' => ['array'],
@@ -53,6 +62,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->authorize('update', $role);
+
         $permissions = Permission::query()->orderBy('name')->get();
         $selected = $role->permissions()->pluck('name')->toArray();
         return view('admin::roles.edit', compact('role', 'permissions', 'selected'));
@@ -63,6 +74,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update', $role);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:roles,name,' . $role->id],
             'permissions' => ['array'],
@@ -83,6 +96,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
+
         $role->delete();
         return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
     }

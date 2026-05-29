@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminNewsCategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny', NewsCategory::class);
+
         $categories = NewsCategory::withCount('news')
             ->withTrashed()
             ->orderBy('order')
@@ -22,11 +27,15 @@ class AdminNewsCategoryController extends Controller
 
     public function create()
     {
+        $this->authorize('create', NewsCategory::class);
+
         return view('admin::news.categories.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', NewsCategory::class);
+
         $validated = $request->validate([
             'name'        => ['required', 'string', 'max:100'],
             'slug'        => ['nullable', 'string', 'max:150', 'unique:news_category,slug'],
@@ -62,11 +71,15 @@ class AdminNewsCategoryController extends Controller
 
     public function edit(NewsCategory $newsCategory)
     {
+        $this->authorize('update', $newsCategory);
+
         return view('admin::news.categories.edit', compact('newsCategory'));
     }
 
     public function update(Request $request, NewsCategory $newsCategory)
     {
+        $this->authorize('update', $newsCategory);
+
         $validated = $request->validate([
             'name'        => ['required', 'string', 'max:100'],
             'slug'        => ['nullable', 'string', 'max:150', "unique:news_category,slug,{$newsCategory->id}"],
@@ -94,6 +107,8 @@ class AdminNewsCategoryController extends Controller
 
     public function destroy(NewsCategory $newsCategory)
     {
+        $this->authorize('delete', $newsCategory);
+
         if ($newsCategory->news()->count() > 0) {
             return redirect()
                 ->route('admin.news.categories.index')

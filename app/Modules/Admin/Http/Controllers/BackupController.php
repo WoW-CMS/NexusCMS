@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Process;
 use ZipArchive;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Backup;
 
 class BackupController extends Controller
 {
+    use AuthorizesRequests;
+
     protected string $backupPath;
 
     public function __construct()
@@ -20,6 +24,8 @@ class BackupController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', Backup::class);
+
         File::ensureDirectoryExists($this->backupPath);
 
         $backups = collect(File::glob($this->backupPath . '/backup-*.zip'))
@@ -41,6 +47,8 @@ class BackupController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Backup::class);
+
         File::ensureDirectoryExists($this->backupPath);
 
         $timestamp = now()->format('Y-m-d-His');
@@ -105,6 +113,8 @@ class BackupController extends Controller
 
     public function download(string $filename)
     {
+        $this->authorize('download', Backup::class);
+
         if (!preg_match('/^backup-[\d-]+\.zip$/', $filename)) {
             abort(403);
         }
@@ -120,6 +130,8 @@ class BackupController extends Controller
 
     public function destroy(string $filename)
     {
+        $this->authorize('delete', Backup::class);
+
         if (!preg_match('/^backup-[\d-]+\.zip$/', $filename)) {
             abort(403);
         }

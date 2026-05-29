@@ -5,13 +5,19 @@ namespace Modules\Admin\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Admin\Services\UpdateService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\UpdateLog;
 
 class UpdateController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(private readonly UpdateService $updates) {}
 
     public function index()
     {
+        $this->authorize('viewAny', UpdateLog::class);
+
         $current    = config('app.version');
         $latest     = $this->updates->getLatestRelease();
         $outdated   = $this->updates->isOutdated($latest);
@@ -30,6 +36,8 @@ class UpdateController extends Controller
 
     public function apply(Request $request)
     {
+        $this->authorize('apply', UpdateLog::class);
+
         if (!settings('update_enabled', config('update.enabled', true))) {
             return response()->json(['success' => false, 'error' => 'The auto-update system is disabled.'], 403);
         }

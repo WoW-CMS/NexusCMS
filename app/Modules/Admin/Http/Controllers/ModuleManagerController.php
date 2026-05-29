@@ -7,11 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Module;
 
 class ModuleManagerController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny', Module::class);
+
         $discoveredModules = $this->discoverModules();
         ModuleRegistryService::syncDiscoveredModules($discoveredModules);
 
@@ -24,6 +30,8 @@ class ModuleManagerController extends Controller
 
     public function edit(string $module)
     {
+        $this->authorize('update', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
 
         return view('admin::modules.edit', ['module' => $moduleData]);
@@ -31,6 +39,8 @@ class ModuleManagerController extends Controller
 
     public function update(Request $request, string $module)
     {
+        $this->authorize('update', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
 
         $validated = $request->validate([
@@ -57,6 +67,8 @@ class ModuleManagerController extends Controller
 
     public function uninstall(string $module)
     {
+        $this->authorize('uninstall', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
 
         if ($moduleData['folder'] === 'Admin') {
@@ -82,6 +94,8 @@ class ModuleManagerController extends Controller
 
     public function toggle(string $module)
     {
+        $this->authorize('toggle', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
 
         $config = $moduleData['config'];
@@ -105,6 +119,8 @@ class ModuleManagerController extends Controller
 
     public function migrate(string $module)
     {
+        $this->authorize('migrate', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
         $migrationsPath = $moduleData['migrations_path'];
 
@@ -129,6 +145,8 @@ class ModuleManagerController extends Controller
 
     public function destroy(Request $request, string $module)
     {
+        $this->authorize('delete', Module::class);
+
         $moduleData = $this->getModuleDataOrFail($module);
 
         if ($moduleData['folder'] === 'Admin') {

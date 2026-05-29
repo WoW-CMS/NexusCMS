@@ -9,14 +9,19 @@ use App\Models\Realm;
 use GameCrypto\SoapAccountCreator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RealmManagementController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display realms listing.
      */
     public function index()
     {
+        $this->authorize('viewAny', Realm::class);
+
         $realms = Realm::query()->latest()->paginate(12);
 
         return view('admin::realms.index', compact('realms'));
@@ -27,6 +32,8 @@ class RealmManagementController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Realm::class);
+
         return view('admin::realms.create');
     }
 
@@ -35,6 +42,8 @@ class RealmManagementController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Realm::class);
+
         $validated = $request->validate($this->validationRules());
 
         Realm::create($this->realmPayload($validated));
@@ -49,6 +58,8 @@ class RealmManagementController extends Controller
      */
     public function edit(Realm $realm)
     {
+        $this->authorize('update', $realm);
+
         return view('admin::realms.edit', [
             'realm' => $realm,
             'authConfig' => $this->decodeDatabaseConfig($realm->auth_database),
@@ -62,6 +73,8 @@ class RealmManagementController extends Controller
      */
     public function update(Request $request, Realm $realm)
     {
+        $this->authorize('update', $realm);
+
         $validated = $request->validate($this->validationRules($realm->id));
 
         $realm->update($this->realmPayload($validated));
@@ -76,6 +89,8 @@ class RealmManagementController extends Controller
      */
     public function destroy(Realm $realm)
     {
+        $this->authorize('delete', $realm);
+
         $realm->delete();
 
         return redirect()
@@ -88,6 +103,8 @@ class RealmManagementController extends Controller
      */
     public function soapTest(Realm $realm)
     {
+        $this->authorize('soapTest', $realm);
+
         try {
             $soap = new SoapAccountCreator(
                 (string) $realm->console_hostname,

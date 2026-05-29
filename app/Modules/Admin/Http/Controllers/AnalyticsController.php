@@ -5,9 +5,13 @@ namespace Modules\Admin\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\AnalyticsSession;
 
 class AnalyticsController extends Controller
 {
+    use AuthorizesRequests;
+
     protected AnalyticsService $analyticsService;
 
     public function __construct(AnalyticsService $analyticsService)
@@ -20,6 +24,8 @@ class AnalyticsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', AnalyticsSession::class);
+
         $period = $request->query('period', '30d');
         $startDate = $this->analyticsService->getStartDate($period);
 

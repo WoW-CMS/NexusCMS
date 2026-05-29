@@ -10,11 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminNewsController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
+        $this->authorize('viewAny', News::class);
+
         $news = News::withTrashed()
             ->with(['author', 'category'])
             ->orderBy('created_at', 'desc')
@@ -25,6 +29,8 @@ class AdminNewsController extends Controller
 
     public function create()
     {
+        $this->authorize('create', News::class);
+
         $categories      = NewsCategory::where('is_active', true)->orderBy('name')->get();
         $activeLocales   = LocalizationService::getActiveLocales();
         $defaultLocale   = LocalizationService::getDefaultLocale();
@@ -38,6 +44,8 @@ class AdminNewsController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', News::class);
+
         $activeLocales  = LocalizationService::getActiveLocales();
         $defaultLocale  = LocalizationService::getDefaultLocale();
         $isMultilingual = LocalizationService::isMultilingualEnabled();
@@ -116,6 +124,8 @@ class AdminNewsController extends Controller
 
     public function edit(News $news)
     {
+        $this->authorize('update', $news);
+
         $categories     = NewsCategory::where('is_active', true)->orderBy('name')->get();
         $activeLocales  = LocalizationService::getActiveLocales();
         $defaultLocale  = LocalizationService::getDefaultLocale();
@@ -129,6 +139,8 @@ class AdminNewsController extends Controller
 
     public function update(Request $request, News $news)
     {
+        $this->authorize('update', $news);
+
         $activeLocales  = LocalizationService::getActiveLocales();
         $defaultLocale  = LocalizationService::getDefaultLocale();
         $isMultilingual = LocalizationService::isMultilingualEnabled();
@@ -197,6 +209,8 @@ class AdminNewsController extends Controller
 
     public function destroy(News $news)
     {
+        $this->authorize('delete', $news);
+
         $news->delete();
 
         return redirect()
@@ -207,6 +221,8 @@ class AdminNewsController extends Controller
     public function restore(int $id)
     {
         $news = News::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $news);
+
         $news->restore();
 
         return redirect()
