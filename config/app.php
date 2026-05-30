@@ -131,5 +131,5 @@ return [
     | The version of the CMS.
     |
     */
-    'version' => env('APP_VERSION', '0.1.6-alpha.3'),
+    'version' => env('APP_VERSION', '0.1.6-alpha.4'),
 ];

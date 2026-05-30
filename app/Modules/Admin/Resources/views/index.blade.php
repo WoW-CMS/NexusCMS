@@ -237,58 +237,33 @@
 
         <!-- Right Column -->
         <div class="space-y-6">
-            <!-- CMS Update and version -->
-            <!-- CMS Update & Version -->
-            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg border border-blue-100 overflow-hidden">
-                <div class="px-6 py-4 bg-white/60 backdrop-blur-sm border-b border-blue-100 flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fas fa-rocket text-blue-600"></i>
-                        System Update
+            <!-- System Information -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                    <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-blue-600"></i>
+                        System Information
                     </h2>
-                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold shadow-sm">v{{ config('app.version') }}</span>
-                </div>
-                <div class="p-6">
-                    @if($latestRelease === null)
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-500 rounded-xl flex items-center justify-center shadow-md">
-                            <i class="fas fa-plug text-white text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-base text-gray-800 font-semibold mb-1">Could not connect to the update server</p>
-                            <p class="text-sm text-gray-500">Version information is unavailable. Check your internet connection or verify the repository and GitHub token in <a href="{{ route('admin.settings.index') }}#updates" class="text-blue-600 hover:underline">Settings → Updates</a>.</p>
-                        </div>
-                    </div>
-                    @elseif($outdated)
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                            <i class="fas fa-rocket text-white text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-base text-gray-800 font-semibold mb-1">NexusCMS {{ $latestRelease['tag_name'] }} is now available</p>
-                            <p class="text-sm text-gray-600 mb-3">{{ Str::limit($latestRelease['body'] ?? '', 120) }}</p>
-                            <div class="flex items-center gap-3">
-                                <a href="{{ route('admin.updates.index') }}" class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition shadow-sm">
-                                    <i class="fas fa-cloud-arrow-up text-xs"></i> Update now
-                                </a>
-                                <a href="{{ $latestRelease['html_url'] }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
-                            </div>
-                        </div>
-                    </div>
-                    @else
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-md">
-                            <i class="fas fa-circle-check text-white text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-base text-gray-800 font-semibold mb-1">You are up to date</p>
-                            <p class="text-sm text-gray-600">Version {{ $latestRelease['tag_name'] }} —
-                                released {{ \Carbon\Carbon::parse($latestRelease['published_at'])->diffForHumans() }}</p>
-                            <div class="flex items-center gap-3 mt-2">
-                                <a href="{{ $latestRelease['html_url'] }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition">Release notes</a>
-                            </div>
-                        </div>
-                    </div>
+                    @if($isDebug)
+                    <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-semibold">DEBUG ON</span>
                     @endif
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        @foreach($systemInfo as $item)
+                        <div class="flex items-center gap-3 p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-{{ $item['color'] }}-100">
+                                <i class="{{ $item['icon'] }} text-{{ $item['color'] }}-600 text-sm"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs text-gray-500 truncate">{{ $item['label'] }}</p>
+                                <p class="text-sm font-semibold text-gray-800 truncate" title="{{ $item['value'] }}">
+                                    {{ $item['value'] }}
+                                </p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
@@ -331,6 +306,7 @@
                 </div>
             </div>
 
+        
             <!-- Recent Donations -->
             <div class="bg-white rounded-lg shadow">
                 <div class="p-6 border-b border-gray-200">
