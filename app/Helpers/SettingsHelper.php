@@ -132,48 +132,71 @@ if (!function_exists('menu_config')) {
 }
 
 if (!function_exists('menu_items')) {
-    function menu_items(string $menu): array
+    function menu_items(string $menu, int $maxDepth = 1): array
     {
         $items = menu_config($menu);
         $user = auth()->user();
 
-        return array_values(array_filter($items, function ($item) use ($user) {
+        return menu_items_recursive($items, $user, $maxDepth);
+    }
+}
+
+if (!function_exists('menu_items_recursive')) {
+    function menu_items_recursive(array $items, $user, int $maxDepth = 1, int $depth = 0): array
+    {
+        $filtered = [];
+
+        foreach ($items as $item) {
             if (!is_array($item)) {
-                return false;
+                continue;
             }
 
             if (!(bool) ($item['enabled'] ?? true)) {
-                return false;
+                continue;
             }
 
             $authRule = $item['auth'] ?? 'any';
             if ($authRule === 'auth' && !$user) {
-                return false;
+                continue;
             }
 
             if ($authRule === 'guest' && $user) {
-                return false;
+                continue;
             }
 
             $permission = trim((string) ($item['permission'] ?? ''));
             if ($permission !== '' && (!$user || !$user->can($permission))) {
-                return false;
+                continue;
             }
 
             $module = trim((string) ($item['module'] ?? ''));
             if (!menu_module_enabled($module)) {
-                return false;
+                continue;
             }
 
             $routeName = trim((string) ($item['route'] ?? ''));
             $url = trim((string) ($item['url'] ?? ''));
 
-            if ($routeName !== '') {
-                return Route::has($routeName);
+            if ($routeName !== '' && !Route::has($routeName)) {
+                continue;
             }
 
-            return $url !== '';
-        }));
+            if ($routeName === '' && $url === '') {
+                continue;
+            }
+
+            $children = $item['children'] ?? [];
+            $processedChildren = [];
+
+            if ($depth < $maxDepth && !empty($children) && is_array($children)) {
+                $processedChildren = menu_items_recursive($children, $user, $maxDepth, $depth + 1);
+            }
+
+            $item['children'] = $processedChildren;
+            $filtered[] = $item;
+        }
+
+        return $filtered;
     }
 }
 

@@ -311,3 +311,20 @@
     transform: scale(1.1);
     cursor: pointer;
 }
+
+/* ─── Menu Manager ──────────────────────────────────────────────────── */
+.drag-handle { cursor: grab; }
+.drag-handle:active { cursor: grabbing; }
+.drag-over { border-color: #3b82f6 !important; background: #eff6ff !important; }
+.menu-item-card { transition: transform 0.15s, box-shadow 0.15s; }
+.menu-item-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.child-item { margin-left: 1.5rem; border-left: 2px solid #e5e7eb; }
+.nested-indicator { width: 12px; display: inline-block; }
+.icon-preview { width: 24px; text-align: center; }
+.route-chip { font-size: 11px; padding: 2px 6px; background: #f3f4f6; border-radius: 4px; color: #6b7280; }
+.module-badge { font-size: 10px; padding: 1px 5px; border-radius: 3px; }
+.module-badge.enabled { background: #d1fae5; color: #065f46; }
+.module-badge.disabled { background: #fee2e2; color: #991b1b; }
+.add-route-btn { font-size: 11px; padding: 3px 8px; }
+.panel-section { border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem; }
+.panel-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }

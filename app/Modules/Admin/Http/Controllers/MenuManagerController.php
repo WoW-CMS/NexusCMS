@@ -3,20 +3,30 @@
 namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\RouteDiscoveryService;
+use App\Services\ModuleRegistryService;
 use Modules\Admin\Domain\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MenuManagerController extends Controller
 {
+    public function __construct(
+        protected RouteDiscoveryService $routeDiscovery,
+    ) {}
+
     public function index()
     {
         $webMenu = menu_config('web');
         $ucpMenu = menu_config('ucp');
         $modules = $this->discoverModules();
+        $availableRoutes = $this->routeDiscovery->getRoutesForMenuPicker();
+        $moduleRoutes = $this->routeDiscovery->getRoutesByModule();
 
-        return view('admin::menus.index', compact('webMenu', 'ucpMenu', 'modules'));
+        return view('admin::menus.index', compact(
+            'webMenu', 'ucpMenu', 'modules', 'availableRoutes', 'moduleRoutes'
+        ));
     }
 
     public function update(Request $request)
@@ -60,6 +70,9 @@ class MenuManagerController extends Controller
             ->with('success', $message);
     }
 
+    /**
+     * Normalize items recursively — supports nested children.
+     */
     protected function normalizeItems(array $items): array
     {
         $normalized = [];
@@ -73,7 +86,8 @@ class MenuManagerController extends Controller
                 continue;
             }
 
-            $normalized[] = [
+            $normalizedItem = [
+                'id' => $this->generateItemId(),
                 'label' => $label,
                 'route' => $route,
                 'url' => $url,
@@ -83,35 +97,43 @@ class MenuManagerController extends Controller
                     ? $item['auth']
                     : 'any',
                 'permission' => trim((string) ($item['permission'] ?? '')),
-                'enabled' => isset($item['enabled']) && (string) $item['enabled'] === '1',
+                'enabled' => in_array('1', (array) ($item['enabled'] ?? ['1'])),
+                'children' => [],
             ];
+
+            // Recursively normalize children
+            if (!empty($item['children']) && is_array($item['children'])) {
+                $normalizedItem['children'] = $this->normalizeItems($item['children']);
+            }
+
+            $normalized[] = $normalizedItem;
         }
 
         return $normalized;
     }
 
+    /**
+     * Generate a unique item ID (ULID-like).
+     */
+    protected function generateItemId(): string
+    {
+        return 'item_' . Str::random(13);
+    }
+
+    /**
+     * Discover modules using ModuleRegistryService.
+     */
     protected function discoverModules(): array
     {
-        $modulesPath = base_path('app/Modules');
-        if (!is_dir($modulesPath)) {
-            return [];
-        }
-
         $modules = [];
 
-        foreach (glob($modulesPath . '/*', GLOB_ONLYDIR) as $moduleDir) {
-            $moduleName = basename($moduleDir);
-            $configPath = $moduleDir . DIRECTORY_SEPARATOR . 'module.json';
-            $enabled = true;
-
-            if (File::exists($configPath)) {
-                $decoded = json_decode(File::get($configPath), true);
-                if (is_array($decoded) && array_key_exists('enabled', $decoded)) {
-                    $enabled = (bool) $decoded['enabled'];
-                }
+        foreach (ModuleRegistryService::getAllModules() as $module) {
+            $moduleName = trim((string) ($module['folder'] ?? ''));
+            if ($moduleName === '') {
+                continue;
             }
 
-            $modules[$moduleName] = $enabled;
+            $modules[$moduleName] = (bool) ($module['enabled'] ?? true);
         }
 
         ksort($modules);
@@ -138,6 +160,16 @@ class MenuManagerController extends Controller
                     $item['enabled'] = false;
                     $affected++;
                 }
+            }
+
+            // Recursively handle children
+            if (!empty($item['children'])) {
+                [$item['children'], $childAffected] = $this->handleDisabledModuleItems(
+                    $item['children'],
+                    $modules,
+                    $action
+                );
+                $affected += $childAffected;
             }
 
             $result[] = $item;

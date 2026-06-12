@@ -226,11 +226,14 @@
     </form>
 </main>
 
-@push('scripts')
+@push('styles')
 <style>
     .ck-editor__editable { min-height: 500px !important; }
     .ck-excerpt .ck-editor__editable { min-height: 130px !important; }
 </style>
+@endpush
+
+@push('scripts')
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
 <script>

@@ -24,10 +24,26 @@
                         $isActive = !empty($item['route']) ? request()->routeIs($item['route']) : false;
                         $iconClass = $item['icon'] ?? 'fas fa-link w-5';
                     @endphp
-                    <a href="{{ menu_item_href($item) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ $isActive ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30 hover:bg-blue-500/30' : 'text-gray-400 hover:bg-slate-700/50 hover:text-white' }}">
-                        <i class="{{ $iconClass }}"></i>
-                        <span class="font-medium">{{ $item['label'] ?? 'Menu' }}</span>
-                    </a>
+                    @if(!empty($item['children']))
+                        <div class="pt-2 pb-2 border-t border-slate-700/50 first:border-t-0 first:pt-0">
+                            <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $item['label'] }}</p>
+                            <div class="space-y-1">
+                                @foreach($item['children'] as $child)
+                                    @php $childActive = !empty($child['route']) ? request()->routeIs($child['route']) : false; @endphp
+                                    <a href="{{ menu_item_href($child) }}"
+                                       class="flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm {{ $childActive ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'text-gray-400 hover:bg-slate-700/50 hover:text-white' }}">
+                                        <i class="{{ $child['icon'] ?? 'fas fa-link w-4' }}"></i>
+                                        <span class="font-medium">{{ $child['label'] ?? 'Menu' }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <a href="{{ menu_item_href($item) }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 {{ $isActive ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30 hover:bg-blue-500/30' : 'text-gray-400 hover:bg-slate-700/50 hover:text-white' }}">
+                            <i class="{{ $iconClass }}"></i>
+                            <span class="font-medium">{{ $item['label'] ?? 'Menu' }}</span>
+                       </a>
+                    @endif
                 @endforeach
             </div>
 

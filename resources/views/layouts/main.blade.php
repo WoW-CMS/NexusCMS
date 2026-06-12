@@ -24,7 +24,28 @@
                     </div>
                     <div class="hidden md:flex gap-6">
                         @foreach(menu_items('web') as $item)
-                            <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">{{ $item['label'] ?? 'MENU' }}</a>
+                            @if(!empty($item['children']))
+ <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                                    <button class="flex items-center gap-1 text-slate-300 hover:text-white transition-colors duration-200 font-medium">
+                                        {{ $item['label'] ?? 'MENU' }}
+                                        <i class="fas fa-chevron-down text-xs opacity-70"></i>
+                                    </button>
+                                    <div x-show="open"
+                                         x-transition:enter="transition ease-out duration-100"
+                                         x-transition:enter-start="opacity-0 transform scale-95"
+                                         x-transition:enter-end="opacity-100 transform scale-100"
+                                         class="absolute left-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 z-50">
+                                        @foreach($item['children'] as $child)
+                                            <a href="{{ menu_item_href($child) }}"
+                                               class="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700 transition-colors">
+                                                {{ $child['label'] ?? '' }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">{{ $item['label'] ?? 'MENU' }}</a>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -54,7 +75,16 @@
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col gap-2">
                     @foreach(menu_items('web') as $item)
-                        <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">{{ $item['label'] ?? 'MENU' }}</a>
+                        @if(!empty($item['children']))
+                            <div class="pl-4 border-l-2 border-slate-700">
+                                <p class="text-slate-500 text-xs uppercase tracking-wider py-1">{{ $item['label'] }}</p>
+                                @foreach($item['children'] as $child)
+                                    <a href="{{ menu_item_href($child) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2 block">{{ $child['label'] ?? '' }}</a>
+                                @endforeach
+                            </div>
+                        @else
+                            <a href="{{ menu_item_href($item) }}" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2">{{ $item['label'] ?? 'MENU' }}</a>
+                        @endif
                     @endforeach
                     @auth
                         <div class="flex flex-col gap-2 pt-2">
