@@ -41,7 +41,7 @@
                     <ul class="space-y-3 mb-8">
                         <li class="flex items-start gap-2">
                             <i class="fas fa-check text-blue-500 mt-1"></i>
-                            <span class="text-slate-300">{{ number_format($plan->dp_total) }} Donation Points</span>
+                            <span class="text-slate-300">{{ number_format($plan->dp_base) }} Donation Points</span>
                         </li>
                         @if($plan->extra_pct > 0)
                             <li class="flex items-start gap-2">
@@ -86,7 +86,7 @@
                                 @endif
                             </div>
                             <div class="text-center mb-4">
-                                <span class="text-slate-300">{{ number_format($plan->dp_total) }} DP</span>
+                                <span class="text-slate-300">{{ number_format($plan->dp_base) }} DP</span>
                             </div>
                             @auth
                                 <form method="POST" action="{{ route('donate.checkout') }}">

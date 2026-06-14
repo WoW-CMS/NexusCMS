@@ -16,7 +16,7 @@ class DonateController extends Controller
         $available = array_map(fn($g) => ['id' => $g->id(), 'name' => $g->displayName()], $gateways->all());
         $plans = DonationPlan::query()
             ->where('active', true)
-            ->select(['id', 'name', 'amount', 'dp_total', 'sort_order'])
+            ->select(['id', 'name', 'amount', 'dp_base', 'sort_order'])
             ->orderBy('sort_order')
             ->get();
         
@@ -30,7 +30,7 @@ class DonateController extends Controller
         if ($request->filled('plan_id')) {
             $plan = DonationPlan::findOrFail($request->input('plan_id'));
             $amount = $plan->amount;
-            $dpAmount = $plan->dp_total;
+            $dpAmount = $plan->dp_base;
         } else {
             $amount = $request->input('amount', 0);
             $rate = (int) config('donate.dp_rate', 100);
