@@ -91,13 +91,36 @@ class DonateAdminController extends Controller
 
     // ─── Transactions ─────────────────────────────────────────────────────────
 
-    public function transactionsIndex(): View
+    public function transactionsIndex(Request $request): View
     {
         $transactions = DonationTransaction::query()
             ->with('user')
+            ->when($request->filled('q'), function ($q) use ($request) {
+                $term = '%' . $request->string('q') . '%';
+                $q->where(function ($q) use ($term) {
+                    $q->where('transaction_id', 'like', $term)
+                      ->orWhereHas('user', function ($q) use ($term) {
+                          $q->where('name', 'like', $term)
+                            ->orWhere('email', 'like', $term);
+                      });
+                });
+            })
+            ->when($request->filled('gateway'), fn ($q) => $q->where('gateway', $request->string('gateway')))
+            ->when($request->filled('status'),   fn ($q) => $q->where('status', $request->string('status')))
+            ->when($request->filled('from'),     fn ($q) => $q->whereDate('created_at', '>=', $request->date('from')))
+            ->when($request->filled('to'),       fn ($q) => $q->whereDate('created_at', '<=', $request->date('to')))
             ->latest()
-            ->paginate(50);
+            ->paginate(50)
+            ->withQueryString();
 
-        return view('donate-admin::transactions.index', compact('transactions'));
+        $gateways = DonationTransaction::query()
+            ->select('gateway')
+            ->whereNotNull('gateway')
+            ->distinct()
+            ->orderBy('gateway')
+            ->pluck('gateway')
+            ->all();
+
+        return view('donate-admin::transactions.index', compact('transactions', 'gateways'));
     }
 }

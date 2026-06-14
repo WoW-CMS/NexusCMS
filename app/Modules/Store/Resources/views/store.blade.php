@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+    <div class="relative pt-32 pb-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-8">
                 <h1 class="text-5xl md:text-6xl font-bold mb-6">
@@ -17,27 +17,26 @@
                     <i class="fas fa-coins text-yellow-500 text-xl"></i>
                     <div class="text-left">
                         <div class="text-xs text-slate-400">Your Balance</div>
-                        <div class="text-2xl font-bold text-yellow-500">2,450 DP</div>
+                        <div class="text-2xl font-bold text-yellow-500">{{ number_format($balance) }} DP</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    @section('content')
-        <div class="max-w-7xl mx-auto pt-24 pb-14 px-4 sm:px-6 lg:px-8">
-            <div class="mb-8 bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-bold mb-2">Donation Store</h1>
-                        <p class="text-slate-300">Purchase account services and rewards using your Donation Points.</p>
-                    </div>
-                    <div class="rounded-xl bg-slate-950/80 border border-slate-700 px-6 py-4 min-w-[180px]">
-                        <p class="text-xs uppercase tracking-widest text-slate-400">Current Balance</p>
-                        <p class="text-3xl font-bold text-yellow-400">{{ number_format($balance) }} DP</p>
-                    </div>
+    <div class="max-w-7xl mx-auto pb-14 px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-2">Donation Store</h2>
+                    <p class="text-slate-300">Purchase account services and rewards using your Donation Points.</p>
+                </div>
+                <div class="rounded-xl bg-slate-950/80 border border-slate-700 px-6 py-4 min-w-[180px]">
+                    <p class="text-xs uppercase tracking-widest text-slate-400">Current Balance</p>
+                    <p class="text-3xl font-bold text-yellow-400">{{ number_format($balance) }} DP</p>
                 </div>
             </div>
+        </div>
 
             @if (session('success'))
                 <div class="mb-6 rounded-lg border border-green-700/60 bg-green-900/30 text-green-200 px-4 py-3">

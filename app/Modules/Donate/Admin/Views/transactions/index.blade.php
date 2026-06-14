@@ -11,6 +11,63 @@
 </header>
 
 <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+    {{-- Filters --}}
+    <form method="GET" action="{{ route('admin.donate.transactions.index') }}"
+          class="bg-white rounded-lg shadow p-4 mb-4 grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+        <div class="md:col-span-4">
+            <label class="block text-xs font-medium text-gray-600 mb-1">Search</label>
+            <input type="search" name="q" value="{{ request('q') }}"
+                   placeholder="User name, email, transaction ID…"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">Gateway</label>
+            <select name="gateway" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All</option>
+                @foreach(($gateways ?? []) as $gw)
+                    <option value="{{ $gw }}" @selected(request('gateway') === $gw)>{{ ucfirst($gw) }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">Status</label>
+            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All</option>
+                @foreach(['completed', 'pending', 'failed', 'refunded'] as $st)
+                    <option value="{{ $st }}" @selected(request('status') === $st)>{{ ucfirst($st) }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">From</label>
+            <input type="date" name="from" value="{{ request('from') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">To</label>
+            <input type="date" name="to" value="{{ request('to') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="md:col-span-12 flex items-center gap-2">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+                <i class="fas fa-filter mr-1"></i>Apply Filters
+            </button>
+            @if(request()->hasAny(['q', 'gateway', 'status', 'from', 'to']))
+                <a href="{{ route('admin.donate.transactions.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium">
+                    <i class="fas fa-times mr-1"></i>Clear
+                </a>
+            @endif
+            <span class="ml-auto text-sm text-gray-500">
+                {{ $transactions->total() }} {{ Str::plural('transaction', $transactions->total()) }}
+            </span>
+        </div>
+    </form>
+
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead class="bg-gray-50">

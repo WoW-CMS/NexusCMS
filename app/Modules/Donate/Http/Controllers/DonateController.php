@@ -8,6 +8,7 @@ use Modules\Donate\Services\GatewayManager;
 use Modules\Donate\Domain\Models\DonationTransaction;
 use Illuminate\Support\Facades\DB;
 use Modules\Donate\Domain\Models\DonationPlan;
+use Modules\Store\Domain\Models\StoreProduct;
 
 class DonateController extends Controller
 {
@@ -19,8 +20,19 @@ class DonateController extends Controller
             ->select(['id', 'name', 'amount', 'dp_base', 'sort_order'])
             ->orderBy('sort_order')
             ->get();
-        
-        return view('donate::home', ['gateways' => $available, 'plans' => $plans]); 
+
+        $storeProducts = StoreProduct::query()
+            ->where('active', true)
+            ->select(['id', 'name', 'description', 'cost', 'type', 'sort_order'])
+            ->orderBy('sort_order')
+            ->limit(4)
+            ->get();
+
+        return view('donate::home', [
+            'gateways'      => $available,
+            'plans'         => $plans,
+            'storeProducts' => $storeProducts,
+        ]);
     }
 
     public function checkout(Request $request, GatewayManager $gateways)

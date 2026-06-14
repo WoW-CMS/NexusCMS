@@ -160,41 +160,20 @@
             </div>
 
             <div class="grid md:grid-cols-4 gap-6">
-                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
-                    <h4 class="font-bold mb-2">Epic Mount</h4>
-                    <p class="text-slate-400 text-sm mb-4">Exclusive flying mount</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-blue-500 font-semibold">1,500 DP</span>
-                        <button class="text-sm text-slate-400 hover:text-white">View</button>
+                @forelse(($storeProducts ?? collect()) as $product)
+                    <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
+                        <h4 class="font-bold mb-2">{{ $product->name }}</h4>
+                        <p class="text-slate-400 text-sm mb-4">{{ $product->description ?? '—' }}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-blue-500 font-semibold">{{ number_format($product->cost) }} DP</span>
+                            <a href="{{ route('store.index') }}" class="text-sm text-slate-400 hover:text-white">View</a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
-                    <h4 class="font-bold mb-2">Transmog Set</h4>
-                    <p class="text-slate-400 text-sm mb-4">Legendary appearance</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-blue-500 font-semibold">2,000 DP</span>
-                        <button class="text-sm text-slate-400 hover:text-white">View</button>
+                @empty
+                    <div class="md:col-span-4 text-center py-8 text-slate-400 text-sm border border-dashed border-slate-700 rounded-xl">
+                        No store products available right now.
                     </div>
-                </div>
-
-                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
-                    <h4 class="font-bold mb-2">Name Change</h4>
-                    <p class="text-slate-400 text-sm mb-4">Change character name</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-blue-500 font-semibold">500 DP</span>
-                        <button class="text-sm text-slate-400 hover:text-white">View</button>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all duration-300">
-                    <h4 class="font-bold mb-2">Level Boost</h4>
-                    <p class="text-slate-400 text-sm mb-4">Instant level 70</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-blue-500 font-semibold">3,000 DP</span>
-                        <button class="text-sm text-slate-400 hover:text-white">View</button>
-                    </div>
-                </div>
+                @endforelse
             </div>
 
             <div class="text-center mt-8">
