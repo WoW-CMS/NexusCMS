@@ -26,7 +26,7 @@ class SystemInfoService
             ],
             'nexuscms' => [
                 'label' => 'NexusCMS',
-                'value' => config('app.version', 'Unknown'),
+                'value' => $this->getFullVersion(),
                 'icon'  => 'fas fa-cubes',
                 'color' => 'blue',
             ],
@@ -79,6 +79,34 @@ class SystemInfoService
     public function isProduction(): bool
     {
         return app()->environment('production');
+    }
+
+    /**
+     * Get the bare version string, e.g. "0.1.6-alpha.5".
+     */
+    public function getVersion(): string
+    {
+        return (string) config('app.version', '0.0.0');
+    }
+
+    /**
+     * Get the release codename, e.g. "Anvil".
+     */
+    public function getCodename(): string
+    {
+        return (string) config('app.codename', '');
+    }
+
+    /**
+     * Get the version + codename combined for display, e.g. "0.1.6 · Anvil".
+     * Falls back to just the version if no codename is configured.
+     */
+    public function getFullVersion(): string
+    {
+        $version  = $this->getVersion();
+        $codename = $this->getCodename();
+
+        return $codename !== '' ? "{$version} · {$codename}" : $version;
     }
 
     public function isDebugEnabled(): bool

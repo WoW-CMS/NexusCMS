@@ -7,9 +7,16 @@
     <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-8">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold">Donation Receipt</h2>
-            <button onclick="window.print()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-semibold">
-                Print / Save as PDF
-            </button>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('donate.receipt.pdf', $tx->id) }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold"
+                   title="Download a PDF copy of this receipt">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </a>
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-semibold">
+                    Print
+                </button>
+            </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

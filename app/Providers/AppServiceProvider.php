@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Libraries\Redis\RedisLibrary;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Modules\Armory\Services\ArmoryService;
@@ -51,5 +54,36 @@ class AppServiceProvider extends ServiceProvider
             Config::set('cache.default', 'file');
             Config::set('queue.default', 'sync');
         }
+
+        $this->configureRateLimiters();
+    }
+
+    /**
+     * Register named rate limiters used by the donate module and elsewhere.
+     *
+     * - donate-checkout: per authenticated user, 5 attempts/min. Hard cap
+     *   against scripted donation abuse; reasonable for legit double-clicks.
+     * - donate-webhook: per IP, 30/min. Legit gateways can retry a handful
+     *   of times; this stops flood / replay attempts.
+     * - donate-receipt: per authenticated user, 20/min. Generous because
+     *   the user may open the receipt several times (email link, browser
+     *   back, etc.).
+     */
+    protected function configureRateLimiters(): void
+    {
+        RateLimiter::for('donate-checkout', function (Request $request) {
+            return Limit::perMinute(5)
+                ->by('donate-checkout:' . optional($request->user())->id ?: $request->ip());
+        });
+
+        RateLimiter::for('donate-webhook', function (Request $request) {
+            return Limit::perMinute(30)
+                ->by('donate-webhook:' . $request->ip());
+        });
+
+        RateLimiter::for('donate-receipt', function (Request $request) {
+            return Limit::perMinute(20)
+                ->by('donate-receipt:' . optional($request->user())->id ?: $request->ip());
+        });
     }
 }

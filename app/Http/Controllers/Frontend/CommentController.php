@@ -22,7 +22,7 @@ class CommentController extends Controller
     public function store(Request $request, $slug)
     {
         $request->validate([
-            'body' => 'required|string',
+            'body' => 'required|string|max:10000',
         ]);
 
         $news = News::where('slug', $slug)->firstOrFail();

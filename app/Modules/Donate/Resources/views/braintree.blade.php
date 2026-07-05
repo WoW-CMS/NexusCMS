@@ -23,18 +23,53 @@
 <script src="https://js.braintreegateway.com/web/dropin/1.39.0/js/dropin.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var form = document.getElementById('bt-form');
+    var form   = document.getElementById('bt-form');
     var button = document.getElementById('submit-button');
+    var submitting = false;
+
+    function lockButton() {
+        submitting = true;
+        button.disabled = true;
+        button.classList.add('opacity-60', 'cursor-not-allowed');
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing…';
+    }
+
+    function unlockButton() {
+        submitting = false;
+        button.disabled = false;
+        button.classList.remove('opacity-60', 'cursor-not-allowed');
+        button.innerHTML = 'Pay';
+    }
+
     braintree.dropin.create({
         authorization: '{{ $token }}',
         container: '#dropin-container'
     }, function (createErr, instance) {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
+
+            // ─── Client-side idempotency: ignore subsequent submits ──────
+            // Braintree nonces are single-use. The server also dedupes
+            // (see DonateController::checkout), but locking the button
+            // here prevents the user from queuing two POSTs before the
+            // server-side lock kicks in.
+            if (submitting) {
+                return;
+            }
+            lockButton();
+
             instance.requestPaymentMethod(function (err, payload) {
-                if (err) return;
+                if (err) {
+                    // Drop-in couldn't tokenize (validation error, etc.).
+                    // Re-enable the button so the user can retry.
+                    unlockButton();
+                    return;
+                }
                 document.getElementById('nonce').value = payload.nonce;
                 form.submit();
+                // Don't unlockButton() — once the form is submitting,
+                // navigation away is the only way out. If the request
+                // fails server-side, the redirect/error page handles it.
             });
         });
     });

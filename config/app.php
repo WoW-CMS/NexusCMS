@@ -128,8 +128,10 @@ return [
     | Version CMS
     |--------------------------------------------------------------------------
     |
-    | The version of the CMS.
+    | The version of the CMS. The codename is the release nickname
+    | (see ROADMAP.md) and is shown alongside the version in the admin panel.
     |
     */
-    'version' => env('APP_VERSION', '0.1.6-alpha.5'),
+    'version'  => env('APP_VERSION', '0.1.6-alpha.5'),
+    'codename' => env('APP_CODENAME', 'Anvil'),
 ];

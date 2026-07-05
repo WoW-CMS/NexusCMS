@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Illuminate\Support\Facades\Log;
 use App\Exceptions\UserNotFoundException;
 use App\Helpers\RealmHelper;
 use App\Libraries\Auth\AccountLibrary;
@@ -374,9 +375,15 @@ class UserController extends Controller
                 ->with('success', 'Cuenta de juego creada y vinculada exitosamente.');
 
         } catch (\Exception $e) {
+            Log::error('Game account creation failed', [
+                'user_id' => $request->user()?->id,
+                'realm_id' => $request->realm,
+                'error' => $e->getMessage(),
+            ]);
+
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error al crear la cuenta de juego: ' . $e->getMessage());
+                ->with('error', 'Error al crear la cuenta de juego. Por favor, inténtalo de nuevo más tarde.');
         }
     }
 }

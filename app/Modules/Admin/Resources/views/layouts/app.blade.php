@@ -321,6 +321,23 @@
             @yield('content')
         </main>
 
+        {{-- Footer --}}
+        <footer class="shrink-0 bg-white border-t border-gray-200 px-6 py-2.5 flex items-center justify-between text-xs text-gray-500">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-cubes text-blue-500"></i>
+                <span class="font-semibold text-gray-700">{{ config('app.name', 'NexusCMS') }}</span>
+                <span class="text-gray-400">·</span>
+                <span>{{ app(\App\Services\SystemInfoService::class)->getFullVersion() }}</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('admin.updates.index') }}" class="hover:text-blue-600 transition" title="Check for updates">
+                    <i class="fas fa-cloud-arrow-up"></i>
+                </a>
+                <span class="text-gray-300">|</span>
+                <span>&copy; {{ date('Y') }} {{ config('app.name', 'NexusCMS') }}</span>
+            </div>
+        </footer>
+
     </div>
 </div>
 

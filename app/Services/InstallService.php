@@ -134,18 +134,38 @@ class InstallService
 
         foreach ($data as $key => $value) {
             if ($value !== null) {
+                $sanitized = $this->sanitizeEnvValue((string) $value);
+
                 if (preg_match("/^{$key}=.*/m", $envContent)) {
                     $envContent = preg_replace(
                         "/^{$key}=.*/m",
-                        "{$key}=\"{$value}\"",
+                        "{$key}={$sanitized}",
                         $envContent
                     );
                 } else {
-                    $envContent .= PHP_EOL."{$key}=\"{$value}\"";
+                    $envContent .= PHP_EOL."{$key}={$sanitized}";
                 }
             }
         }
 
         $this->files->put($envPath, $envContent);
+    }
+
+    /**
+     * Sanitize a value for safe inclusion in a .env file.
+     *
+     * Strips control characters (newlines, carriage returns, null bytes)
+     * that could be used to inject additional environment variables,
+     * then wraps the value in double quotes with internal quotes escaped.
+     */
+    protected function sanitizeEnvValue(string $value): string
+    {
+        // Remove characters that could break out of the value context
+        $value = str_replace(["\n", "\r", "\0", "\x1a"], '', $value);
+
+        // Escape any embedded double quotes
+        $value = str_replace('"', '\\"', $value);
+
+        return "\"{$value}\"";
     }
 }

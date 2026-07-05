@@ -52,7 +52,14 @@ class InstallController extends Controller
 
             return response()->json(['success' => true, 'message' => '✅ Conexión exitosa']);
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => '❌ Error: ' . $e->getMessage()]);
+            \Illuminate\Support\Facades\Log::warning('Install DB test failed', [
+                'host' => $payload['db_host'],
+                'port' => $payload['db_port'],
+                'database' => $payload['db_name'],
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['success' => false, 'message' => '❌ No se pudo conectar a la base de datos. Verifique las credenciales e intente de nuevo.']);
         }
     }
 
@@ -73,9 +80,14 @@ class InstallController extends Controller
         try {
             $service->run($validated);
         } catch (\Throwable $exception) {
+            \Illuminate\Support\Facades\Log::error('Installation failed', [
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+            ]);
+
             return back()
                 ->withInput()
-                ->withErrors(['install' => 'No se pudo completar la instalación: ' . $exception->getMessage()]);
+                ->withErrors(['install' => 'No se pudo completar la instalación. Revise los logs del servidor para más detalles.']);
         }
 
         $lockContent = now()->toDateTimeString();
